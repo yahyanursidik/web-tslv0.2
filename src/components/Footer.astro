@@ -2,34 +2,114 @@
 // Footer Component
 ---
 <!-- Footer -->
-<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline w-full py-xl px-margin-desktop max-w-max-width mx-auto flex flex-col md:flex-row justify-between gap-gutter">
-    <div class="flex flex-col gap-sm">
-        <div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">Tarbiyah Sunnah Learning</div>
-        <p class="text-on-surface-variant font-label-sm text-label-sm max-w-sm">
-            Lembaga pendidikan Islam yang berkomitmen menyelenggarakan pembelajaran Al-Qur'an dan ilmu syar'i secara profesional dan sesuai sunnah.
-        </p>
-        <p class="text-on-surface-variant font-label-sm text-label-sm mt-md">
-            © 2024 Tarbiyah Sunnah Learning. Amanah &amp; Terarah.
-        </p>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-xl">
-        <div class="flex flex-col gap-xs">
-            <span class="font-label-md text-label-md font-bold text-primary mb-2">Program</span>
-            <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Al-Qur'an</a>
-            <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Arabic &amp; Diniyah</a>
-            <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Islamic Education for Kids</a>
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline w-full pt-xl">
+    <div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-xl pb-xl">
+        <!-- Column 1: Brand Identity -->
+        <div class="flex flex-col gap-sm animate-on-scroll stagger-1">
+            <div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">Tarbiyah Sunnah Learning</div>
+            <p class="text-on-surface-variant font-body-md text-label-md max-w-sm">
+                Lembaga pendidikan Islam yang berkomitmen menyelenggarakan pembelajaran Al-Qur'an dan ilmu syar'i secara profesional, bertahap, dan sesuai sunnah.
+            </p>
         </div>
-        <div class="flex flex-col gap-xs">
-            <span class="font-label-md text-label-md font-bold text-primary mb-2">Legal</span>
-            <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Privacy Policy</a>
-            <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Terms of Service</a>
+        
+        <!-- Column 2: Programs -->
+        <div class="flex flex-col gap-xs animate-on-scroll stagger-2">
+            <span class="font-title-lg text-title-lg font-bold text-primary mb-2">Program</span>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Al-Qur'an</a>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Arabic &amp; Diniyah</a>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Quran for Kids</a>
         </div>
-        <div class="flex flex-col gap-xs">
-            <span class="font-label-md text-label-md font-bold text-primary mb-2">Kontak</span>
-            <div class="flex gap-xs mt-1">
-                <span class="material-symbols-outlined text-on-surface-variant" data-icon="mail">mail</span>
-                <span class="font-label-sm text-label-sm">info@tsl.id</span>
+        
+        <!-- Column 3: Legal/Company -->
+        <div class="flex flex-col gap-xs animate-on-scroll stagger-3">
+            <span class="font-title-lg text-title-lg font-bold text-primary mb-2">Legal</span>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Tentang Kami</a>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Kebijakan Privasi</a>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Syarat &amp; Ketentuan</a>
+        </div>
+        
+        <!-- Column 4: Contact -->
+        <div class="flex flex-col gap-xs animate-on-scroll stagger-4">
+            <span class="font-title-lg text-title-lg font-bold text-primary mb-2">Kontak</span>
+            <div class="flex items-center gap-xs text-on-surface-variant mb-1">
+                <span class="material-symbols-outlined text-sm" data-icon="mail">mail</span>
+                <span class="font-label-md text-label-md">salam@tarbiyahsunnahlearning.or.id</span>
+            </div>
+            <div class="flex gap-sm mt-2">
+                <a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors" href="#">
+                    <span class="material-symbols-outlined" data-icon="public">public</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors" href="#">
+                    <span class="material-symbols-outlined" data-icon="share">share</span>
+                </a>
             </div>
         </div>
     </div>
+    
+    <!-- Bottom Bar -->
+    <div class="border-t border-outline-variant/30 py-md">
+        <div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-sm animate-on-scroll">
+            <p class="text-on-surface-variant font-label-sm text-label-sm">
+                © 2024 Tarbiyah Sunnah Learning. Amanah &amp; Terarah.
+            </p>
+            <button class="flex items-center gap-xs text-primary font-label-sm text-label-sm hover:underline" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                Kembali ke atas
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_upward">arrow_upward</span>
+            </button>
+        </div>
+    </div>
 </footer>
+
+<style is:global>
+    /* Entrance Animations */
+    @media (prefers-reduced-motion: no-preference) {
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Stagger delays */
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (!prefersReducedMotion) {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        } else {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(el => {
+                el.classList.add('is-visible');
+            });
+        }
+    });
+</script>

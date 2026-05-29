@@ -91,6 +91,20 @@ export default {
                         "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
                         "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
                         "display-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    },
+                    "animation": {
+                        "float": "float 6s ease-in-out infinite",
+                        "shimmer": "shimmer 8s linear infinite"
+                    },
+                    "keyframes": {
+                        "float": {
+                            "0%, 100%": { transform: "translateY(0)" },
+                            "50%": { transform: "translateY(-10px)" }
+                        },
+                        "shimmer": {
+                            "0%": { backgroundPosition: "200% center" },
+                            "100%": { backgroundPosition: "-200% center" }
+                        }
                     }
                 }
             }

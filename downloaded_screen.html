@@ -1,0 +1,640 @@
+<!DOCTYPE html><html class="light" lang="id" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tarbiyah Sunnah Learning - Amanah &amp; Terarah</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:wght@600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "primary": "#2b4f1d",
+                        "secondary-fixed-dim": "#a7d295",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#426732",
+                        "on-secondary-fixed-variant": "#2a4f1f",
+                        "secondary": "#416835",
+                        "surface-tint": "#436833",
+                        "surface-dim": "#dadad5",
+                        "on-tertiary-fixed-variant": "#564500",
+                        "tertiary-container": "#cba81b",
+                        "on-surface-variant": "#43493e",
+                        "on-surface": "#1a1c19",
+                        "tertiary": "#725c00",
+                        "on-secondary-fixed": "#022100",
+                        "primary-fixed-dim": "#a8d292",
+                        "tertiary-fixed-dim": "#e8c339",
+                        "inverse-surface": "#2f312e",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c3c9bb",
+                        "on-error": "#ffffff",
+                        "outline": "#73796d",
+                        "secondary-fixed": "#c2efaf",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffe07d",
+                        "on-primary-fixed-variant": "#2c4f1d",
+                        "surface-container-high": "#e8e8e3",
+                        "surface-container-low": "#f4f4ee",
+                        "on-tertiary-container": "#4d3e00",
+                        "surface-bright": "#fafaf4",
+                        "surface-container": "#eeeee9",
+                        "primary-fixed": "#c3efac",
+                        "on-secondary-container": "#466c39",
+                        "background": "#fafaf4",
+                        "surface-variant": "#e3e3de",
+                        "inverse-on-surface": "#f1f1ec",
+                        "on-primary-fixed": "#052100",
+                        "surface-container-highest": "#e3e3de",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#a8d292",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#b8e4a2",
+                        "secondary-container": "#bfecac",
+                        "on-background": "#1a1c19",
+                        "surface": "#fafaf4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "xl": "64px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "sm": "16px",
+                        "md": "24px",
+                        "max-width": "1200px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "auto",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Source Serif 4"],
+                        "title-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Source Serif 4"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Source Serif 4"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Source Serif 4"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    },
+                    "animation": {
+                        "float": "float 6s ease-in-out infinite",
+                        "shimmer": "shimmer 8s linear infinite",
+                    },
+                    "keyframes": {
+                        "float": {
+                            "0%, 100%": { transform: "translateY(0)" },
+                            "50%": { transform: "translateY(-10px)" },
+                        },
+                        "shimmer": {
+                            "0%": { backgroundPosition: "200% center" },
+                            "100%": { backgroundPosition: "-200% center" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fafaf4;
+            color: #1a1c19;
+        }
+        
+        /* Entrance Animations */
+        @media (prefers-reduced-motion: no-preference) {
+            .animate-on-scroll {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            }
+            .animate-on-scroll.is-visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            /* Stagger delays */
+            .stagger-1 { transition-delay: 0.1s; }
+            .stagger-2 { transition-delay: 0.2s; }
+            .stagger-3 { transition-delay: 0.3s; }
+            
+            /* Nav Underline Hover */
+            .nav-link {
+                position: relative;
+            }
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: #2b4f1d;
+                transition: width 0.3s ease;
+            }
+            .nav-link:hover::after {
+                width: 100%;
+            }
+            
+            /* Button Hover Scale */
+            .btn-hover-scale {
+                transition: transform 0.2s ease, filter 0.2s ease;
+            }
+            .btn-hover-scale:hover {
+                transform: scale(1.02);
+                filter: brightness(1.05);
+            }
+            .btn-hover-scale:active {
+                transform: scale(0.98);
+            }
+            
+            /* Program Card Hover Lift */
+            .card-hover-lift {
+                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            }
+            .card-hover-lift:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            }
+        }
+        
+        .bg-shimmer-glow {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline docked full-width top-0 sticky z-50 transition-colors duration-300">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-max-width mx-auto h-20">
+<div class="flex items-center gap-sm">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim transition-colors duration-300">Tarbiyah Sunnah Learning</span>
+</div>
+<div class="hidden md:flex items-center gap-lg"><a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-bold font-label-md text-label-md" href="#">Home</a><a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim font-label-md text-label-md transition-colors duration-200 nav-link" href="#">Profil</a><a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim font-label-md text-label-md transition-colors duration-200 nav-link" href="#">Program</a><a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim font-label-md text-label-md transition-colors duration-200 nav-link" href="#">Artikel</a><a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim font-label-md text-label-md transition-colors duration-200 nav-link" href="#">Jadwal</a><a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim font-label-md text-label-md transition-colors duration-200 nav-link" href="#">Kontak</a></div>
+<div class="flex items-center gap-sm">
+<button class="hidden lg:flex items-center px-sm py-xs font-label-md text-label-md text-primary hover:bg-surface-container-low transition-colors duration-200 rounded-lg">
+                    Login LMS
+                </button>
+<button class="bg-primary text-on-primary px-md py-xs rounded-full font-label-md text-label-md btn-hover-scale">
+                    Register
+                </button>
+<span class="material-symbols-outlined text-primary cursor-pointer lg:hidden" data-icon="menu">menu</span>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-xl pb-24 bg-surface">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row items-center gap-xl">
+<div class="flex-1 text-center md:text-left">
+<h1 class="font-headline-lg text-headline-lg md:text-display-lg text-primary mb-md animate-on-scroll is-visible stagger-1">
+                        Tarbiyah Sunnah Learning: Belajar Islam, Al-Qur’an, dan Bahasa Arab secara <span class="text-tertiary">Bertahap, Terarah, dan Bermakna.</span>
+</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mb-xl max-w-2xl animate-on-scroll is-visible stagger-2">
+                        Akses pendidikan Islam berkualitas melalui sistem pembelajaran daring dan luring yang amanah, dirancang untuk mendukung pertumbuhan spiritual Anda setiap langkah.
+                    </p>
+<div class="flex flex-wrap gap-sm justify-center md:justify-start animate-on-scroll is-visible stagger-3">
+<button class="bg-tertiary text-on-tertiary px-xl py-md rounded-lg font-title-lg text-title-lg btn-hover-scale" style="background-color: rgb(230, 126, 34); color: rgb(255, 255, 255);">
+                            Lihat Program
+                        </button>
+<button class="border-2 border-primary text-primary px-xl py-md rounded-lg font-title-lg text-title-lg hover:bg-primary/5 btn-hover-scale transition-colors">
+                            Masuk LMS TSL
+                        </button>
+<button class="bg-surface-container-high text-primary px-xl py-md rounded-lg font-label-md text-label-md flex items-center gap-xs btn-hover-scale">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+                            Sistem Informasi Qur’an
+                        </button>
+</div>
+</div>
+<div class="flex-1 w-full max-w-lg animate-on-scroll is-visible stagger-2">
+<div class="aspect-square bg-surface-container-low rounded-3xl relative overflow-hidden border border-outline-variant motion-safe:animate-float">
+<img alt="Learning Experience" class="w-full h-full object-cover grayscale-[0.5] transition-transform duration-700 hover:scale-105" data-alt="A serene, minimalist classroom environment with natural lighting streaming through large windows. The scene captures a clean, wooden desk with a leather-bound book and a digital tablet, symbolizing the blend of traditional and modern learning. The aesthetic is corporate yet warm, using a soft green and white color palette to create a peaceful atmosphere. No human faces are visible." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbdO-JT-QCF6h4lOzkVb128kMMpWL2Pg4hsLG-H5SVHXTba8Y4H6ImYC2IEtsIe8GkJfko9mHGqIx1o2c3uEDoBU4BCLHkHippK7CgZ7M_t8wn4YkF2_4PK5yxuQ8Nq_Fnm7wRDqrerv-IxfOyCFhB2yKc4fL5AAzQ2wYTNDs3aun_Gm786AdeDaLQh3xbEi7jhg6qBFVI5tab35bKxphfi1S5tAcEJ48KBlhs5MLpXFEvoAGmrza5ORnIIguTKn0GeDptv_9duwUV">
+<div class="absolute bottom-md left-md right-md bg-white/90 backdrop-blur-sm p-sm rounded-xl flex items-center gap-sm border border-primary/10 shadow-lg">
+<div class="w-xs h-xs bg-tertiary-fixed-dim rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="trending_up">trending_up</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">5,000+ Siswa Aktif Bertumbuh</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Program Showcase - Bento Grid Inspired -->
+<section class="py-xl bg-surface-container-lowest">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-xl animate-on-scroll is-visible">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-xs">Program Pendidikan Kami</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Pilih jalur belajar yang sesuai dengan kebutuhan Anda saat ini.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Ma’had TSL -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-1 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="school">account_balance</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Ma’had TSL</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Program pendidikan Islam berjenjang yang mencakup Aqidah, Fiqh, dan Akhlak.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">account_balance</span>
+</button>
+</div>
+<!-- S-1 PJJ -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-2 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="auto_stories">history_edu</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">S-1 PJJ</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Pendidikan Jarak Jauh setingkat Sarjana dengan kurikulum yang terstandarisasi.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">history_edu</span>
+</button>
+</div>
+<!-- Arabic Online -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-3 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="translate">language</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Arabic Online</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Kuasai Bahasa Arab dari dasar hingga tingkat lanjut dengan metode praktis.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">language</span>
+</button>
+</div>
+<!-- Qur’an Kids -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-1 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="child_care">menu_book</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Qur’an Kids</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Metode menyenangkan bagi anak-anak untuk mencintai dan menghafal Al-Qur’an.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">menu_book</span>
+</button>
+</div>
+<!-- Qur’an Adults -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-2 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="menu_book">auto_stories</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Qur’an Adults</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Tahsin dan Tahfidz khusus dewasa dengan bimbingan ustadz yang berpengalaman.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">auto_stories</span>
+</button>
+</div>
+<!-- Madrasah Kids Online -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-3 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="skillet">menu_book</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Madrasah Anak Online</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Pembentukan karakter islami dan pengetahuan dasar agama untuk anak usia dini.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">menu_book</span>
+</button>
+</div>
+<!-- Basic Islam (BID) -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-1 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="lightbulb">foundation</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Belajar Islam Dasar (BID)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Pondasi dasar bagi siapa saja yang ingin memulai belajar Islam secara benar.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">foundation</span>
+</button>
+</div>
+<!-- Online Lectures -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-2 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="video_library">cast_for_education</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Kajian Rutin Online</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Kajian tematik rutin yang dapat diakses kapan saja dari mana saja.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">cast_for_education</span>
+</button>
+</div>
+<!-- Offline Collaboration -->
+<div class="group bg-surface border border-outline-variant p-md rounded-xl hover:border-primary card-hover-lift flex flex-col h-full animate-on-scroll stagger-3 is-visible">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm transition-transform duration-300 group-hover:scale-110" data-icon="groups">groups</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Kegiatan Kolaborasi Offline</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-md text-sm">Daurah dan temu muka untuk mempererat ukhuwah dan pendalaman materi.</p>
+<button class="text-primary font-label-md text-label-md flex items-center gap-xs group-hover:gap-sm transition-all duration-300">
+                            Pelajari Program <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- "Mulai dari Mana?" Section -->
+<section class="py-xl bg-primary text-on-primary">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row items-center gap-xl">
+<div class="flex-1 animate-on-scroll is-visible">
+<h2 class="font-headline-lg text-headline-lg mb-md">Mulai dari Mana?</h2>
+<p class="text-body-lg font-body-lg mb-xl opacity-90">Kami membantu Anda menemukan langkah pertama yang tepat sesuai dengan niat dan kondisi Anda.</p>
+<div class="space-y-sm">
+<a class="group flex items-center justify-between p-md bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 border border-white/20 hover:scale-[1.01]" href="#">
+<span class="font-title-lg text-title-lg">Saya ingin belajar Bahasa Arab dari nol</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="group flex items-center justify-between p-md bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 border border-white/20 hover:scale-[1.01]" href="#">
+<span class="font-title-lg text-title-lg">Saya ingin memperbaiki bacaan Al-Qur'an</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="group flex items-center justify-between p-md bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 border border-white/20 hover:scale-[1.01]" href="#">
+<span class="font-title-lg text-title-lg">Saya ingin anak saya belajar agama sejak dini</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</div>
+<div class="flex-1 hidden md:block animate-on-scroll stagger-2 is-visible">
+<img alt="Guide" class="rounded-3xl shadow-2xl rotate-3 transition-transform duration-500 hover:rotate-1 motion-safe:animate-float" data-alt="A focused image of an open notebook with neatly written notes and a pen placed on its spine, resting on a clean white surface. Soft shadows and warm morning light create a sense of beginning and preparation. The color theme features muted greens and cream tones to evoke a scholarly and calm mood, aligning with the concept of a new learning journey." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwtunWeH6A1RSEBjxf1PveGD02L23Ay1pGKRDT3YyDauN70irtbYZf_7yvYM0dBcE8PxJkARg9FTqmP8HcwUg-8RvN9Cmz0hUi0Bq8X6J0J_hU1P25Nn67DRoKicYe9q_g2fGl4ZX49EVKMF7oVpMOG_1wTekWB6WqJUD_3X1TwydgauJc5rtxN5upW2cTh80xVaNhGTm76pPKSMRx9O1eroHUJkXjXo2K1BS3GAOv-NAmaqlfZjY9eWOhWcX9hxlTvuPG178W98mA">
+</div>
+</div>
+</div>
+</section>
+<!-- "Mengapa TSL?" -->
+<section class="py-xl bg-surface">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-xl animate-on-scroll is-visible">
+<h2 class="font-headline-lg text-headline-lg text-primary">Mengapa Belajar di TSL?</h2>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-xl">
+<div class="text-center animate-on-scroll stagger-1 group is-visible">
+<div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="stairs">stairs</span>
+</div>
+<h4 class="font-title-lg text-title-lg mb-xs">Bertahap</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Kurikulum yang disusun rapi langkah demi langkah.</p>
+</div>
+<div class="text-center animate-on-scroll stagger-2 group is-visible">
+<div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="explore">explore</span>
+</div>
+<h4 class="font-title-lg text-title-lg mb-xs">Terarah</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Visi pendidikan yang jelas dan terukur hasilnya.</p>
+</div>
+<div class="text-center animate-on-scroll stagger-3 group is-visible">
+<div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="schedule">schedule</span>
+</div>
+<h4 class="font-title-lg text-title-lg mb-xs">Fleksibel</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Sistem LMS yang dapat diakses kapan saja dan di mana saja.</p>
+</div>
+<div class="text-center animate-on-scroll stagger-4 group is-visible">
+<div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="favorite">favorite</span>
+</div>
+<h4 class="font-title-lg text-title-lg mb-xs">Berbasis Adab</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Mengutamakan penanaman nilai adab sebelum ilmu.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Alur Belajar -->
+<section class="py-xl bg-surface-container-low overflow-hidden">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop animate-on-scroll is-visible">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-xl">Alur Belajar yang Mudah</h2>
+<div class="relative flex flex-col md:flex-row items-center md:justify-between gap-xl md:gap-0">
+<!-- Line -->
+<div class="hidden md:block absolute top-10 left-0 w-full h-1 bg-tertiary-fixed-dim -z-0"></div>
+<!-- Steps -->
+<div class="relative z-10 flex flex-col items-center gap-sm md:w-1/5 group">
+<div class="w-16 h-16 bg-white border-4 border-tertiary rounded-full flex items-center justify-center text-primary font-bold transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">1</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Pilih Program</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-sm md:w-1/5 group">
+<div class="w-16 h-16 bg-white border-4 border-tertiary rounded-full flex items-center justify-center text-primary font-bold transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">2</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Pendaftaran</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-sm md:w-1/5 group">
+<div class="w-16 h-16 bg-white border-4 border-tertiary rounded-full flex items-center justify-center text-primary font-bold transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">3</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Orientasi Siswa</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-sm md:w-1/5 group">
+<div class="w-16 h-16 bg-white border-4 border-tertiary rounded-full flex items-center justify-center text-primary font-bold transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">4</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Proses Belajar</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-sm md:w-1/5 group">
+<div class="w-16 h-16 bg-white border-4 border-tertiary rounded-full flex items-center justify-center text-primary font-bold transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">5</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Evaluasi Akhir</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Jadwal Terdekat & Artikel -->
+<section class="py-xl bg-surface">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl">
+<!-- Upcoming Schedule -->
+<div class="animate-on-scroll stagger-1 is-visible">
+<div class="flex justify-between items-end mb-md">
+<h2 class="font-headline-md text-headline-md text-primary">Jadwal Terdekat</h2>
+<a class="text-primary font-label-md text-label-md underline hover:text-primary-container transition-colors" href="#">Lihat Semua</a>
+</div>
+<div class="space-y-sm">
+<div class="bg-white p-md rounded-xl border border-outline-variant flex gap-md items-center card-hover-lift cursor-pointer group">
+<div class="bg-primary/5 text-primary p-sm rounded-lg text-center min-w-[80px] transition-colors duration-300 group-hover:bg-primary/10">
+<div class="font-bold text-xl">15</div>
+<div class="text-xs uppercase">Mei</div>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg group-hover:text-primary transition-colors">Webinar: Pentingnya Adab Penuntut Ilmu</h4>
+<p class="text-sm text-on-surface-variant">Pukul 20:00 WIB via Zoom</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-outline-variant flex gap-md items-center card-hover-lift cursor-pointer group">
+<div class="bg-primary/5 text-primary p-sm rounded-lg text-center min-w-[80px] transition-colors duration-300 group-hover:bg-primary/10">
+<div class="font-bold text-xl">18</div>
+<div class="text-xs uppercase">Mei</div>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg group-hover:text-primary transition-colors">Daurah Bahasa Arab Dasar Batch 2</h4>
+<p class="text-sm text-on-surface-variant">Pukul 09:00 WIB via LMS TSL</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-outline-variant flex gap-md items-center card-hover-lift cursor-pointer group">
+<div class="bg-primary/5 text-primary p-sm rounded-lg text-center min-w-[80px] transition-colors duration-300 group-hover:bg-primary/10">
+<div class="font-bold text-xl">22</div>
+<div class="text-xs uppercase">Mei</div>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg group-hover:text-primary transition-colors">Open House Madrasah Anak Online</h4>
+<p class="text-sm text-on-surface-variant">Pukul 16:00 WIB via Google Meet</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Latest Articles -->
+<div class="animate-on-scroll stagger-2 is-visible">
+<div class="flex justify-between items-end mb-md">
+<h2 class="font-headline-md text-headline-md text-primary">Artikel Terbaru</h2>
+<a class="text-primary font-label-md text-label-md underline hover:text-primary-container transition-colors" href="#">Baca Blog</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-sm">
+<div class="group flex gap-sm items-center bg-white p-sm rounded-xl border border-outline-variant card-hover-lift cursor-pointer">
+<div class="w-20 h-20 bg-surface-container rounded-lg shrink-0 overflow-hidden">
+<img alt="Article 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A macro shot of calligraphy tools including a bamboo reed pen and deep black ink on textured parchment paper. The lighting is soft and focused, emphasizing the artisanal quality of the materials. The color palette is dominated by earthy browns and off-whites, suggesting a deep connection to Islamic art and scholarly traditions." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANvysteLSVFVvZHLUuPOW9I343Cx1fb1zh6oMKJlwroGlAr3CRzJkptzONTuyd7c2UYcmsO9f3RrsAyZVq-ZHCZjwAMnyMvV3HBoBajpwm10OGDaXPx2nayu3wv6XHRjHnvAngEseqH2PW9qlbI4KfIPLSOiarty_RwJdL_I0TY6uEf6W9AuEeh6HPqzqMn8koNChO-EiSG2cYPhvOhD3V1l92tLYFmKeSpmN_a9h5fc_ik_IZBeICKaXOgCObPtQSxh8f4qupZwEE">
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold mb-1 group-hover:text-primary transition-colors">Membangun Karakter Anak Melalui Sirah</h4>
+<p class="text-xs text-on-surface-variant">5 Menit Membaca</p>
+</div>
+</div>
+<div class="group flex gap-sm items-center bg-white p-sm rounded-xl border border-outline-variant card-hover-lift cursor-pointer">
+<div class="w-20 h-20 bg-surface-container rounded-lg shrink-0 overflow-hidden">
+<img alt="Article 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="An atmospheric photograph of a clean, minimalist prayer space with a woven mat on a light wood floor. A single ray of sunlight highlights the texture of the mat, creating a peaceful and contemplative mood. The aesthetic is extremely clean and minimal, using a monochromatic green and white palette to convey spiritual tranquility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Ttbyj1h3L55eazVvnwRKrWB5hRkZqDbL5GM7kBs-gDA12C8idjEMEthzfZnxWla-NfLmnN2PL54f2C9PIP1nvL9idwIykrEwD-2J33ZZcwGS4Ms14XXh_5jIfJ2o_3j0IkoXghhkSL92NGt76-OoF6PJKypo8scpGqiT8zXXil3N1xD60QA4AYah_i9VmRkP9DXOdUE5DUeDfReuWTV1CmvDAOYlxAZUPooToAcdydhfNwFEWFIt-o3_ueLcImA_85t3zVwv-g2w">
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold mb-1 group-hover:text-primary transition-colors">Tips Menjaga Istiqamah dalam Belajar</h4>
+<p class="text-xs text-on-surface-variant">3 Menit Membaca</p>
+</div>
+</div>
+<div class="group flex gap-sm items-center bg-white p-sm rounded-xl border border-outline-variant card-hover-lift cursor-pointer">
+<div class="w-20 h-20 bg-surface-container rounded-lg shrink-0 overflow-hidden">
+<img alt="Article 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A high-angle view of an open dictionary or reference book with fine print, shot with a shallow depth of field. The image captures the essence of academic rigor and deep study. The lighting is bright and even, reinforcing the clean corporate modern look of the educational platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALAJzk935t8mpxOlrHEAHXPYFAUwG_AwBUxy7Np1K6CiZp4g7TX7-4m4Fkf6iOTUHoQqu75aySIZZl-OPRIk3qqOX-M5ENfy33WiXDwIRWvUrYLbLF3p-Hr5YlmIK_MClgOYRi8BNxmQ8_x4SF_a2T6yQ56Dvhmvy9I9dPU6w5C8iI6XiRfV8YKQqQq0qf05Oalo83Tn3Su-1SKpjkZBc_JS335gRJWdjRKorn3OdKImLb14ugwJfVec7gdj_FAmXLmMSQR-hl9sR9">
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold mb-1 group-hover:text-primary transition-colors">Manfaat Memahami Bahasa Arab bagi Muslim</h4>
+<p class="text-xs text-on-surface-variant">4 Menit Membaca</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-xl bg-surface-container-highest">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop animate-on-scroll is-visible">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-xl">Apa Kata Siswa TSL?</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white p-xl rounded-xl border border-outline-variant shadow-sm italic hover:shadow-md transition-shadow duration-300">
+<p class="font-body-md text-body-md mb-md">"Alhamdulillah, belajar di Ma’had TSL sangat membantu saya yang sibuk bekerja tetap bisa belajar agama secara sistematis."</p>
+<div class="font-bold text-primary not-italic">— Abu Ahmad, Siswa Ma’had TSL</div>
+</div>
+<div class="bg-white p-xl rounded-xl border border-outline-variant shadow-sm italic hover:shadow-md transition-shadow duration-300 delay-100">
+<p class="font-body-md text-body-md mb-md">"Metode mengajar Arabic Online sangat mudah dimengerti, bahkan untuk saya yang benar-benar mulai dari nol."</p>
+<div class="font-bold text-primary not-italic">— Ummu Zaid, Siswa Arabic Online</div>
+</div>
+<div class="bg-white p-xl rounded-xl border border-outline-variant shadow-sm italic hover:shadow-md transition-shadow duration-300 delay-200">
+<p class="font-body-md text-body-md mb-md">"Anak-anak selalu antusias mengikuti kelas Qur’an Kids. Visualnya menarik dan ustadznya sangat sabar."</p>
+<div class="font-bold text-primary not-italic">— Bunda Raihan, Orang Tua Siswa</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-xl bg-white border-t border-outline-variant relative overflow-hidden">
+<div class="absolute inset-0 bg-shimmer-glow opacity-50 motion-safe:animate-shimmer pointer-events-none"></div>
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop text-center relative z-10 animate-on-scroll is-visible">
+<h2 class="font-display-lg text-primary mb-md">Siap Memulai Perjalanan Belajar Bersama TSL?</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant mb-xl max-w-2xl mx-auto">
+                    Bergabunglah dengan ribuan penuntut ilmu lainnya. Daftarkan diri Anda hari ini dan mulai transformasi spiritual Anda.
+                </p>
+<button class="bg-tertiary text-on-tertiary px-32 py-md rounded-lg font-title-lg text-title-lg hover:opacity-90 shadow-lg transition-all active:scale-95 btn-hover-scale">
+                    Daftar Sekarang
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline w-full pt-xl">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-xl pb-xl">
+<!-- Column 1: Brand Identity -->
+<div class="flex flex-col gap-sm">
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">Tarbiyah Sunnah Learning</div>
+<p class="text-on-surface-variant font-body-md text-label-md max-w-sm">
+                Lembaga pendidikan Islam yang berkomitmen menyelenggarakan pembelajaran Al-Qur'an dan ilmu syar'i secara profesional, bertahap, dan sesuai sunnah.
+            </p>
+</div>
+<!-- Column 2: Programs -->
+<div class="flex flex-col gap-xs">
+<span class="font-title-lg text-title-lg font-bold text-primary mb-2">Program</span>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Al-Qur'an</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Arabic &amp; Diniyah</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Quranfor Kids</a>
+</div>
+<!-- Column 3: Legal/Company -->
+<div class="flex flex-col gap-xs">
+<span class="font-title-lg text-title-lg font-bold text-primary mb-2">Legal</span>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Tentang Kami</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Kebijakan Privasi</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Syarat &amp; Ketentuan</a>
+</div>
+<!-- Column 4: Contact -->
+<div class="flex flex-col gap-xs">
+<span class="font-title-lg text-title-lg font-bold text-primary mb-2">Kontak</span>
+<div class="flex items-center gap-xs text-on-surface-variant mb-1">
+<span class="material-symbols-outlined text-sm" data-icon="mail">mail</span>
+<span class="font-label-md text-label-md">salam@tarbiyahsunnahlearning.or.id</span>
+</div>
+<div class="flex gap-sm mt-2">
+<a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Bottom Bar -->
+<div class="border-t border-outline-variant/30 py-md">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-sm">
+<p class="text-on-surface-variant font-label-sm text-label-sm">
+                © 2024 Tarbiyah Sunnah Learning. Amanah &amp; Terarah.
+            </p>
+<button class="flex items-center gap-xs text-primary font-label-sm text-label-sm hover:underline" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                Kembali ke atas
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_upward">arrow_upward</span>
+</button>
+</div>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (!prefersReducedMotion) {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Optional: stop observing once animated
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(el => observer.observe(el));
+        } else {
+            // If reduced motion is preferred, ensure elements are visible immediately
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    });
+</script>
+
+
+</body></html>
