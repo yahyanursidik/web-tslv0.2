@@ -1,7 +1,16 @@
 {
   "name": "tarbiyah-sunnah-learning-monorepo",
   "private": true,
+  "scripts": {
+    "dev": "npm run dev --workspace=web",
+    "build": "npm run build --workspace=web",
+    "lint": "npm run lint --workspace=web",
+    "preview": "npm run preview --workspace=web"
+  },
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "engines": {
+    "node": ">=20"
+  }
 }
