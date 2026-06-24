@@ -131,9 +131,49 @@ const SejarahPerjalanan = () => (
         <div className="lg:w-1/3">
           <h2 className="font-headline text-4xl font-bold text-primary mb-6">Sejarah Perjalanan</h2>
           <p className="text-on-surface-variant leading-relaxed mb-8">Sebuah ikhtiar pendidikan yang berkesinambungan, menebar manfaat setapak demi setapak dalam naungan keberkahan.</p>
-          <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden bg-primary/5 border-2 border-dashed border-primary/20 flex flex-col items-center justify-center gap-6 p-8 text-center">
-            <span className="material-symbols-outlined text-[100px] text-primary/30">map</span>
-            <p className="text-primary/60 font-bold uppercase tracking-widest text-xs">The Adventure of Knowledge</p>
+          <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden bg-[#e8eddf] border border-primary/15 shadow-[inset_0_0_50px_rgba(24,61,37,.08)] p-6">
+            <svg viewBox="0 0 420 420" role="img" aria-labelledby="journey-map-title journey-map-desc" className="h-full w-full">
+              <title id="journey-map-title">Peta perjalanan ilmu TSL</title>
+              <desc id="journey-map-desc">Ilustrasi peta dengan jalur perjalanan, empat tonggak, dan kompas penunjuk arah.</desc>
+              <defs>
+                <pattern id="map-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+                  <path d="M28 0H0V28" fill="none" stroke="#285c32" strokeOpacity=".06" strokeWidth="1" />
+                </pattern>
+                <filter id="map-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#183d25" floodOpacity=".18" />
+                </filter>
+              </defs>
+              <rect width="420" height="420" rx="34" fill="url(#map-grid)" />
+              <path d="M22 92C76 42 122 61 157 38c43-28 83-7 95 27 12 33 45 41 83 31 35-9 62 8 73 38v84c-38 17-68 10-88-18-24-34-61-36-91-8-36 34-76 27-102-10-23-32-59-43-105-27Z" fill="#d1dec7" opacity=".9" />
+              <path d="M42 273c36-44 79-49 115-18 27 23 55 26 88 8 39-21 76-11 110 25 22 23 43 36 63 38v78H42Z" fill="#d7e2ce" opacity=".9" />
+              <path d="M77 323C65 263 116 241 151 230c47-15 42-71 84-88 37-15 76 12 104-20" fill="none" stroke="#bd9412" strokeWidth="5" strokeLinecap="round" strokeDasharray="3 14" />
+              {[
+                { cx: 78, cy: 323, label: '2018' },
+                { cx: 153, cy: 229, label: '2020' },
+                { cx: 235, cy: 142, label: '2022' },
+                { cx: 339, cy: 122, label: '2024' },
+              ].map((point) => (
+                <g key={point.label} filter="url(#map-shadow)">
+                  <circle cx={point.cx} cy={point.cy} r="15" fill="#285c32" stroke="#fbfaf4" strokeWidth="5" />
+                  <circle cx={point.cx} cy={point.cy} r="4" fill="#f0c84b" />
+                  <rect x={point.cx - 24} y={point.cy + 21} width="48" height="20" rx="10" fill="#fbfaf4" />
+                  <text x={point.cx} y={point.cy + 35} textAnchor="middle" fontSize="10" fontWeight="700" fill="#183d25">{point.label}</text>
+                </g>
+              ))}
+              <g transform="translate(306 292)" filter="url(#map-shadow)">
+                <circle cx="48" cy="48" r="43" fill="#fbfaf4" stroke="#285c32" strokeWidth="3" />
+                <circle cx="48" cy="48" r="34" fill="none" stroke="#285c32" strokeOpacity=".2" />
+                <text x="48" y="18" textAnchor="middle" fontSize="11" fontWeight="800" fill="#285c32">U</text>
+                <path d="M48 23 59 51 48 46 37 51Z" fill="#bd9412" />
+                <path d="M48 73 37 45 48 50 59 45Z" fill="#285c32" />
+                <circle cx="48" cy="48" r="4" fill="#fbfaf4" stroke="#183d25" strokeWidth="2" />
+              </g>
+              <g transform="translate(28 25)">
+                <rect width="176" height="52" rx="16" fill="#fbfaf4" fillOpacity=".9" />
+                <text x="16" y="22" fontSize="9" fontWeight="800" letterSpacing="1.7" fill="#987400">THE ADVENTURE OF</text>
+                <text x="16" y="40" fontSize="16" fontWeight="800" fill="#183d25">KNOWLEDGE</text>
+              </g>
+            </svg>
           </div>
         </div>
         <div className="lg:w-2/3 relative">
@@ -219,21 +259,21 @@ const SejarahKepemimpinan = () => (
   </section>
 );
 
-const DewanPimpinan = () => (
+const DewanPembina = () => (
   <section className="py-24 bg-surface-container-low">
     <div className="max-w-7xl mx-auto px-8">
       <div className="text-center mb-16">
-        <h2 className="font-headline text-4xl font-bold text-primary mb-4">Dewan Pimpinan</h2>
-        <p className="text-secondary max-w-2xl mx-auto font-medium">Dipimpin oleh asatidzah dan profesional yang berdedikasi tinggi bagi perkembangan dakwah dan pendidikan.</p>
+        <h2 className="font-headline text-4xl font-bold text-primary mb-4">Dewan Pembina</h2>
+        <p className="text-secondary max-w-2xl mx-auto font-medium">Dibina oleh tim yang berdedikasi tinggi bagi perkembangan dakwah dan pendidikan.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
         <div className="group text-center">
           <div className="relative overflow-hidden rounded-full mx-auto w-64 h-64 mb-6 border-8 border-surface-container-high bg-surface-container-low flex items-center justify-center shadow-inner">
             <div className="text-primary/10 group-hover:scale-110 transition-transform duration-500">
-              <span className="material-symbols-outlined text-[140px]">account_circle</span>
+              <span className="material-symbols-outlined text-[140px]">menu_book</span>
             </div>
             <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-8">
-              <p className="text-white text-sm font-medium leading-relaxed">Fokus pada Pengembangan Kurikulum &amp; Manhaj Dakwah.</p>
+              <p className="text-white text-sm font-medium leading-relaxed">Pembina Divisi TSL.</p>
             </div>
           </div>
           <h4 className="font-headline text-2xl font-bold text-primary">Ust. Abu Haidar As-Sundawy</h4>
@@ -242,14 +282,14 @@ const DewanPimpinan = () => (
         <div className="group text-center">
           <div className="relative overflow-hidden rounded-full mx-auto w-64 h-64 mb-6 border-8 border-surface-container-high bg-surface-container-low flex items-center justify-center shadow-inner">
             <div className="text-secondary/10 group-hover:scale-110 transition-transform duration-500">
-              <span className="material-symbols-outlined text-[140px]">admin_panel_settings</span>
+              <span className="material-symbols-outlined text-[140px]">account_balance</span>
             </div>
             <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-8">
-              <p className="text-white text-sm font-medium leading-relaxed">Manajemen Operasional &amp; Strategi Kelembagaan.</p>
+              <p className="text-white text-sm font-medium leading-relaxed">Pimpinan dan manajemen kelembagaan pusat.</p>
             </div>
           </div>
-          <h4 className="font-headline text-2xl font-bold text-primary">Dr. Muhammad Bisri M, M.Si.</h4>
-          <p className="text-secondary font-bold text-xs tracking-[0.2em] uppercase mt-2">Direktur TSL</p>
+          <h4 className="font-headline text-2xl font-bold text-primary">Asep Dadang Sukarna Hikmat Nirwana</h4>
+          <p className="text-secondary font-bold text-xs tracking-[0.2em] uppercase mt-2">Mudir Yayasan Tarbiyah Sunnah</p>
         </div>
       </div>
     </div>
@@ -281,7 +321,7 @@ export default function About() {
       <BudayaKerja />
       <SejarahPerjalanan />
       <SejarahKepemimpinan />
-      <DewanPimpinan />
+      <DewanPembina />
       <AboutCTA />
     </main>
   );

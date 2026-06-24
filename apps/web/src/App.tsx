@@ -9,6 +9,9 @@ import Quran from './pages/Quran';
 import MadrasahAnak from './pages/MadrasahAnak';
 import BahasaArab from './pages/BahasaArab';
 import S1PJJ from './pages/S1PJJ';
+import Kajian from './pages/Kajian';
+import MahadTSL from './pages/MahadTSL';
+import PreschoolDaring from './pages/PreschoolDaring';
 
 export default function App() {
   return (
@@ -23,6 +26,9 @@ export default function App() {
           <Route path="/madrasah-anak" element={<MadrasahAnak />} />
           <Route path="/bahasa-arab" element={<BahasaArab />} />
           <Route path="/s1-pjj" element={<S1PJJ />} />
+          <Route path="/kajian" element={<Kajian />} />
+          <Route path="/mahad-tsl" element={<MahadTSL />} />
+          <Route path="/preschool-daring" element={<PreschoolDaring />} />
         </Route>
       </Routes>
     </BrowserRouter>

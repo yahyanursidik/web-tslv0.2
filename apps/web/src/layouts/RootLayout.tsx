@@ -1,12 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import logoTsl from '../assets/logo.png';
+
+function BrandMark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`relative block shrink-0 overflow-hidden rounded-xl bg-white ${className}`} aria-hidden="true">
+      <img src={logoTsl} alt="" className="absolute left-1/2 top-0 h-[72px] w-[56px] max-w-none -translate-x-1/2 object-contain object-top" />
+    </span>
+  );
+}
 
 const programLinks = [
   { to: '/bid', icon: 'menu_book', title: 'Belajar Islam Dasar', text: 'Fondasi aqidah, ibadah, dan adab.' },
   { to: '/al-quran', icon: 'auto_stories', title: "Program Al-Qur'an", text: 'Tahsin dan hafalan untuk anak & dewasa.' },
+  { to: '/preschool-daring', icon: 'toys', title: 'Preschool Daring TSL', text: 'Belajar dan bertumbuh islami dari rumah.' },
   { to: '/madrasah-anak', icon: 'child_care', title: 'Madrasah Anak Daring', text: 'Diniyah interaktif untuk usia 4–12 tahun.' },
   { to: '/bahasa-arab', icon: 'translate', title: 'Bahasa Arab Daring', text: 'Dari pemula hingga mampu membaca teks.' },
   { to: '/s1-pjj', icon: 'school', title: 'S1 Pendidikan Jarak Jauh', text: 'Program sarjana Pendidikan Bahasa Arab.' },
+  { to: '/mahad-tsl', icon: 'account_balance', title: 'Ma’had TSL Daring', text: 'Bahasa Arab dan diniyah berbasis marhalah.' },
+  { to: '/kajian', icon: 'live_tv', title: 'Kajian Rutin Daring', text: 'Jadwal tematik dan arsip rekaman kajian.' },
 ];
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
@@ -40,9 +52,7 @@ function Navbar() {
       <header className="sticky top-0 z-50 border-b border-[#d9ddcf] bg-[#fbfaf4]/95 backdrop-blur-xl">
         <nav className="site-container flex h-[72px] items-center justify-between" aria-label="Navigasi utama">
           <Link to="/" className="group flex items-center gap-3" aria-label="Tarbiyah Sunnah Learning - Beranda">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#285c32] text-white shadow-[0_5px_18px_rgba(40,92,50,.2)] transition-transform group-hover:-rotate-3">
-              <span className="material-symbols-outlined text-[23px]">import_contacts</span>
-            </span>
+            <BrandMark className="h-11 w-11 border border-[#d9ddcf] shadow-[0_5px_18px_rgba(40,92,50,.13)] transition-transform group-hover:-rotate-3" />
             <span className="leading-tight">
               <strong className="block font-headline text-[17px] text-[#183d25]">Tarbiyah Sunnah</strong>
               <span className="block text-[9px] font-bold uppercase tracking-[.22em] text-[#697264]">Learning</span>
@@ -54,7 +64,7 @@ function Navbar() {
             <NavLink className={navClass} to="/tentang">Tentang</NavLink>
             <div className="relative" onMouseEnter={() => setProgramOpen(true)} onMouseLeave={() => setProgramOpen(false)}>
               <button
-                className={`nav-link flex items-center gap-1 ${['/program', '/bid', '/al-quran', '/madrasah-anak', '/bahasa-arab', '/s1-pjj'].includes(location.pathname) ? 'nav-link-active' : ''}`}
+                className={`nav-link flex items-center gap-1 ${['/program', '/bid', '/al-quran', '/preschool-daring', '/madrasah-anak', '/bahasa-arab', '/s1-pjj', '/mahad-tsl', '/kajian'].includes(location.pathname) ? 'nav-link-active' : ''}`}
                 onClick={() => setProgramOpen((value) => !value)}
                 aria-expanded={programOpen}
                 aria-haspopup="true"
@@ -65,7 +75,7 @@ function Navbar() {
                 <div className="rounded-2xl border border-[#d9ddcf] bg-white p-3 shadow-[0_20px_50px_rgba(24,61,37,.14)]">
                   <div className="grid grid-cols-2 gap-1">
                     {programLinks.map((item) => (
-                      <Link key={item.title} to={item.to} className={`rounded-xl p-4 transition-colors hover:bg-[#f1f3e9] ${item.to === '/s1-pjj' ? 'col-span-2' : ''}`}>
+                      <Link key={item.title} to={item.to} className="rounded-xl p-4 transition-colors hover:bg-[#f1f3e9]">
                         <span className="material-symbols-outlined mb-3 text-[24px] text-[#285c32]">{item.icon}</span>
                         <strong className="block text-sm text-[#1d2a20]">{item.title}</strong>
                         <span className="mt-1 block text-xs leading-relaxed text-[#697264]">{item.text}</span>
@@ -101,7 +111,7 @@ function Navbar() {
 
       <div className={`fixed inset-0 z-[60] lg:hidden ${mobileOpen ? 'pointer-events-auto' : 'pointer-events-none'}`} aria-hidden={!mobileOpen}>
         <button className={`absolute inset-0 bg-[#102718]/55 backdrop-blur-sm transition-opacity ${mobileOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setMobileOpen(false)} aria-label="Tutup menu" />
-        <aside className={`absolute right-0 top-0 flex h-full w-[min(90vw,390px)] flex-col bg-[#fbfaf4] p-6 shadow-2xl transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <aside className={`absolute right-0 top-0 flex h-full w-[min(90vw,390px)] flex-col overflow-y-auto overscroll-contain bg-[#fbfaf4] p-6 shadow-2xl transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="mb-8 flex items-center justify-between">
             <span className="font-headline text-xl font-bold text-[#183d25]">Menu</span>
             <button className="grid h-10 w-10 place-items-center rounded-xl border border-[#d9ddcf]" onClick={() => setMobileOpen(false)} aria-label="Tutup menu">
@@ -117,7 +127,7 @@ function Navbar() {
           <p className="mb-3 text-[11px] font-bold uppercase tracking-[.18em] text-[#7a8175]">Program populer</p>
           <div className="space-y-2">
             {programLinks.map((item) => (
-              <Link key={item.title} to={item.to} className="flex items-center gap-3 rounded-xl bg-white p-3.5 text-sm font-bold text-[#183d25]">
+              <Link key={item.title} to={item.to} aria-current={location.pathname === item.to ? 'page' : undefined} className={`flex items-center gap-3 rounded-xl border p-3.5 text-sm font-bold text-[#183d25] ${location.pathname === item.to ? 'border-[#9caf94] bg-[#e3efd8]' : 'border-transparent bg-white'}`}>
                 <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#e3efd8] material-symbols-outlined text-xl">{item.icon}</span>
                 {item.title}
               </Link>
@@ -139,14 +149,14 @@ function Footer() {
       <div className="site-container grid gap-10 py-14 md:grid-cols-[1.35fr_repeat(3,1fr)]">
         <div>
           <Link to="/" className="mb-5 inline-flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#285c32] text-white material-symbols-outlined">import_contacts</span>
+            <BrandMark className="h-12 w-12 border border-[#d2d8ce]" />
             <span className="font-headline text-lg font-bold text-[#183d25]">Tarbiyah Sunnah Learning</span>
           </Link>
           <p className="max-w-xs text-sm leading-7 text-[#667064]">Ekosistem pendidikan Islam yang membantu keluarga belajar secara bertahap, terarah, dan amanah.</p>
         </div>
         <div>
           <h3 className="footer-title">Program</h3>
-          <div className="footer-links"><Link to="/bid">Belajar Islam Dasar</Link><Link to="/al-quran">Al-Qur'an Anak & Dewasa</Link><Link to="/madrasah-anak">Madrasah Anak Daring</Link><Link to="/bahasa-arab">Bahasa Arab Daring</Link><Link to="/s1-pjj">Program S1 PJJ</Link></div>
+          <div className="footer-links"><Link to="/bid">Belajar Islam Dasar</Link><Link to="/al-quran">Al-Qur'an Anak & Dewasa</Link><Link to="/preschool-daring">Preschool Daring TSL</Link><Link to="/madrasah-anak">Madrasah Anak Daring</Link><Link to="/bahasa-arab">Bahasa Arab Daring</Link><Link to="/s1-pjj">Program S1 PJJ</Link><Link to="/mahad-tsl">Ma’had TSL Daring</Link><Link to="/kajian">Kajian Rutin Daring</Link></div>
         </div>
         <div>
           <h3 className="footer-title">Jelajahi</h3>
@@ -154,7 +164,7 @@ function Footer() {
         </div>
         <div>
           <h3 className="footer-title">Terhubung</h3>
-          <div className="footer-links"><a href="https://my.tslbelajarislam.id/" target="_blank" rel="noreferrer">Learning Management System</a><a href="https://wa.me/62895377710900" target="_blank" rel="noreferrer">WhatsApp Admin</a><a href="mailto:info@tsl.or.id">info@tsl.or.id</a></div>
+          <div className="footer-links"><a href="https://my.tslbelajarislam.id/" target="_blank" rel="noreferrer">Learning Management System</a><a href="https://wa.me/62895377710900" target="_blank" rel="noreferrer">WhatsApp Admin</a><a href="mailto:salam@tarbiyahsunnahlearning.or.id">salam@tarbiyahsunnahlearning.or.id</a></div>
         </div>
       </div>
       <div className="border-t border-[#d9ddcf]">
