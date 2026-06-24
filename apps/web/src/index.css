@@ -49,6 +49,11 @@
 .s1-hero-actions { display: flex; flex-direction: column; gap: .75rem; }
 .s1-subnav { top: 72px; }
 .s1-hero { min-height: 620px; }
+.kajian-hero-title { font-size: 2.25rem; }
+.kajian-hero-actions { display: flex; flex-direction: column; gap: .75rem; }
+.kajian-subnav { top: 72px; }
+.kajian-archive-grid { grid-template-columns: minmax(0, 1fr); }
+.kajian-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
 
 @media (min-width: 640px) {
   .madrasah-hero-title { font-size: 3rem; }
@@ -58,6 +63,9 @@
   .s1-hero-title { font-size: 3rem; }
   .s1-hero-actions { flex-direction: row; }
   .s1-hero { min-height: 680px; }
+  .kajian-hero-title { font-size: 3rem; }
+  .kajian-hero-actions { flex-direction: row; }
+  .kajian-archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -67,6 +75,7 @@
   .arabic-hero-actions { flex-direction: column; }
   .s1-hero-title { font-size: 2.5rem; }
   .s1-hero-actions { flex-direction: row; }
+  .kajian-hero-title { font-size: 2.5rem; }
 }
 
 @media (min-width: 1024px) {
@@ -75,12 +84,16 @@
   .arabic-hero-title { font-size: 3rem; }
   .arabic-hero-actions { flex-direction: row; }
   .s1-hero-title { font-size: 3.25rem; }
+  .kajian-hero-title { font-size: 3.25rem; }
+  .kajian-archive-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .kajian-hero-grid { grid-template-columns: minmax(0, 1.08fr) minmax(390px, .92fr); }
 }
 
 @media (min-width: 1280px) {
   .madrasah-hero-title { font-size: 3.75rem; }
   .arabic-hero-title { font-size: 3.75rem; }
   .s1-hero-title { font-size: 3.75rem; }
+  .kajian-hero-title { font-size: 3.75rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

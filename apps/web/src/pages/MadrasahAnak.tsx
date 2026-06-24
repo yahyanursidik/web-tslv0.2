@@ -55,7 +55,7 @@ export default function MadrasahAnak() {
 
           <div className="relative mx-auto w-full max-w-[540px]">
             <div className="rounded-[30px] bg-[#274d45] p-4 shadow-[0_28px_70px_rgba(24,61,37,.2)] sm:p-6 lg:rounded-[36px] lg:p-8">
-              <img src="/images/program-madrasah-hero.jpg" alt="Ilustrasi anak belajar agama secara daring di ruang yang hangat" className="aspect-square w-full rounded-[24px] object-cover" />
+              <img src="/images/program-quran-anak.png" alt="Ilustrasi Al-Qur’an berwarna lembut untuk pembelajaran anak" className="aspect-square w-full rounded-[24px] object-cover" />
             </div>
             <div className="absolute -right-3 -top-4 hidden items-center gap-3 rounded-2xl border border-[#d8ddd1] bg-white px-4 py-3 shadow-xl sm:flex">
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#f6e9a9] text-[#755a00] material-symbols-outlined">task_alt</span>
@@ -114,8 +114,8 @@ export default function MadrasahAnak() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <img src="/images/program-madrasah-reading.jpg" alt="Ilustrasi ananda membaca buku pelajaran" loading="lazy" className="mt-12 aspect-[3/4] w-full rounded-3xl object-cover shadow-[0_15px_35px_rgba(24,61,37,.12)]" />
-            <img src="/images/program-madrasah-class.jpg" alt="Ilustrasi halaqah belajar anak bersama pengajar" loading="lazy" className="aspect-[3/4] w-full rounded-3xl object-cover shadow-[0_15px_35px_rgba(24,61,37,.12)]" />
+            <img src="/images/program-quran-anak-landscape.webp" alt="Ruang belajar Al-Qur’an dengan rehal dan perangkat digital" loading="lazy" className="mt-12 aspect-[3/4] w-full rounded-3xl object-cover shadow-[0_15px_35px_rgba(24,61,37,.12)]" />
+            <img src="/images/hero-learning-library-landscape.webp" alt="Perpustakaan Islam dengan buku dan meja belajar" loading="lazy" className="aspect-[3/4] w-full rounded-3xl object-cover shadow-[0_15px_35px_rgba(24,61,37,.12)]" />
           </div>
         </div>
       </section>
