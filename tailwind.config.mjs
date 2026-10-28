@@ -16,6 +16,13 @@ export default {
         line: '#E2E8E0',
         night: '#102E20',
         sand: '#F3EEE3',
+        // Warna dari logo resmi TSL
+        brand: {
+          DEFAULT: '#466835',
+          dark: '#2C5122',
+          orange: '#F5821F',
+          yellow: '#E6C33B',
+        },
       },
       fontFamily: {
         heading: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],

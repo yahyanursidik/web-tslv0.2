@@ -10,7 +10,7 @@ export const site = {
   description:
     'Portal pembelajaran Islam Tarbiyah Sunnah Learning: program terarah dan bertahap untuk anak, dewasa, pendidikan lanjutan, hingga usia 45+, serta jadwal kajian rutin daring.',
   locale: 'id_ID',
-  /** Tampilkan penanda pratinjau sampai logo, kontak, dan pendaftaran resmi diverifikasi. */
+  /** Tampilkan penanda pratinjau sampai kontak dan pendaftaran resmi diverifikasi. */
   isPreview: true,
   announcement: {
     text: 'Pembaruan program pembelajaran TSL 2026–2027',

@@ -1,6 +1,12 @@
 # Tarbiyah Sunnah Learning — Website
 
-Portal publik TSL (Astro 6 + Tailwind + TypeScript), dibangun dari *Initial Brief Revamp* (28 Okt 2026) dan prototipe UI/UX `tsl-revamp`.
+Portal publik TSL (Astro 7 + Tailwind 3 + TypeScript), dibangun dari *Initial Brief Revamp* (28 Okt 2026) dan prototipe UI/UX `tsl-revamp`. Node ≥ 22.22.
+
+Tailwind dijalankan lewat PostCSS (`postcss.config.mjs`), bukan `@astrojs/tailwind` yang tidak mendukung Astro 7.
+
+## Logo
+
+Aset logo resmi di `public/images/`: `tsl-logo.webp`/`.png` (logo vertikal lengkap), `tsl-mark-96/192.webp` dan `tsl-mark-512.png` (mark layang-layang). Header/footer memakai mark + logotype horizontal (`src/components/Brand.astro`). Favicon, apple-touch-icon, dan gambar Open Graph default (`og-default.png`) dibuat dari logo yang sama.
 
 ```sh
 npm install
@@ -33,10 +39,9 @@ Semua konten ada di `src/data/` dan modelnya mengikuti brief bagian 9 — siap d
 
 ## Masih menunggu data resmi (brief P0)
 
-- Logo resmi (`public/images/tsl-mark*.svg` masih konsep), kontak, tautan pendaftaran, kebijakan tautan kajian.
+- Kontak, tautan pendaftaran, kebijakan tautan kajian. Sebaiknya minta juga file logo vektor (SVG/AI) agar mark tajam di semua ukuran.
 - Dokumen Al-Qur'an & Bahasa Arab Dewasa; verifikasi Belajar Islam Dasar, Ma'had, S1 PJJ.
 - Frekuensi sesi MAUD/private TSL for Kids (sengaja tidak ditampilkan) dan redaksi "Class or Siroh".
 - Alamat migrasi Preschool → tambahkan ke `redirects` di `astro.config.mjs`.
-- Gambar Open Graph (PNG 1200×630) — kirim lewat prop `image` di layout.
 
 > Catatan: `extract.cjs` dan file `*.html` di root adalah sisa ekspor desain lama. Jangan jalankan `extract.cjs` — skrip itu menimpa `src/pages/index.astro`.
