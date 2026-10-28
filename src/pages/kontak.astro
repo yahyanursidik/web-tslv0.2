@@ -1,15 +1,16 @@
 ---
-import { AtSign, Clock, Mail, MapPin, MessageCircle, MonitorPlay } from '@lucide/astro';
+import { AtSign, Clock, Mail, MapPin, MessageCircle, MonitorPlay, Video } from '@lucide/astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/ui/PageHero.astro';
 import { site } from '../data/site';
 import { programs } from '../data/programs';
 
 const channels = [
-  { key: 'whatsapp', label: 'WhatsApp admin', icon: MessageCircle, value: site.contact.whatsapp, cta: 'Kirim pesan' },
+  { key: 'whatsapp', label: 'WhatsApp admin', icon: MessageCircle, value: site.contact.whatsapp, cta: site.contact.whatsappLabel },
+  { key: 'lms', label: 'Learning Management System', icon: MonitorPlay, value: site.lmsUrl, cta: 'Masuk LMS' },
   { key: 'email', label: 'Email', icon: Mail, value: site.contact.email ? `mailto:${site.contact.email}` : null, cta: site.contact.email },
   { key: 'instagram', label: 'Instagram', icon: AtSign, value: site.contact.instagram, cta: 'Buka Instagram' },
-  { key: 'youtube', label: 'YouTube', icon: MonitorPlay, value: site.contact.youtube, cta: 'Buka YouTube' },
+  { key: 'youtube', label: 'YouTube', icon: Video, value: site.contact.youtube, cta: 'Buka YouTube' },
   { key: 'address', label: 'Alamat', icon: MapPin, value: null, cta: site.contact.address },
 ];
 const programTitles = Object.fromEntries(programs.map((p) => [p.slug, p.title]));

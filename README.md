@@ -39,9 +39,11 @@ Semua konten ada di `src/data/` dan modelnya mengikuti brief bagian 9 — siap d
 
 ## Masih menunggu data resmi (brief P0)
 
-- Kontak, tautan pendaftaran, kebijakan tautan kajian. Sebaiknya minta juga file logo vektor (SVG/AI) agar mark tajam di semua ukuran.
+- Alamat, media sosial, kebijakan tautan kajian, dan portal pendaftaran selain Ma'had (saat ini lewat WhatsApp admin). Sebaiknya minta juga file logo vektor (SVG/AI).
 - Dokumen Al-Qur'an & Bahasa Arab Dewasa; verifikasi Belajar Islam Dasar, Ma'had, S1 PJJ.
 - Frekuensi sesi MAUD/private TSL for Kids (sengaja tidak ditampilkan) dan redaksi "Class or Siroh".
 - Alamat migrasi Preschool → tambahkan ke `redirects` di `astro.config.mjs`.
 
-> Catatan: `extract.cjs` dan file `*.html` di root adalah sisa ekspor desain lama. Jangan jalankan `extract.cjs` — skrip itu menimpa `src/pages/index.astro`.
+## Deploy
+
+Netlify membaca `netlify.toml` (build `npm run build`, publish `dist`) dan memasang redirect 301 dari URL website lama (`/madrasah-anak`, `/mahad-tsl`, `/al-quran`, dll.).

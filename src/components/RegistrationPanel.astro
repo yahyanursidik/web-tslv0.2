@@ -1,10 +1,10 @@
 ---
 /**
- * Panel tindakan program. Tombol hanya aktif bila tautan resmi sudah diisi di data;
- * bila belum, tampilkan status jujur alih-alih tautan kosong.
+ * Panel tindakan program. Urutan prioritas: portal pendaftaran program → WhatsApp admin
+ * dengan pesan pembuka → halaman Kontak. Tidak pernah menampilkan tautan kosong.
  */
 import { ArrowUpRight, Info, MessageCircle, Share2 } from '@lucide/astro';
-import { site } from '../data/site';
+import { site, waLink } from '../data/site';
 import type { Program } from '../data/programs';
 
 interface Props {
@@ -13,7 +13,8 @@ interface Props {
 }
 const { program: p, sticky = false } = Astro.props;
 const registration = p.registrationUrl ?? site.registrationUrl;
-const contact = p.contactUrl ?? site.contact.whatsapp;
+const contact = p.contactUrl ?? waLink(`Assalamu’alaikum, saya ingin bertanya tentang program ${p.title}.`);
+const registerViaWa = !registration ? waLink(`Assalamu’alaikum, saya ingin mendaftar program ${p.title}.`) : null;
 ---
 
 <aside class:list={['rounded-2xl border border-line bg-white p-5 shadow-lift', sticky && 'lg:sticky lg:top-28']} aria-label="Pendaftaran dan konsultasi">
@@ -23,6 +24,10 @@ const contact = p.contactUrl ?? site.contact.whatsapp;
       registration ? (
         <a href={registration} class="btn btn-primary w-full" target="_blank" rel="noopener" data-track="cta_daftar" data-track-label={p.id}>
           Daftar sekarang <ArrowUpRight size={18} aria-hidden="true" />
+        </a>
+      ) : registerViaWa ? (
+        <a href={registerViaWa} class="btn btn-primary w-full" target="_blank" rel="noopener" data-track="cta_daftar" data-track-label={p.id}>
+          <MessageCircle size={18} aria-hidden="true" /> Daftar via WhatsApp
         </a>
       ) : (
         <span class="btn btn-primary w-full" aria-disabled="true">Pendaftaran segera dibuka</span>
@@ -44,10 +49,10 @@ const contact = p.contactUrl ?? site.contact.whatsapp;
     </button>
   </div>
   {
-    !registration && (
+    p.dataStatus === 'pending' && (
       <p class="mt-4 flex gap-2 rounded-xl bg-cream p-3 text-xs text-muted">
         <Info size={16} class="mt-0.5 shrink-0" aria-hidden="true" />
-        Formulir pendaftaran, biaya, dan jadwal angkatan ditampilkan setelah divalidasi pengelola.
+        Rincian biaya dan jadwal angkatan dapat ditanyakan kepada admin sambil halaman ini diperbarui.
       </p>
     )
   }

@@ -5,7 +5,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import AddToCalendar from '../../components/AddToCalendar.astro';
 import { activeKajian, getTeacher, kajianUrl, kajianExceptions, type Kajian } from '../../data/kajian';
 import { getProgram, programUrl } from '../../data/programs';
-import { site } from '../../data/site';
+import { waLink } from '../../data/site';
 import { DAYS, formatTime } from '../../lib/schedule';
 
 export function getStaticPaths() {
@@ -17,6 +17,7 @@ const teacher = getTeacher(k.teacherId);
 const sameTeacher = activeKajian.filter((x) => x.teacherId === k.teacherId && x.id !== k.id);
 const exceptions = kajianExceptions.filter((x) => x.kajianId === k.id);
 const scheduleText = k.sessions.map((s) => `${DAYS[s.day]} ${formatTime(s.time)}`).join(' & ');
+const askLink = waLink(`Assalamu’alaikum, saya ingin mengikuti ${k.title} (${scheduleText} WIB). Mohon info tautan bergabungnya.`);
 
 // Program terstruktur yang relevan untuk melanjutkan belajar
 const relatedProgram: Record<string, string> = {
@@ -142,7 +143,7 @@ const next = relatedProgram[k.id] ? getProgram(relatedProgram[k.id]) : null;
                 <li>2. Tautan {k.platform} dibagikan oleh pengelola melalui kanal resmi.</li>
                 <li>3. Bergabung beberapa menit sebelum kajian dimulai.</li>
               </ol>
-              <a href={site.contact.whatsapp ?? '/kontak'} class="btn btn-primary mt-4 w-full" data-track="kajian_howto" data-track-label={k.id}>
+              <a href={askLink ?? '/kontak'} target={askLink ? '_blank' : undefined} rel="noopener" class="btn btn-primary mt-4 w-full" data-track="kajian_howto" data-track-label={k.id}>
                 <MessageCircle size={18} aria-hidden="true" /> Minta tautan ke admin
               </a>
             </>

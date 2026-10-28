@@ -30,6 +30,7 @@ const links = [
       </div>
       <a href="/bantuan" class="font-bold hover:text-forest">Bantuan</a>
       <a href="/kontak" class="font-bold hover:text-forest">Kontak</a>
+      {site.lmsUrl && <a href={site.lmsUrl} target="_blank" rel="noopener" class="font-bold hover:text-forest" data-track="lms_open">Masuk LMS ↗</a>}
     </div>
   </div>
 </div>
@@ -192,10 +193,11 @@ const links = [
         </div>
       </div>
     </div>
-    <div class="sticky bottom-0 border-t border-line bg-white p-4">
+    <div class="sticky bottom-0 grid gap-2 border-t border-line bg-white p-4">
       <a href="/program#finder" class="btn btn-primary w-full" data-track="cta_mulai" data-track-label="drawer">
         <Compass size={18} aria-hidden="true" /> Temukan program yang sesuai
       </a>
+      {site.lmsUrl && <a href={site.lmsUrl} target="_blank" rel="noopener" class="btn btn-outline w-full" data-track="lms_open">Masuk LMS</a>}
     </div>
   </div>
 </div>

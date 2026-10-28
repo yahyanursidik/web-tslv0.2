@@ -4,7 +4,7 @@ import { site } from '../data/site';
 import { programs, programUrl } from '../data/programs';
 
 const year = new Date().getFullYear();
-const contact = Object.entries(site.contact).filter(([, v]) => v);
+const contact = [site.contact.whatsapp, site.contact.email].filter(Boolean);
 ---
 
 <footer class="bg-night text-[#C3D5C9]">
@@ -39,10 +39,14 @@ const contact = Object.entries(site.contact).filter(([, v]) => v);
         <li><a href="/tentang" class="hover:text-white hover:underline">Tentang TSL</a></li>
         <li><a href="/bantuan" class="hover:text-white hover:underline">Bantuan & FAQ</a></li>
         <li><a href="/kontak" class="hover:text-white hover:underline">Kontak</a></li>
+        {site.lmsUrl && <li><a href={site.lmsUrl} target="_blank" rel="noopener" class="hover:text-white hover:underline">Learning Management System ↗</a></li>}
       </ul>
       {
-        contact.length === 0 && (
-          <p class="mt-5 rounded-xl border border-white/15 p-3 text-xs">Kanal kontak, alamat, dan media sosial resmi sedang dikonfirmasi.</p>
+        contact.length > 0 && (
+          <ul class="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm">
+            {site.contact.whatsapp && <li><a href={site.contact.whatsapp} target="_blank" rel="noopener" class="hover:text-white hover:underline">WhatsApp {site.contact.whatsappLabel}</a></li>}
+            {site.contact.email && <li><a href={`mailto:${site.contact.email}`} class="break-all hover:text-white hover:underline">{site.contact.email}</a></li>}
+          </ul>
         )
       }
     </nav>

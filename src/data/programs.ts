@@ -39,7 +39,11 @@ export interface Program {
   groups?: { label: string; age: string }[];
   tracks?: Track[];
   curriculum?: string[];
+  /** Rincian rumpun materi; bila ada, ditampilkan menggantikan daftar `curriculum`. */
+  curriculumDetail?: { title: string; text: string }[];
   support?: string[];
+  enrollmentSteps?: { title: string; text: string }[];
+  pricing?: { items: { label: string; value: string; note: string }[]; note?: string };
   facts: { label: string; value: string }[];
   faq?: { q: string; a: string }[];
   /** 'guide' = bersumber dari panduan resmi; 'pending' = menunggu dokumen/validasi. */
@@ -280,35 +284,95 @@ export const programs: Program[] = [
     title: 'Ma’had TSL Daring',
     segment: 'lanjutan',
     ageLabel: 'Pendidikan lanjutan',
-    menuDescription: 'Pembelajaran diniyyah lanjutan',
-    summary: 'Pembelajaran diniyyah dan Bahasa Arab tingkat lanjutan yang diselenggarakan secara daring.',
+    menuDescription: 'Bahasa Arab & ilmu diniyah berjenjang',
+    summary:
+      'Pembelajaran Bahasa Arab dan ilmu diniyah yang sistematis, bertahap, dan berbasis level belajar — sepenuhnya daring, Senin–Sabtu pukul 19.45 WIB.',
+    // Sumber: halaman Ma’had TSL di website sebelumnya (PR #4–#6, Juli 2026).
     intro: [
-      'Ma’had TSL Daring adalah jalur bagi pembelajar yang ingin memperdalam ilmu diniyyah dan Bahasa Arab secara lebih terstruktur.',
+      'Ma’had TSL Daring adalah program pembelajaran Bahasa Arab dan ilmu diniyah yang sistematis, bertahap, dan berbasis level belajar untuk membangun fondasi keilmuan Islam berdasarkan Al-Qur’an dan As-Sunnah.',
+      'Bahasa menjadi alat untuk memahami sumber ilmu, sementara materi diniyah menata pemahaman dan amal secara seimbang. Materi disusun dengan rujukan kitab para ulama yang mu’tabar dan sesuai manhaj Ahlus Sunnah.',
     ],
     audience: [
-      'Pembelajar yang telah memiliki dasar dan ingin pendalaman diniyyah.',
-      'Peserta yang menginginkan pembelajaran berjenjang dengan komitmen jangka panjang.',
+      'Remaja yang ingin membangun karakter Islami dan kebiasaan belajar sejak dini.',
+      'Dewasa yang ingin memperdalam ilmu agama di tengah kesibukan.',
+      'Guru & pengajar yang ingin meningkatkan kompetensi bahasa dan ilmu syar’i.',
+      'Pemula — tes penempatan membantu menentukan level awal yang sesuai.',
     ],
-    outcomes: [],
-    modalities: [],
-    curriculum: ['Diniyyah', 'Bahasa Arab'],
+    outcomes: [
+      'Hafalan Juz 30 yang kuat, tepat, dan mutqin.',
+      'Mampu membaca, memahami, dan menerjemahkan bahasa Arab secara bertahap.',
+      'Ilmu syar’i yang aplikatif dan sesuai manhaj Ahlus Sunnah.',
+      'Fondasi keilmuan dari kitab-kitab ulama yang mu’tabar.',
+    ],
+    modalities: [
+      { title: 'Full online', text: 'Belajar dari lokasi masing-masing melalui kelas daring dan LMS TSL.' },
+      { title: 'Senin–Sabtu, 19.45–20.45 WIB', text: 'Pertemuan rutin enam hari sepekan, satu jam setiap malam.' },
+      { title: 'Rekaman setiap pertemuan', text: 'Materi dapat dipelajari ulang sehingga tidak kehilangan kesempatan mengulang.' },
+      { title: 'Sistem semester & level', text: 'Pembelajaran berjenjang dengan evaluasi dan administrasi setiap semester.' },
+    ],
+    curriculum: ['Bahasa Arab', 'Aqidah', 'Fiqh', 'Adab', 'Hadits', 'Tafsir'],
+    curriculumDetail: [
+      { title: 'Bahasa Arab', text: 'Nahwu, sharaf, dan durusul lughah.' },
+      { title: 'Aqidah', text: 'Pemurnian tauhid dan penguatan manhaj.' },
+      { title: 'Fiqh', text: 'Ibadah harian dan dasar muamalah.' },
+      { title: 'Adab', text: 'Akhlak mulia dan adab penuntut ilmu.' },
+      { title: 'Hadits', text: 'Kajian hadits dan pengenalan kitab induk.' },
+      { title: 'Tafsir', text: 'Tadabbur dan pemahaman ayat Al-Qur’an.' },
+    ],
+    enrollmentSteps: [
+      { title: 'Registrasi', text: 'Isi formulir melalui portal PMB TSL.' },
+      { title: 'Tes penempatan', text: 'Ikuti ujian daring untuk menentukan level belajar.' },
+      { title: 'Administrasi', text: 'Selesaikan biaya pendidikan dan konfirmasi.' },
+      { title: 'Mulai belajar', text: 'Akses LMS dan ikuti materi pertama.' },
+    ],
+    pricing: {
+      items: [
+        { label: 'Pendaftaran & tes', value: 'Akan diinformasikan', note: 'Disampaikan pada masa SPMB.' },
+        { label: 'SPP per semester', value: 'Rp1.800.000', note: 'Dapat dicicil hingga 6 kali.' },
+      ],
+      note: 'Beasiswa tersedia bagi santri berprestasi dan kurang mampu, sesuai syarat, kuota, dan ketentuan. Konfirmasikan nominal dan skema pembayaran terbaru kepada admin sebelum menyelesaikan pendaftaran.',
+    },
     facts: [
-      { label: 'Jenjang', value: 'Lanjutan' },
-      { label: 'Format', value: 'Daring' },
+      { label: 'Format', value: 'Full online + rekaman' },
+      { label: 'Jadwal', value: 'Senin–Sabtu' },
+      { label: 'Waktu', value: '19.45–20.45 WIB' },
+      { label: 'SPP', value: 'Rp1,8 jt / semester' },
     ],
-    dataStatus: 'pending',
-    pendingNotice: pendingDefault,
-    internalNote: 'Validasi level, kurikulum aktif, jadwal, dan periode penerimaan.',
+    faq: [
+      {
+        q: 'Apakah seluruh pembelajaran dilakukan secara daring?',
+        a: 'Ya. Kegiatan belajar, tes penempatan, materi, dan administrasi dilaksanakan secara daring melalui kanal resmi serta LMS TSL.',
+      },
+      {
+        q: 'Apakah pemula dapat mengikuti program ini?',
+        a: 'Dapat. Tes penempatan membantu menentukan level belajar yang sesuai, sehingga peserta memulai dari tingkat kemampuan yang tepat.',
+      },
+      {
+        q: 'Berapa lama satu periode pembelajaran?',
+        a: 'Program berjalan dengan sistem semester dan tahapan belajar. Jadwal serta durasi terbaru diinformasikan pada saat pendaftaran.',
+      },
+      {
+        q: 'Apakah tersedia beasiswa?',
+        a: 'Tersedia dukungan beasiswa bagi santri berprestasi dan kurang mampu, mengikuti syarat, kuota, dan ketentuan yang berlaku.',
+      },
+      {
+        q: 'Apakah biaya dapat berubah?',
+        a: 'Nominal di halaman ini merupakan acuan program. Konfirmasikan biaya dan skema pembayaran terbaru kepada admin sebelum menyelesaikan pendaftaran.',
+      },
+    ],
+    dataStatus: 'guide',
     status: 'active',
     enrollmentStatus: 'unverified',
-    registrationUrl: null,
-    contactUrl: null,
+    registrationUrl: 'https://pmb.sim-tsl.com',
+    // Kontak khusus Ma’had & STPII Support (0881 0257 66336)
+    contactUrl: `https://wa.me/62881025766336?text=${encodeURIComponent('Assalamu’alaikum, saya ingin mendapatkan informasi pendaftaran program Ma’had TSL Daring.')}`,
     image: '/images/learning-mahad.svg',
     imageAlt: 'Ilustrasi layar laptop untuk pembelajaran daring',
     tone: 'mist',
     seo: {
-      title: 'Ma’had TSL Daring — Pembelajaran Diniyyah Lanjutan',
-      description: 'Pembelajaran diniyyah dan Bahasa Arab tingkat lanjutan secara daring bersama Tarbiyah Sunnah Learning.',
+      title: 'Ma’had TSL Daring — Bahasa Arab & Ilmu Diniyah Berjenjang',
+      description:
+        'Bahasa Arab, aqidah, fiqh, adab, hadits, dan tafsir secara daring Senin–Sabtu 19.45 WIB, dengan rekaman kelas dan tes penempatan. SPP Rp1.800.000/semester.',
     },
   },
   {

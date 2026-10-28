@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, Check, Clock, Info } from '@lucide/astro';
+import { ArrowRight, ArrowUpRight, Check, Clock, Info } from '@lucide/astro';
 import Base from '../../layouts/Base.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import StatusBadge from '../../components/ui/StatusBadge.astro';
@@ -24,6 +24,8 @@ const sections = [
   { id: 'cara-belajar', label: 'Cara belajar', show: p.modalities.length > 0 || !!p.groups?.length },
   { id: 'pendampingan', label: 'Pendampingan', show: !!p.support?.length },
   { id: 'materi', label: 'Materi', show: !!p.curriculum?.length },
+  { id: 'alur-pendaftaran', label: 'Alur pendaftaran', show: !!p.enrollmentSteps?.length },
+  { id: 'biaya', label: 'Biaya', show: !!p.pricing },
   { id: 'faq', label: 'Pertanyaan', show: !!p.faq?.length },
 ].filter((s) => s.show);
 
@@ -42,13 +44,20 @@ const related = programs
         <div>
           <div class="flex flex-wrap items-center gap-2">
             <span class="badge bg-white text-deep">{segments[p.segment].label}</span>
-            <span class="badge bg-white text-deep">{p.ageLabel}</span>
+            {p.ageLabel.toLowerCase() !== segments[p.segment].label.toLowerCase() && <span class="badge bg-white text-deep">{p.ageLabel}</span>}
             <StatusBadge program={p} />
           </div>
           <h1 class="mt-5 text-[2.3rem] font-extrabold leading-[1.1] md:text-[3.2rem]">{p.title}</h1>
           <p class="mt-4 max-w-xl text-[1.1rem] text-[#4F6157]">{p.summary}</p>
           <div class="mt-7 flex flex-wrap gap-3">
-            <a href="#daftar" class="btn btn-primary">Cara mendaftar <ArrowRight size={18} aria-hidden="true" /></a>
+            {p.registrationUrl ? (
+              <a href={p.registrationUrl} target="_blank" rel="noopener" class="btn btn-primary" data-track="cta_daftar" data-track-label={p.id}>
+                Daftar sekarang <ArrowUpRight size={18} aria-hidden="true" />
+              </a>
+            ) : (
+              <a href="#daftar" class="btn btn-primary">Cara mendaftar <ArrowRight size={18} aria-hidden="true" /></a>
+            )}
+            {p.enrollmentSteps && <a href="#alur-pendaftaran" class="btn btn-outline">Alur pendaftaran</a>}
             {p.offerings && <a href="#layanan" class="btn btn-outline">Lihat {p.offerings.length} layanan</a>}
             {p.tracks && <a href="#jalur" class="btn btn-outline">Lihat {p.tracks.length} jalur</a>}
           </div>
@@ -239,14 +248,68 @@ const related = programs
         p.curriculum && (
           <section id="materi" class="scroll-mt-28">
             <h2 class="text-[1.6rem] font-extrabold">{p.dataStatus === 'pending' ? 'Fokus pembelajaran' : 'Materi pembelajaran'}</h2>
-            <ul class="mt-5 flex flex-wrap gap-2">
-              {p.curriculum.map((c) => <li class="rounded-full border border-line bg-white px-4 py-2 font-bold">{c}</li>)}
-            </ul>
+            {p.curriculumDetail ? (
+              <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+                {p.curriculumDetail.map((c) => (
+                  <li class="rounded-2xl border border-line p-4">
+                    <b class="block font-heading text-lg">{c.title}</b>
+                    <span class="text-sm text-muted">{c.text}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul class="mt-5 flex flex-wrap gap-2">
+                {p.curriculum.map((c) => <li class="rounded-full border border-line bg-white px-4 py-2 font-bold">{c}</li>)}
+              </ul>
+            )}
             {p.dataStatus === 'pending' && (
               <p class="mt-4 flex gap-2 text-sm text-muted">
                 <Info size={16} class="mt-0.5 shrink-0" aria-hidden="true" /> Rincian kurikulum akan ditambahkan setelah divalidasi.
               </p>
             )}
+          </section>
+        )
+      }
+
+      {
+        p.enrollmentSteps && (
+          <section id="alur-pendaftaran" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Alur pendaftaran</h2>
+            <ol class="mt-5 grid gap-3 sm:grid-cols-2">
+              {p.enrollmentSteps.map((s, i) => (
+                <li class="rounded-2xl bg-cream p-5">
+                  <span class:list={['flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold', i === p.enrollmentSteps!.length - 1 ? 'bg-gold text-night' : 'bg-forest text-white']}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 class="mt-4 text-lg font-extrabold">{s.title}</h3>
+                  <p class="mt-1 text-sm text-muted">{s.text}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        p.pricing && (
+          <section id="biaya" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Biaya</h2>
+            <div class="mt-5 overflow-hidden rounded-2xl border border-line">
+              <dl class="grid divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+                {p.pricing.items.map((item) => (
+                  <div class="p-6">
+                    <dt class="text-xs font-bold uppercase tracking-wide text-muted">{item.label}</dt>
+                    <dd class="mt-2 font-heading text-2xl font-extrabold text-forest">{item.value}</dd>
+                    <dd class="mt-1 text-sm text-muted">{item.note}</dd>
+                  </div>
+                ))}
+              </dl>
+              {p.pricing.note && (
+                <p class="flex gap-2 border-t border-line bg-mist p-5 text-sm text-muted">
+                  <Info size={16} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" /> {p.pricing.note}
+                </p>
+              )}
+            </div>
           </section>
         )
       }
