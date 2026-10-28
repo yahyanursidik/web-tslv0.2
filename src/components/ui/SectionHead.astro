@@ -1,0 +1,19 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  inverse?: boolean;
+  id?: string;
+}
+const { eyebrow, title, lead, inverse = false, id } = Astro.props;
+---
+
+<div class="mb-9 flex flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-10">
+  <div class="max-w-2xl">
+    <span class:list={['eyebrow', inverse && '!text-[#B7D0BC]']}>{eyebrow}</span>
+    <h2 id={id} class:list={['section-title', inverse && '!text-white']} set:html={title} />
+  </div>
+  {lead && <p class:list={['max-w-md', inverse ? 'text-[#C5D9CB]' : 'text-muted']}>{lead}</p>}
+  <slot />
+</div>

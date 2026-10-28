@@ -1,0 +1,288 @@
+---
+import { ArrowRight, ChevronDown, Compass, Menu, Search, X } from '@lucide/astro';
+import Brand from './Brand.astro';
+import NextKajian from './NextKajian.astro';
+import { site } from '../data/site';
+import { getProgram, menuGroups, programUrl } from '../data/programs';
+import { activeKajian, sessionCount } from '../data/kajian';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`));
+
+const links = [
+  { href: '/kajian', label: 'Jadwal Kajian' },
+  { href: '/cara-belajar', label: 'Cara Belajar' },
+  { href: '/tentang', label: 'Tentang TSL' },
+];
+---
+
+<div class="bg-mist text-[0.8rem] text-[#335543]">
+  <div class="container-site flex min-h-[38px] items-center justify-between gap-4">
+    <p class="truncate py-2">
+      {site.announcement.text} ·
+      <a href={site.announcement.href} class="font-bold text-forest underline underline-offset-2">{site.announcement.linkLabel}</a>
+    </p>
+    <div class="hidden items-center gap-5 lg:flex">
+      <div class="flex items-center gap-1" role="group" aria-label="Ukuran teks">
+        <span class="mr-1">Ukuran teks</span>
+        <button type="button" data-text-size="md" aria-pressed="true" class="rounded-md px-2 py-0.5 font-bold aria-pressed:bg-white aria-pressed:text-forest" aria-label="Teks standar">A</button>
+        <button type="button" data-text-size="lg" aria-pressed="false" class="rounded-md px-2 py-0.5 text-[1rem] font-bold aria-pressed:bg-white aria-pressed:text-forest" aria-label="Teks lebih besar">A+</button>
+      </div>
+      <a href="/bantuan" class="font-bold hover:text-forest">Bantuan</a>
+      <a href="/kontak" class="font-bold hover:text-forest">Kontak</a>
+      {site.lmsUrl && <a href={site.lmsUrl} target="_blank" rel="noopener" class="font-bold hover:text-forest" data-track="lms_open">Masuk LMS ↗</a>}
+    </div>
+  </div>
+</div>
+
+<header class="sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur" data-header>
+  <div class="container-site flex h-[72px] items-center gap-6 lg:h-[78px]">
+    <Brand />
+
+    <nav aria-label="Navigasi utama" class="ml-auto hidden lg:block">
+      <ul class="flex items-center gap-1">
+        <li>
+          <a href="/" class="nav-link" aria-current={isActive('/') ? 'page' : undefined}>Beranda</a>
+        </li>
+        <li data-mega-root>
+          <button
+            type="button"
+            class="nav-link inline-flex items-center gap-1.5"
+            aria-expanded="false"
+            aria-controls="mega-program"
+            data-mega-toggle
+            aria-current={isActive('/program') ? 'page' : undefined}
+          >
+            Program Belajar <ChevronDown size={16} class="transition-transform" aria-hidden="true" data-mega-chevron />
+          </button>
+          <div id="mega-program" class="absolute inset-x-0 top-full hidden border-b border-line bg-white shadow-soft" data-mega>
+            <div class="container-site grid grid-cols-[1fr_2fr_1.05fr] gap-8 py-7">
+              <div class="flex flex-col rounded-2xl bg-cream p-6">
+                <span class="eyebrow">Jelajahi program</span>
+                <p class="mt-3 font-heading text-xl font-extrabold leading-snug text-ink">Belajar untuk setiap tahap kehidupan.</p>
+                <p class="mt-2 text-sm text-muted">Pilih berdasarkan usia dan tujuan belajar. Belum yakin? Jawab dua pertanyaan singkat.</p>
+                <div class="mt-auto flex flex-col gap-2 pt-5">
+                  <a href="/program#finder" class="btn btn-primary" data-track="finder_open" data-track-label="mega">
+                    <Compass size={18} aria-hidden="true" /> Program Finder
+                  </a>
+                  <a href="/program" class="btn btn-ghost">Semua program <ArrowRight size={18} aria-hidden="true" /></a>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-x-6 gap-y-5">
+                {
+                  menuGroups.map((g) => (
+                    <div>
+                      <p class="mb-1 px-3 text-[0.7rem] font-extrabold uppercase tracking-[0.12em] text-sage">{g.title}</p>
+                      {g.programIds.map((id) => {
+                        const p = getProgram(id);
+                        return (
+                          <a href={programUrl(p)} class="block rounded-xl px-3 py-2.5 hover:bg-mist" aria-current={isActive(programUrl(p)) ? 'page' : undefined}>
+                            <span class="block text-[0.92rem] font-bold text-ink">{p.title}</span>
+                            <span class="mt-0.5 block text-[0.82rem] text-muted">{p.menuDescription}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  ))
+                }
+              </div>
+              <div class="flex flex-col gap-3 rounded-2xl bg-mist p-3">
+                <NextKajian variant="compact" />
+                <a href="/kajian" class="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-bold text-forest hover:bg-white">
+                  <span>Kajian Rutin Daring<small class="block font-normal text-muted">{activeKajian.length} kajian · {sessionCount} sesi pekanan</small></span>
+                  <ArrowRight size={18} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} class="nav-link" aria-current={isActive(l.href) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 lg:ml-0">
+      <button
+        type="button"
+        data-search-open
+        class="inline-flex h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm text-muted hover:border-sage"
+        aria-label="Cari program, kajian, atau bantuan"
+      >
+        <Search size={18} aria-hidden="true" />
+        <span class="hidden xl:inline">Cari</span>
+        <kbd class="hidden rounded border border-line px-1.5 text-[0.7rem] font-bold xl:inline">Ctrl K</kbd>
+      </button>
+      <a href="/program#finder" class="btn btn-primary hidden !py-2 lg:inline-flex" data-track="cta_mulai" data-track-label="header">
+        Mulai Belajar <ArrowRight size={18} aria-hidden="true" />
+      </a>
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-xl text-forest hover:bg-mist lg:hidden"
+        aria-label="Buka menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-drawer-open
+      >
+        <Menu size={24} aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menu mobile: panel layar penuh dengan akordeon kategori -->
+<div id="mobile-menu" class="fixed inset-0 z-[70] hidden lg:hidden" data-drawer role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="absolute inset-0 bg-night/50" data-drawer-close></div>
+  <div class="absolute inset-y-0 right-0 flex w-full max-w-[420px] flex-col overflow-y-auto bg-white">
+    <div class="flex h-[72px] shrink-0 items-center justify-between border-b border-line px-4">
+      <Brand />
+      <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-xl text-forest hover:bg-mist" aria-label="Tutup menu" data-drawer-close>
+        <X size={24} aria-hidden="true" />
+      </button>
+    </div>
+    <div class="flex flex-1 flex-col gap-1 p-4">
+      <button type="button" data-search-open class="mb-3 flex h-12 items-center gap-3 rounded-xl border border-line px-4 text-muted">
+        <Search size={18} aria-hidden="true" /> Cari program, kajian, bantuan…
+      </button>
+      <a href="/" class="drawer-link" aria-current={isActive('/') ? 'page' : undefined}>Beranda</a>
+      <details class="group" open={isActive('/program')}>
+        <summary class="flex cursor-pointer list-none items-center justify-between rounded-xl px-3 py-3 text-[1.05rem] font-bold text-ink hover:bg-mist [&::-webkit-details-marker]:hidden">
+          Program Belajar <ChevronDown size={20} class="transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div class="mb-2 ml-1 border-l-2 border-mist pl-3">
+          {
+            menuGroups.map((g) => (
+              <div class="py-1">
+                <p class="px-3 pt-2 text-[0.7rem] font-extrabold uppercase tracking-[0.12em] text-sage">{g.title}</p>
+                {g.programIds.map((id) => {
+                  const p = getProgram(id);
+                  return (
+                    <a href={programUrl(p)} class="block rounded-lg px-3 py-2.5 font-bold hover:bg-mist" aria-current={isActive(programUrl(p)) ? 'page' : undefined}>
+                      {p.title}
+                      <small class="block font-normal text-muted">{p.menuDescription}</small>
+                    </a>
+                  );
+                })}
+              </div>
+            ))
+          }
+          <a href="/program" class="block rounded-lg px-3 py-2.5 font-bold text-forest hover:bg-mist">Lihat semua program →</a>
+        </div>
+      </details>
+      {
+        links.map((l) => (
+          <a href={l.href} class="drawer-link" aria-current={isActive(l.href) ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+      <a href="/bantuan" class="drawer-link" aria-current={isActive('/bantuan') ? 'page' : undefined}>Bantuan & FAQ</a>
+      <a href="/kontak" class="drawer-link" aria-current={isActive('/kontak') ? 'page' : undefined}>Kontak</a>
+
+      <div class="mt-4 rounded-2xl bg-cream p-4">
+        <p class="text-sm font-bold">Ukuran teks</p>
+        <div class="mt-2 grid grid-cols-2 gap-2" role="group" aria-label="Ukuran teks">
+          <button type="button" class="chip justify-center" data-text-size="md" aria-pressed="true">Standar</button>
+          <button type="button" class="chip justify-center text-base" data-text-size="lg" aria-pressed="false">Lebih besar</button>
+        </div>
+      </div>
+    </div>
+    <div class="sticky bottom-0 grid gap-2 border-t border-line bg-white p-4">
+      <a href="/program#finder" class="btn btn-primary w-full" data-track="cta_mulai" data-track-label="drawer">
+        <Compass size={18} aria-hidden="true" /> Temukan program yang sesuai
+      </a>
+      {site.lmsUrl && <a href={site.lmsUrl} target="_blank" rel="noopener" class="btn btn-outline w-full" data-track="lms_open">Masuk LMS</a>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .nav-link {
+    @apply relative rounded-lg px-3 py-2 text-[0.9rem] font-bold text-[#435349] transition-colors hover:text-forest;
+  }
+  .nav-link[aria-current='page'],
+  .nav-link[aria-expanded='true'] {
+    @apply text-forest;
+  }
+  .nav-link[aria-current='page']::after {
+    content: '';
+    @apply absolute inset-x-3 -bottom-[18px] h-[3px] rounded-full bg-gold;
+  }
+  .drawer-link {
+    @apply block rounded-xl px-3 py-3 text-[1.05rem] font-bold text-ink hover:bg-mist;
+  }
+  .drawer-link[aria-current='page'] {
+    @apply bg-mist text-forest;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-mega-root]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-mega-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-mega]');
+  const chevron = document.querySelector<SVGElement>('[data-mega-chevron]');
+
+  function setMega(open: boolean, returnFocus = false) {
+    if (!toggle || !panel) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    panel.classList.toggle('hidden', !open);
+    chevron?.classList.toggle('rotate-180', open);
+    if (!open && returnFocus) toggle.focus();
+  }
+
+  toggle?.addEventListener('click', () => setMega(toggle.getAttribute('aria-expanded') !== 'true'));
+  root?.addEventListener('focusout', (e) => {
+    if (!root.contains(e.relatedTarget as Node)) setMega(false);
+  });
+  document.addEventListener('click', (e) => {
+    if (root && !root.contains(e.target as Node)) setMega(false);
+  });
+  panel?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setMega(false);
+  });
+
+  // Drawer mobile
+  const drawer = document.querySelector<HTMLElement>('[data-drawer]');
+  const opener = document.querySelector<HTMLButtonElement>('[data-drawer-open]');
+  function setDrawer(open: boolean) {
+    if (!drawer || !opener) return;
+    drawer.classList.toggle('hidden', !open);
+    opener.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (open) drawer.querySelector<HTMLElement>('[data-drawer-close].inline-flex')?.focus();
+    else opener.focus();
+  }
+  opener?.addEventListener('click', () => setDrawer(true));
+  drawer?.querySelectorAll('[data-drawer-close]').forEach((el) => el.addEventListener('click', () => setDrawer(false)));
+  drawer?.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest('a');
+    if (a) setDrawer(false);
+    if ((e.target as HTMLElement).closest('[data-search-open]')) setDrawer(false);
+  });
+  // Jebakan fokus sederhana di dalam drawer
+  drawer?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const items = [...drawer.querySelectorAll<HTMLElement>('a, button, summary')].filter((el) => el.offsetParent !== null);
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (toggle?.getAttribute('aria-expanded') === 'true') setMega(false, true);
+    if (drawer && !drawer.classList.contains('hidden')) setDrawer(false);
+  });
+</script>

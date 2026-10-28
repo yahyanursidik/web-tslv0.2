@@ -1,0 +1,82 @@
+---
+import { MessageCircle, Search } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import FaqList from '../components/FaqList.astro';
+import { faqs, faqCategories } from '../data/faq';
+---
+
+<Base title="Bantuan & FAQ" description="Jawaban atas pertanyaan umum seputar program, kajian rutin, dan pendaftaran di Tarbiyah Sunnah Learning.">
+  <PageHero crumbs={[{ label: 'Bantuan' }]} eyebrow="Pusat bantuan" title="Ada yang bisa kami bantu?">
+    <label class="relative mt-8 block max-w-xl">
+      <span class="sr-only">Cari pertanyaan</span>
+      <Search size={20} class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true" />
+      <input type="search" data-faq-search placeholder="Cari pertanyaan, mis. jadwal, biaya, tahfidz…" class="h-14 w-full rounded-2xl border border-line bg-white pl-12 pr-4 text-[1.02rem] outline-none focus:border-sage" />
+    </label>
+  </PageHero>
+
+  <section class="section !pt-10">
+    <div class="container-site grid gap-10 lg:grid-cols-[220px_1fr]">
+      <div class="flex gap-2 overflow-x-auto lg:flex-col" role="group" aria-label="Kategori">
+        <button type="button" class="chip shrink-0 lg:justify-start" data-faq-cat="" aria-pressed="true">Semua ({faqs.length})</button>
+        {
+          faqCategories.map((c) => (
+            <button type="button" class="chip shrink-0 lg:justify-start" data-faq-cat={c} aria-pressed="false">
+              {c} ({faqs.filter((f) => f.category === c).length})
+            </button>
+          ))
+        }
+      </div>
+      <div>
+        <FaqList items={faqs} />
+        <p data-faq-empty hidden class="rounded-2xl border border-dashed border-line p-8 text-center text-muted">
+          Belum ada pertanyaan yang cocok. Coba kata lain atau hubungi admin.
+        </p>
+        <div class="mt-10 flex flex-col gap-4 rounded-2xl bg-mist p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="font-heading text-lg font-extrabold">Belum menemukan jawaban?</p>
+            <p class="text-sm text-muted">Tanyakan langsung kepada pengelola melalui kanal resmi.</p>
+          </div>
+          <a href="/kontak" class="btn btn-primary shrink-0"><MessageCircle size={18} aria-hidden="true" /> Hubungi kami</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { track } from '../lib/client';
+
+  const items = [...document.querySelectorAll<HTMLDetailsElement>('[data-faq]')];
+  const input = document.querySelector<HTMLInputElement>('[data-faq-search]')!;
+  const cats = [...document.querySelectorAll<HTMLButtonElement>('[data-faq-cat]')];
+  const empty = document.querySelector<HTMLElement>('[data-faq-empty]')!;
+  let cat = '';
+  let timer: number;
+
+  function apply() {
+    const terms = input.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    items.forEach((d) => {
+      const ok = (!cat || d.dataset.category === cat) && terms.every((t) => d.dataset.search!.includes(t));
+      d.hidden = !ok;
+      if (ok) shown++;
+      if (terms.length && ok && shown <= 2) d.open = true;
+    });
+    cats.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.faqCat === cat)));
+    empty.hidden = shown > 0;
+    clearTimeout(timer);
+    if (terms.length && !shown) timer = window.setTimeout(() => track('faq_no_result', { query: input.value }), 800);
+  }
+  input.addEventListener('input', apply);
+  cats.forEach((b) =>
+    b.addEventListener('click', () => {
+      cat = b.dataset.faqCat!;
+      apply();
+    }),
+  );
+  if (location.hash.startsWith('#q=')) {
+    input.value = decodeURIComponent(location.hash.slice(3));
+    apply();
+  }
+</script>

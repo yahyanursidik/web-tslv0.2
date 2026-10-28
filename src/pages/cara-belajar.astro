@@ -1,0 +1,97 @@
+---
+import { ArrowRight, CalendarDays, ClipboardCheck, Compass, Layers, MonitorPlay, Sprout, UserRound, Users } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import SectionHead from '../components/ui/SectionHead.astro';
+import { sessionCount } from '../data/kajian';
+
+const principles = [
+  { icon: Compass, title: 'Terarah', text: 'Setiap program menjelaskan untuk siapa ia dirancang, apa yang dipelajari, dan arah capaiannya — sehingga Anda tahu langkah yang sedang ditempuh.' },
+  { icon: Layers, title: 'Bertahap', text: 'Materi dan kelompok belajar disusun sesuai usia, kesiapan, dan kemampuan. Tidak melompat, tidak tertinggal.' },
+  { icon: Sprout, title: 'Pembiasaan', text: 'Ilmu diarahkan menjadi amal: nilai Islam dibiasakan dalam keseharian, terutama pada program anak.' },
+  { icon: Users, title: 'Pendampingan', text: 'Kelas kecil dan sesi private memberi ruang bagi guru untuk memperhatikan setiap peserta.' },
+  { icon: ClipboardCheck, title: 'Evaluasi & tindak lanjut', text: 'Perkembangan dipantau sesuai ketentuan program, lalu ditindaklanjuti dengan target berikutnya.' },
+];
+
+const modes = [
+  { icon: Users, title: 'Kelas klasikal daring', text: 'Belajar bersama dalam kelompok kecil. Contoh: kelas madrasah TSL for Kids maksimal 6 anak.', where: 'TSL for Kids' },
+  { icon: UserRound, title: 'Sesi private', text: 'Satu guru untuk satu peserta dengan fokus sesuai kebutuhan.', where: 'TSL for Kids · Gemilang Senja' },
+  { icon: CalendarDays, title: 'Kajian rutin pekanan', text: `Kajian terbuka ${sessionCount} sesi setiap pekan via Zoom & Google Meet, tanpa paket kelas.`, where: 'Jadwal Kajian' },
+  { icon: MonitorPlay, title: 'Intensif & musiman', text: 'Program tatap muka full board 3 hari 2 malam, serta program daring khusus Ramadan.', where: 'Gemilang Senja' },
+];
+---
+
+<Base title="Cara Belajar di TSL" description="Pendekatan pembelajaran Tarbiyah Sunnah Learning — terarah, bertahap, pembiasaan, pendampingan, dan evaluasi — serta ragam cara belajar dan langkah memulai.">
+  <PageHero
+    crumbs={[{ label: 'Cara Belajar' }]}
+    eyebrow="Pendekatan pembelajaran"
+    title="Belajar dengan arah yang jelas."
+    lead="Bukan sekadar hadir di kelas. Setiap program dirancang agar peserta memahami tujuan, belajar sesuai tahap, dan melihat perkembangannya."
+  />
+
+  <section class="section" aria-labelledby="prinsip-title">
+    <div class="container-site">
+      <SectionHead id="prinsip-title" eyebrow="Lima prinsip" title="Yang kami jaga dalam setiap program." lead="Penerapan detail berbeda di tiap program dan mengikuti ketentuan masing-masing." />
+      <ol class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {
+          principles.map(({ icon: Icon, title, text }, i) => (
+            <li class:list={['rounded-2xl border border-line p-6', i === 0 && 'lg:row-span-2 lg:bg-forest lg:text-white lg:border-forest']}>
+              <span class:list={['flex h-12 w-12 items-center justify-center rounded-xl', i === 0 ? 'bg-mist text-deep lg:bg-white/10 lg:text-white' : 'bg-mist text-deep']}>
+                <Icon size={24} aria-hidden="true" />
+              </span>
+              <h3 class:list={['mt-5 text-xl font-extrabold', i === 0 && 'lg:!text-white']}>{title}</h3>
+              <p class:list={['mt-2', i === 0 ? 'text-muted lg:text-[#D0DED1]' : 'text-muted']}>{text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-[#F8F9F5]" aria-labelledby="ragam-title">
+    <div class="container-site">
+      <SectionHead id="ragam-title" eyebrow="Ragam cara belajar" title="Pilih ritme yang sesuai." />
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          modes.map(({ icon: Icon, title, text, where }) => (
+            <div class="card flex gap-5 p-6">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-mist text-deep"><Icon size={24} aria-hidden="true" /></span>
+              <div>
+                <h3 class="text-lg font-extrabold">{title}</h3>
+                <p class="mt-1 text-muted">{text}</p>
+                <p class="mt-3 text-xs font-bold uppercase tracking-wide text-sage">{where}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="langkah-title">
+    <div class="container-site">
+      <SectionHead id="langkah-title" eyebrow="Cara memulai" title="Jelajahi → Pahami → Daftar atau ikuti." />
+      <ol class="relative space-y-4 border-l-2 border-mist pl-8 md:pl-10">
+        <li class="relative">
+          <span class="absolute -left-[45px] top-1 flex h-8 w-8 items-center justify-center rounded-full bg-forest text-sm font-bold text-white md:-left-[53px]">1</span>
+          <h3 class="text-xl font-extrabold">Jelajahi</h3>
+          <p class="mt-1 max-w-2xl text-muted">Mulai dari kelompok usia di beranda, Program Finder, atau tombol Cari di bagian atas halaman.</p>
+        </li>
+        <li class="relative pt-4">
+          <span class="absolute -left-[45px] top-5 flex h-8 w-8 items-center justify-center rounded-full bg-forest text-sm font-bold text-white md:-left-[53px]">2</span>
+          <h3 class="text-xl font-extrabold">Pahami</h3>
+          <p class="mt-1 max-w-2xl text-muted">Baca halaman program: untuk siapa, layanan atau jalur yang tersedia, cara belajar, dan pertanyaan umum.</p>
+        </li>
+        <li class="relative pt-4">
+          <span class="absolute -left-[45px] top-5 flex h-8 w-8 items-center justify-center rounded-full bg-forest text-sm font-bold text-white md:-left-[53px]">3</span>
+          <h3 class="text-xl font-extrabold">Daftar atau ikuti</h3>
+          <p class="mt-1 max-w-2xl text-muted">Gunakan panel pendaftaran di halaman program, atau simpan jadwal kajian ke kalender dan ikuti setiap pekan.</p>
+        </li>
+      </ol>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/program#finder" class="btn btn-primary"><Compass size={18} aria-hidden="true" /> Buka Program Finder</a>
+        <a href="/kajian" class="btn btn-outline">Lihat jadwal kajian <ArrowRight size={18} aria-hidden="true" /></a>
+      </div>
+    </div>
+  </section>
+</Base>

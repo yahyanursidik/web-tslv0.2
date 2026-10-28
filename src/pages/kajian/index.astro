@@ -1,0 +1,257 @@
+---
+import { ArrowRight, Clock, Globe, LayoutGrid, Link2, List, Video } from '@lucide/astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import NextKajian from '../../components/NextKajian.astro';
+import WeekStrip from '../../components/WeekStrip.astro';
+import AddToCalendar from '../../components/AddToCalendar.astro';
+import { activeKajian, kajianExceptions, getTeacher, kajianUrl, sessionCount, teachers } from '../../data/kajian';
+import { DAYS, flattenSessions, formatTime } from '../../lib/schedule';
+
+const sessions = flattenSessions(activeKajian, teachers);
+const days = DAYS.map((name, day) => ({ name, day, items: sessions.filter((s) => s.day === day) })).filter((d) => d.items.length);
+const activeTeachers = teachers.filter((t) => activeKajian.some((k) => k.teacherId === t.id));
+const byId = Object.fromEntries(activeKajian.map((k) => [k.id, k]));
+---
+
+<Base
+  title="Jadwal Kajian Rutin Daring"
+  description={`${activeKajian.length} kajian rutin dengan ${sessionCount} sesi pekanan via Zoom & Google Meet. Jadwal dalam WIB, lengkap dengan pemateri dan tambah ke kalender.`}
+>
+  <PageHero
+    crumbs={[{ label: 'Jadwal Kajian' }]}
+    eyebrow="Kajian rutin daring"
+    title="Luangkan waktu untuk menuntut ilmu."
+    lead={`${activeKajian.length} kajian dengan ${sessionCount} sesi setiap pekan, terbuka melalui Zoom Meeting dan Google Meet. Seluruh jadwal dalam WIB (UTC+7).`}
+  >
+    <NextKajian slot="aside" />
+  </PageHero>
+
+  <section class="section !pt-12" aria-labelledby="jadwal-title">
+    <div class="container-site">
+      <div class="grid gap-3 md:grid-cols-3">
+        <div class="flex gap-3 rounded-2xl bg-mist p-4">
+          <Globe size={20} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" />
+          <p class="text-sm"><b class="block">Waktu Indonesia Barat</b><span class="text-muted" data-tz-note>Jam lokal Anda ditampilkan otomatis bila berbeda.</span></p>
+        </div>
+        <div class="flex gap-3 rounded-2xl bg-mist p-4">
+          <Video size={20} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" />
+          <p class="text-sm"><b class="block">Zoom Meeting & Google Meet</b><span class="text-muted">Platform tercantum di setiap sesi.</span></p>
+        </div>
+        <div class="flex gap-3 rounded-2xl bg-mist p-4">
+          <Link2 size={20} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" />
+          <p class="text-sm"><b class="block">Tautan bergabung</b><span class="text-muted">Dibagikan pengelola setelah diverifikasi.</span></p>
+        </div>
+      </div>
+
+      {
+        kajianExceptions.length > 0 && (
+          <div class="mt-6 rounded-2xl border border-gold/40 bg-[#FBF6EA] p-5" role="note">
+            <p class="font-bold">Perubahan jadwal</p>
+            <ul class="mt-2 space-y-1 text-sm">
+              {kajianExceptions.map((x) => (
+                <li>
+                  <b>{byId[x.kajianId]?.title}</b> · {x.date} — {x.notice}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div class="mt-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <h2 id="jadwal-title" class="text-[1.8rem] font-extrabold">Jadwal pekanan</h2>
+        <div class="flex flex-wrap items-center gap-3">
+          <label class="flex items-center gap-2 text-sm font-bold">
+            Pemateri
+            <select data-teacher-filter class="h-10 rounded-xl border border-line bg-white px-3 font-normal">
+              <option value="">Semua pemateri</option>
+              {activeTeachers.map((t) => <option value={t.id}>{t.name.replace(/,.*$/, '')}</option>)}
+            </select>
+          </label>
+          <div class="flex rounded-xl border border-line p-1" role="group" aria-label="Tampilan">
+            <button type="button" class="view-btn" data-view="list" aria-pressed="true"><List size={16} aria-hidden="true" /> Daftar</button>
+            <button type="button" class="view-btn" data-view="week" aria-pressed="false"><LayoutGrid size={16} aria-hidden="true" /> Pekan</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap gap-2" role="group" aria-label="Saring menurut hari" data-day-filters>
+        <button type="button" class="chip" data-day-filter="all" aria-pressed="true">Semua hari</button>
+        <button type="button" class="chip" data-day-filter="today" aria-pressed="false">Hari ini</button>
+        {days.map((d) => <button type="button" class="chip" data-day-filter={d.day} aria-pressed="false">{d.name} <span class="opacity-60">{d.items.length}</span></button>)}
+      </div>
+
+      <div class="mt-6" data-view-panel="list">
+        {
+          days.map((d) => (
+            <section class="border-t border-line py-5" data-day-group={d.day} aria-label={d.name}>
+              <h3 class="flex items-center gap-2 text-lg font-extrabold">
+                {d.name}
+                <span class="badge hidden bg-gold/15 text-[#7A5A16]" data-today-label>
+                  Hari ini
+                </span>
+              </h3>
+              <ul class="mt-3 space-y-3">
+                {d.items.map((s) => (
+                  <li
+                    class="grid grid-cols-[72px_1fr] gap-x-4 gap-y-3 rounded-2xl border border-line bg-white p-4 sm:grid-cols-[96px_1fr_auto] sm:items-center sm:p-5"
+                    data-session-row
+                    data-day={s.day}
+                    data-time={s.time}
+                    data-teacher={byId[s.kajianId].teacherId}
+                  >
+                    <div>
+                      <p class="font-heading text-[1.35rem] font-extrabold leading-none text-forest">{formatTime(s.time)}</p>
+                      <p class="mt-1 text-xs font-bold text-muted">WIB</p>
+                      <p class="mt-1 hidden text-xs text-deep" data-local-time />
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <a href={`/kajian/${s.slug}`} class="font-heading text-[1.08rem] font-extrabold hover:underline">
+                          {s.title}
+                        </a>
+                        <span class="badge hidden bg-forest text-white" data-next-label>
+                          Berikutnya · <span data-countdown />
+                        </span>
+                      </div>
+                      <p class="mt-1 text-sm text-muted">{s.teacher}</p>
+                      <div class="mt-2 flex flex-wrap gap-2">
+                        <span class="badge border border-[#D3E1D2] text-[#44694B]">
+                          <Video size={12} aria-hidden="true" /> {s.platform}
+                        </span>
+                        {s.audience && <span class="badge bg-sand text-[#6B5420]">{s.audience}</span>}
+                      </div>
+                    </div>
+                    <div class="col-span-2 flex gap-2 sm:col-span-1">
+                      <AddToCalendar kajian={byId[s.kajianId]} variant="icon" />
+                      <a href={`/kajian/${s.slug}`} class="btn btn-ghost !min-h-[40px] !py-1.5 text-sm">
+                        Detail <ArrowRight size={16} aria-hidden="true" />
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+        <div data-schedule-empty hidden class="rounded-2xl border border-dashed border-line p-10 text-center">
+          <Clock size={28} class="mx-auto text-sage" aria-hidden="true" />
+          <p class="mt-3 font-heading text-lg font-extrabold">Tidak ada kajian pada pilihan ini.</p>
+          <p class="mt-1 text-muted" data-empty-hint>Coba hari atau pemateri lain.</p>
+          <button type="button" class="btn btn-outline mt-5" data-schedule-reset>Tampilkan semua jadwal</button>
+        </div>
+      </div>
+
+      <div class="mt-6" data-view-panel="week" hidden>
+        <WeekStrip />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-[#F8F9F5] !pt-14" aria-labelledby="kenali-title">
+    <div class="container-site">
+      <h2 id="kenali-title" class="text-[1.8rem] font-extrabold">Kenali kajiannya</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          activeKajian.map((k) => (
+            <a href={kajianUrl(k)} class="card card-hover flex flex-col p-6">
+              <span class="eyebrow">{k.topics.join(' · ')}</span>
+              <b class="mt-2 font-heading text-lg font-extrabold">{k.title}</b>
+              <span class="mt-1 text-sm text-muted">{getTeacher(k.teacherId).name}</span>
+              <span class="mt-4 flex-1 text-sm">{k.summary}</span>
+              <span class="mt-5 border-t border-line pt-4 text-sm font-bold text-forest">
+                {k.sessions.map((s) => `${DAYS[s.day]} ${formatTime(s.time)}`).join(' & ')} WIB
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .view-btn {
+    @apply inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold text-muted;
+  }
+  .view-btn[aria-pressed='true'] {
+    @apply bg-forest text-white;
+  }
+</style>
+
+<script>
+  import { countdown, localTimeLabel, todayWIB, upcoming } from '../../lib/schedule';
+  import { track } from '../../lib/client';
+
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-session-row]')];
+  const groups = [...document.querySelectorAll<HTMLElement>('[data-day-group]')];
+  const dayButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-day-filter]')];
+  const teacherSelect = document.querySelector<HTMLSelectElement>('[data-teacher-filter]')!;
+  const empty = document.querySelector<HTMLElement>('[data-schedule-empty]')!;
+  const today = todayWIB();
+  let dayFilter = 'all';
+
+  // Tandai hari ini, sesi berikutnya, dan jam lokal
+  groups.find((g) => g.dataset.dayGroup === String(today))?.querySelector('[data-today-label]')?.classList.remove('hidden');
+  function refreshTimes() {
+    const list = upcoming(rows.map((el) => ({ el, day: Number(el.dataset.day), time: el.dataset.time! })));
+    rows.forEach((r) => {
+      r.querySelector('[data-next-label]')!.classList.add('hidden');
+      r.classList.remove('ring-2', 'ring-forest');
+    });
+    const next = list[0];
+    next.el.querySelector('[data-next-label]')!.classList.remove('hidden');
+    next.el.querySelector('[data-countdown]')!.textContent = countdown(next.at);
+    next.el.classList.add('ring-2', 'ring-forest');
+    for (const s of list) {
+      const local = localTimeLabel(s.at);
+      const el = s.el.querySelector<HTMLElement>('[data-local-time]')!;
+      el.textContent = local ? `≈ ${local.split(' waktu')[0]} lokal` : '';
+      el.classList.toggle('hidden', !local);
+    }
+    const tzNote = document.querySelector('[data-tz-note]');
+    if (tzNote && next && localTimeLabel(next.at)) tzNote.textContent = `Perangkat Anda tidak di WIB — jam lokal ditampilkan di bawah jam WIB.`;
+  }
+  refreshTimes();
+  setInterval(refreshTimes, 60_000);
+
+  function apply() {
+    const teacher = teacherSelect.value;
+    const wanted = dayFilter === 'today' ? String(today) : dayFilter;
+    let shown = 0;
+    rows.forEach((r) => {
+      const ok = (wanted === 'all' || r.dataset.day === wanted) && (!teacher || r.dataset.teacher === teacher);
+      r.hidden = !ok;
+      if (ok) shown++;
+    });
+    groups.forEach((g) => (g.hidden = !g.querySelector('[data-session-row]:not([hidden])')));
+    dayButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.dayFilter === dayFilter)));
+    empty.hidden = shown > 0;
+    empty.querySelector('[data-empty-hint]')!.textContent =
+      dayFilter === 'today' ? 'Tidak ada kajian hari ini. Lihat jadwal hari lain atau sesi berikutnya di atas.' : 'Coba hari atau pemateri lain.';
+  }
+  dayButtons.forEach((b) =>
+    b.addEventListener('click', () => {
+      dayFilter = b.dataset.dayFilter!;
+      apply();
+      track('schedule_filter', { day: dayFilter });
+    }),
+  );
+  teacherSelect.addEventListener('change', apply);
+  document.querySelector('[data-schedule-reset]')!.addEventListener('click', () => {
+    dayFilter = 'all';
+    teacherSelect.value = '';
+    apply();
+  });
+
+  // Tampilan daftar / pekan
+  document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) =>
+    b.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      document.querySelectorAll<HTMLElement>('[data-view-panel]').forEach((p) => (p.hidden = p.dataset.viewPanel !== b.dataset.view));
+      document.querySelector<HTMLElement>('[data-day-filters]')!.hidden = b.dataset.view === 'week';
+      teacherSelect.closest('label')!.hidden = b.dataset.view === 'week';
+    }),
+  );
+</script>

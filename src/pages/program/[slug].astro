@@ -1,0 +1,395 @@
+---
+import { ArrowRight, ArrowUpRight, Check, Clock, Info } from '@lucide/astro';
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import StatusBadge from '../../components/ui/StatusBadge.astro';
+import RegistrationPanel from '../../components/RegistrationPanel.astro';
+import ProgramCard from '../../components/ProgramCard.astro';
+import FaqList from '../../components/FaqList.astro';
+import { programs, segments, type Program } from '../../data/programs';
+
+export function getStaticPaths() {
+  return programs.map((program) => ({ params: { slug: program.slug }, props: { program } }));
+}
+
+const { program: p } = Astro.props as { program: Program };
+const toneBg = { green: 'bg-[#E8F0DF]', sand: 'bg-sand', mist: 'bg-mist' }[p.tone];
+
+const sections = [
+  { id: 'ringkasan', label: 'Ringkasan', show: true },
+  { id: 'untuk-siapa', label: 'Untuk siapa', show: p.audience.length > 0 },
+  { id: 'tujuan', label: 'Tujuan belajar', show: p.outcomes.length > 0 },
+  { id: 'layanan', label: 'Ragam layanan', show: !!p.offerings?.length },
+  { id: 'jalur', label: 'Jalur program', show: !!p.tracks?.length },
+  { id: 'cara-belajar', label: 'Cara belajar', show: p.modalities.length > 0 || !!p.groups?.length },
+  { id: 'pendampingan', label: 'Pendampingan', show: !!p.support?.length },
+  { id: 'materi', label: 'Materi', show: !!p.curriculum?.length },
+  { id: 'alur-pendaftaran', label: 'Alur pendaftaran', show: !!p.enrollmentSteps?.length },
+  { id: 'biaya', label: 'Biaya', show: !!p.pricing },
+  { id: 'faq', label: 'Pertanyaan', show: !!p.faq?.length },
+].filter((s) => s.show);
+
+// Program sekelompok lebih dulu, lalu sisanya.
+const related = programs
+  .filter((x) => x.id !== p.id)
+  .sort((a, b) => Number(b.segment === p.segment) - Number(a.segment === p.segment))
+  .slice(0, 3);
+---
+
+<Base title={p.seo.title} description={p.seo.description}>
+  <section class:list={[toneBg, 'pb-12 pt-8 md:pb-16']}>
+    <div class="container-site">
+      <Breadcrumb items={[{ label: 'Program Belajar', href: '/program' }, { label: p.title }]} />
+      <div class="mt-8 grid items-center gap-10 lg:grid-cols-[1.15fr_1fr]">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge bg-white text-deep">{segments[p.segment].label}</span>
+            {p.ageLabel.toLowerCase() !== segments[p.segment].label.toLowerCase() && <span class="badge bg-white text-deep">{p.ageLabel}</span>}
+            <StatusBadge program={p} />
+          </div>
+          <h1 class="mt-5 text-[2.3rem] font-extrabold leading-[1.1] md:text-[3.2rem]">{p.title}</h1>
+          <p class="mt-4 max-w-xl text-[1.1rem] text-[#4F6157]">{p.summary}</p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            {p.registrationUrl ? (
+              <a href={p.registrationUrl} target="_blank" rel="noopener" class="btn btn-primary" data-track="cta_daftar" data-track-label={p.id}>
+                Daftar sekarang <ArrowUpRight size={18} aria-hidden="true" />
+              </a>
+            ) : (
+              <a href="#daftar" class="btn btn-primary">Cara mendaftar <ArrowRight size={18} aria-hidden="true" /></a>
+            )}
+            {p.enrollmentSteps && <a href="#alur-pendaftaran" class="btn btn-outline">Alur pendaftaran</a>}
+            {p.offerings && <a href="#layanan" class="btn btn-outline">Lihat {p.offerings.length} layanan</a>}
+            {p.tracks && <a href="#jalur" class="btn btn-outline">Lihat {p.tracks.length} jalur</a>}
+          </div>
+        </div>
+        <img src={p.image} alt={p.imageAlt} width="720" height="450" class="w-full rounded-[24px]" />
+      </div>
+      <dl class="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-black/5 bg-black/5 lg:grid-cols-4">
+        {
+          p.facts.map((f) => (
+            <div class="bg-white/80 p-4 md:p-5">
+              <dt class="text-xs font-bold uppercase tracking-wide text-muted">{f.label}</dt>
+              <dd class="mt-1 font-heading font-extrabold text-ink">{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <div class="container-site grid gap-10 py-12 md:py-16 lg:grid-cols-[200px_1fr_300px] lg:gap-12">
+    <!-- Navigasi dalam halaman -->
+    <nav aria-label="Isi halaman" class="hidden lg:block">
+      <div class="sticky top-28">
+        <p class="text-xs font-extrabold uppercase tracking-[0.12em] text-sage">Di halaman ini</p>
+        <ul class="mt-3 space-y-1 border-l-2 border-line text-sm" data-toc>
+          {sections.map((s) => <li><a href={`#${s.id}`} class="-ml-[2px] block border-l-2 border-transparent py-1.5 pl-4 text-muted hover:text-forest" data-toc-link={s.id}>{s.label}</a></li>)}
+          <li><a href="#daftar" class="-ml-[2px] block border-l-2 border-transparent py-1.5 pl-4 text-muted hover:text-forest" data-toc-link="daftar">Pendaftaran</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <article class="min-w-0 space-y-14">
+      {
+        p.dataStatus === 'pending' && (
+          <div class="flex gap-3 rounded-2xl border border-gold/40 bg-[#FBF6EA] p-5" role="note">
+            <Clock size={22} class="mt-0.5 shrink-0 text-gold" aria-hidden="true" />
+            <div>
+              <p class="font-bold">Informasi sedang diperbarui</p>
+              <p class="mt-1 text-sm text-muted">{p.pendingNotice}</p>
+            </div>
+          </div>
+        )
+      }
+
+      <section id="ringkasan" class="scroll-mt-28">
+        <h2 class="text-[1.6rem] font-extrabold">Ringkasan program</h2>
+        <div class="prose-tsl mt-4 text-[1.05rem]">{p.intro.map((t) => <p>{t}</p>)}</div>
+      </section>
+
+      {
+        p.audience.length > 0 && (
+          <section id="untuk-siapa" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Untuk siapa program ini?</h2>
+            <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+              {p.audience.map((a) => (
+                <li class="flex gap-3 rounded-2xl bg-cream p-4">
+                  <Check size={20} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" />
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        p.outcomes.length > 0 && (
+          <section id="tujuan" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Tujuan belajar</h2>
+            <ol class="mt-5 space-y-3">
+              {p.outcomes.map((o, i) => (
+                <li class="flex gap-4 border-b border-line pb-3">
+                  <span class="font-heading text-lg font-extrabold text-sage">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{o}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        p.offerings && (
+          <section id="layanan" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Ragam layanan</h2>
+            <p class="mt-2 text-muted">Pilih layanan untuk melihat fokus pembelajarannya.</p>
+            <div class="mt-5" data-tabs>
+              <div role="tablist" aria-label="Layanan" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
+                {p.offerings.map((o, i) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    id={`tab-${o.id}`}
+                    aria-controls={`panel-${o.id}`}
+                    aria-selected={i === 0 ? 'true' : 'false'}
+                    tabindex={i === 0 ? 0 : -1}
+                    class="chip shrink-0"
+                  >
+                    {o.label.replace(/ \(.+\)/, '')}
+                  </button>
+                ))}
+              </div>
+              {p.offerings.map((o, i) => (
+                <div role="tabpanel" id={`panel-${o.id}`} aria-labelledby={`tab-${o.id}`} hidden={i !== 0} class="mt-4 rounded-2xl border border-line p-6">
+                  <div class="flex flex-wrap items-baseline justify-between gap-3">
+                    <h3 class="text-xl font-extrabold">{o.label}</h3>
+                    <span class="badge bg-mist text-deep">{o.age}</span>
+                  </div>
+                  <p class="mt-2 text-muted">{o.summary}</p>
+                  <p class="mt-5 text-xs font-extrabold uppercase tracking-[0.12em] text-sage">Fokus pembelajaran</p>
+                  <ul class="mt-2 flex flex-wrap gap-2">
+                    {o.focus.map((f) => <li class="rounded-full bg-cream px-3 py-1.5 text-sm font-bold">{f}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        p.tracks && (
+          <section id="jalur" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Jalur program</h2>
+            <div class="mt-5 grid gap-4 md:grid-cols-3">
+              {p.tracks.map((t) => (
+                <div class="flex flex-col rounded-2xl border border-line p-5">
+                  <span class="eyebrow">{t.format}</span>
+                  <h3 class="mt-2 text-xl font-extrabold">{t.label}</h3>
+                  <p class="mt-2 text-sm text-muted">{t.detail}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        (p.modalities.length > 0 || p.groups) && (
+          <section id="cara-belajar" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Cara belajar</h2>
+            {p.modalities.length > 0 && (
+              <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                {p.modalities.map((m) => (
+                  <div class="rounded-2xl bg-mist p-5">
+                    <h3 class="text-lg font-extrabold">{m.title}</h3>
+                    <p class="mt-1 text-sm text-muted">{m.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {p.groups && (
+              <div class="mt-6">
+                <h3 class="text-lg font-extrabold">Kelompok usia madrasah</h3>
+                <div class="mt-3 overflow-x-auto rounded-2xl border border-line">
+                  <table class="w-full min-w-[480px] text-left text-sm">
+                    <thead class="bg-cream">
+                      <tr>{p.groups.map((g) => <th scope="col" class="px-4 py-3 font-extrabold">{g.label}</th>)}</tr>
+                    </thead>
+                    <tbody>
+                      <tr>{p.groups.map((g) => <td class="px-4 py-3 text-muted">{g.age}</td>)}</tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </section>
+        )
+      }
+
+      {
+        p.support && (
+          <section id="pendampingan" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Pendampingan & laporan perkembangan</h2>
+            <ol class="mt-5 grid gap-3 sm:grid-cols-3">
+              {p.support.map((s, i) => (
+                <li class="rounded-2xl border border-line p-5">
+                  <span class="flex h-8 w-8 items-center justify-center rounded-full bg-forest text-sm font-bold text-white">{i + 1}</span>
+                  <p class="mt-3 font-bold">{s}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        p.curriculum && (
+          <section id="materi" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">{p.dataStatus === 'pending' ? 'Fokus pembelajaran' : 'Materi pembelajaran'}</h2>
+            {p.curriculumDetail ? (
+              <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+                {p.curriculumDetail.map((c) => (
+                  <li class="rounded-2xl border border-line p-4">
+                    <b class="block font-heading text-lg">{c.title}</b>
+                    <span class="text-sm text-muted">{c.text}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul class="mt-5 flex flex-wrap gap-2">
+                {p.curriculum.map((c) => <li class="rounded-full border border-line bg-white px-4 py-2 font-bold">{c}</li>)}
+              </ul>
+            )}
+            {p.dataStatus === 'pending' && (
+              <p class="mt-4 flex gap-2 text-sm text-muted">
+                <Info size={16} class="mt-0.5 shrink-0" aria-hidden="true" /> Rincian kurikulum akan ditambahkan setelah divalidasi.
+              </p>
+            )}
+          </section>
+        )
+      }
+
+      {
+        p.enrollmentSteps && (
+          <section id="alur-pendaftaran" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Alur pendaftaran</h2>
+            <ol class="mt-5 grid gap-3 sm:grid-cols-2">
+              {p.enrollmentSteps.map((s, i) => (
+                <li class="rounded-2xl bg-cream p-5">
+                  <span class:list={['flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold', i === p.enrollmentSteps!.length - 1 ? 'bg-gold text-night' : 'bg-forest text-white']}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 class="mt-4 text-lg font-extrabold">{s.title}</h3>
+                  <p class="mt-1 text-sm text-muted">{s.text}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        p.pricing && (
+          <section id="biaya" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">Biaya</h2>
+            <div class="mt-5 overflow-hidden rounded-2xl border border-line">
+              <dl class="grid divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+                {p.pricing.items.map((item) => (
+                  <div class="p-6">
+                    <dt class="text-xs font-bold uppercase tracking-wide text-muted">{item.label}</dt>
+                    <dd class="mt-2 font-heading text-2xl font-extrabold text-forest">{item.value}</dd>
+                    <dd class="mt-1 text-sm text-muted">{item.note}</dd>
+                  </div>
+                ))}
+              </dl>
+              {p.pricing.note && (
+                <p class="flex gap-2 border-t border-line bg-mist p-5 text-sm text-muted">
+                  <Info size={16} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" /> {p.pricing.note}
+                </p>
+              )}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        p.faq && (
+          <section id="faq" class="scroll-mt-28">
+            <h2 class="mb-4 text-[1.6rem] font-extrabold">Pertanyaan seputar {p.title}</h2>
+            <FaqList items={p.faq} />
+          </section>
+        )
+      }
+
+      <section id="daftar" class="scroll-mt-28 lg:hidden">
+        <RegistrationPanel program={p} />
+      </section>
+    </article>
+
+    <div class="hidden lg:block">
+      <div id="daftar-desktop"><RegistrationPanel program={p} sticky /></div>
+    </div>
+  </div>
+
+  <section class="section bg-[#F8F9F5] !pt-14" aria-labelledby="lainnya-title">
+    <div class="container-site">
+      <div class="mb-8 flex items-end justify-between gap-4">
+        <h2 id="lainnya-title" class="text-[1.6rem] font-extrabold">Program lainnya</h2>
+        <a href="/program" class="link-arrow">Semua program <ArrowRight size={18} aria-hidden="true" /></a>
+      </div>
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {related.map((r) => <ProgramCard program={r} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Tab layanan (pola ARIA tabs: panah kiri/kanan, Home/End)
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement, focus = true) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !on;
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        const map: Record<string, number> = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 };
+        if (e.key in map) {
+          e.preventDefault();
+          select(tabs[(map[e.key] + tabs.length) % tabs.length]);
+        }
+      });
+    });
+  });
+
+  // Tautan #daftar di desktop mengarah ke panel samping
+  if (matchMedia('(min-width: 1024px)').matches) {
+    document.querySelectorAll<HTMLAnchorElement>('a[href="#daftar"]').forEach((a) => {
+      if (!a.closest('[data-toc]')) a.href = '#daftar-desktop';
+    });
+    document.querySelector<HTMLAnchorElement>('[data-toc-link="daftar"]')?.setAttribute('href', '#daftar-desktop');
+  }
+
+  // Sorot bagian aktif pada navigasi halaman
+  const links = new Map([...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')].map((a) => [a.dataset.tocLink, a]));
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        links.forEach((a) => a.classList.remove('!border-forest', '!text-forest', 'font-bold'));
+        links.get(e.target.id)?.classList.add('!border-forest', '!text-forest', 'font-bold');
+      }
+    },
+    { rootMargin: '-30% 0px -60% 0px' },
+  );
+  document.querySelectorAll('article section[id]').forEach((s) => observer.observe(s));
+</script>

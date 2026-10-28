@@ -1,0 +1,60 @@
+---
+import Brand from './Brand.astro';
+import { site } from '../data/site';
+import { programs, programUrl } from '../data/programs';
+
+const year = new Date().getFullYear();
+const contact = [site.contact.whatsapp, site.contact.email].filter(Boolean);
+---
+
+<footer class="bg-night text-[#C3D5C9]">
+  <div class="container-site grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+    <div>
+      <Brand variant="light" />
+      <p class="mt-5 max-w-xs text-sm">Ekosistem pembelajaran Islam yang terarah dan bertahap — untuk anak, dewasa, hingga usia senja.</p>
+      <div class="mt-5 flex items-center gap-2" role="group" aria-label="Ukuran teks">
+        <span class="text-xs">Ukuran teks</span>
+        <button type="button" data-text-size="md" aria-pressed="true" class="rounded-md border border-white/20 px-2.5 py-1 text-xs font-bold aria-pressed:bg-white aria-pressed:text-forest">A</button>
+        <button type="button" data-text-size="lg" aria-pressed="false" class="rounded-md border border-white/20 px-2.5 py-1 text-sm font-bold aria-pressed:bg-white aria-pressed:text-forest">A+</button>
+      </div>
+    </div>
+    <nav aria-label="Program">
+      <h2 class="text-sm font-extrabold text-white">Program</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        {programs.map((p) => <li><a href={programUrl(p)} class="hover:text-white hover:underline">{p.title}</a></li>)}
+      </ul>
+    </nav>
+    <nav aria-label="Jelajahi">
+      <h2 class="text-sm font-extrabold text-white">Jelajahi</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        <li><a href="/kajian" class="hover:text-white hover:underline">Jadwal Kajian</a></li>
+        <li><a href="/program#finder" class="hover:text-white hover:underline">Program Finder</a></li>
+        <li><a href="/cara-belajar" class="hover:text-white hover:underline">Cara Belajar</a></li>
+        <li><a href="/artikel" class="hover:text-white hover:underline">Artikel & Materi</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Lembaga">
+      <h2 class="text-sm font-extrabold text-white">Lembaga</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        <li><a href="/tentang" class="hover:text-white hover:underline">Tentang TSL</a></li>
+        <li><a href="/bantuan" class="hover:text-white hover:underline">Bantuan & FAQ</a></li>
+        <li><a href="/kontak" class="hover:text-white hover:underline">Kontak</a></li>
+        {site.lmsUrl && <li><a href={site.lmsUrl} target="_blank" rel="noopener" class="hover:text-white hover:underline">Learning Management System ↗</a></li>}
+      </ul>
+      {
+        contact.length > 0 && (
+          <ul class="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm">
+            {site.contact.whatsapp && <li><a href={site.contact.whatsapp} target="_blank" rel="noopener" class="hover:text-white hover:underline">WhatsApp {site.contact.whatsappLabel}</a></li>}
+            {site.contact.email && <li><a href={`mailto:${site.contact.email}`} class="break-all hover:text-white hover:underline">{site.contact.email}</a></li>}
+          </ul>
+        )
+      }
+    </nav>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="container-site flex flex-col gap-2 py-5 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} {site.name}</p>
+      {site.isPreview && <p>Versi pratinjau · kontak dan pendaftaran resmi sedang dikonfirmasi.</p>}
+    </div>
+  </div>
+</footer>

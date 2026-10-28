@@ -1,0 +1,83 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import { programs, programUrl, segments } from '../data/programs';
+import { activeKajian, sessionCount, teachers } from '../data/kajian';
+
+const stats = [
+  { value: programs.length, label: 'jalur program' },
+  { value: activeKajian.length, label: 'kajian rutin' },
+  { value: sessionCount, label: 'sesi kajian pekanan' },
+  { value: '3–45+', label: 'rentang usia pembelajar' },
+];
+---
+
+<Base title="Tentang TSL" description="Tarbiyah Sunnah Learning adalah ekosistem pembelajaran Islam lintas usia: program anak, dewasa, pendidikan lanjutan, usia 45+, dan kajian rutin daring.">
+  <PageHero
+    crumbs={[{ label: 'Tentang TSL' }]}
+    eyebrow="Tarbiyah Sunnah Learning"
+    title="Ekosistem belajar Islam untuk setiap tahap kehidupan."
+    lead="TSL menghadirkan pembelajaran Islam yang terarah, bertahap, dan berkelanjutan — dari madrasah anak hingga pembinaan usia senja."
+  >
+    <div slot="aside" class="flex justify-center lg:justify-end">
+      <img src="/images/tsl-logo.webp" alt="Logo Tarbiyah Sunnah Learning" width="1566" height="2000" class="h-auto w-44 md:w-52" />
+    </div>
+  </PageHero>
+
+  <section class="section !pt-12">
+    <div class="container-site">
+      <dl class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {
+          stats.map((s) => (
+            <div class="rounded-2xl bg-mist p-6">
+              <dt class="sr-only">{s.label}</dt>
+              <dd>
+                <span class="block font-heading text-[2.4rem] font-extrabold leading-none text-forest">{s.value}</span>
+                <span class="mt-2 block text-sm font-bold text-muted">{s.label}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="mt-16 grid gap-10 lg:grid-cols-[1fr_1.3fr]">
+        <div>
+          <span class="eyebrow">Apa yang kami lakukan</span>
+          <h2 class="section-title">Satu tujuan, beragam jalur.</h2>
+        </div>
+        <div class="prose-tsl text-[1.05rem]">
+          <p>
+            Pembelajar datang dengan kebutuhan yang berbeda: orang tua mencari pendidikan Islam untuk anaknya, orang dewasa ingin menata fondasi atau
+            memperdalam ilmu, dan mereka yang memasuki usia matang ingin terus bertumbuh. TSL menyusun jalur belajar untuk masing-masing — bukan
+            berdasarkan struktur divisi, tetapi berdasarkan kebutuhan pembelajar.
+          </p>
+          <p>
+            Di samping program terstruktur, TSL menyelenggarakan kajian rutin daring yang terbuka setiap pekan bersama {teachers.length} pengajar.
+          </p>
+        </div>
+      </div>
+
+      <ul class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          programs.map((p) => (
+            <li>
+              <a href={programUrl(p)} class="card card-hover flex items-center justify-between gap-4 p-5">
+                <span>
+                  <span class="text-xs font-bold uppercase tracking-wide text-sage">{segments[p.segment].short}</span>
+                  <b class="block">{p.title}</b>
+                </span>
+                <ArrowRight size={18} class="shrink-0 text-forest" aria-hidden="true" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-16 rounded-2xl border border-dashed border-line p-6 text-muted">
+        <p class="font-bold text-ink">Profil lembaga</p>
+        <p class="mt-1 text-sm">Sejarah, legalitas, struktur pengelola, dan alamat resmi akan ditambahkan setelah data resmi diterima dari pengelola.</p>
+      </div>
+    </div>
+  </section>
+</Base>

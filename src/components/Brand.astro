@@ -1,0 +1,32 @@
+---
+/**
+ * Logo TSL versi horizontal: mark layang-layang resmi + logotype.
+ * Logo vertikal lengkap tersedia di /images/tsl-logo.webp (dipakai di halaman Tentang & gambar OG).
+ */
+interface Props {
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+const { variant = 'dark', class: className = '' } = Astro.props;
+const light = variant === 'light';
+---
+
+<a href="/" class:list={['flex shrink-0 items-center gap-2.5 rounded-lg', className]} aria-label="Tarbiyah Sunnah Learning — Beranda">
+  <img
+    src="/images/tsl-mark-96.webp"
+    srcset="/images/tsl-mark-96.webp 1x, /images/tsl-mark-192.webp 2x"
+    alt=""
+    width="44"
+    height="44"
+    class="h-11 w-11"
+  />
+  <span class="flex flex-col items-start leading-none">
+    <strong class:list={['font-heading text-[1.02rem] font-extrabold tracking-tight', light ? 'text-white' : 'text-brand']}>Tarbiyah Sunnah</strong>
+    <small
+      class:list={[
+        'mt-1 rounded-[3px] px-1.5 py-[3px] text-[0.56rem] font-extrabold tracking-[0.32em]',
+        light ? 'bg-white text-brand' : 'bg-brand text-white',
+      ]}>LEARNING</small
+    >
+  </span>
+</a>

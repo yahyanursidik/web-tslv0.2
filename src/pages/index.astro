@@ -1,0 +1,258 @@
+---
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Baby,
+  CalendarDays,
+  Check,
+  ClipboardCheck,
+  Compass,
+  GraduationCap,
+  HeartHandshake,
+  Layers,
+  Route,
+  Sprout,
+  UserRound,
+  Users,
+} from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import HeroArt from '../components/home/HeroArt.astro';
+import NextKajian from '../components/NextKajian.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+import SectionHead from '../components/ui/SectionHead.astro';
+import WeekStrip from '../components/WeekStrip.astro';
+import FaqList from '../components/FaqList.astro';
+import { programs, segments, programUrl, getProgram, type Segment } from '../data/programs';
+import { activeKajian, sessionCount } from '../data/kajian';
+import { faqs } from '../data/faq';
+
+const segmentCards: { id: Segment; icon: any; programs: string[] }[] = [
+  { id: 'anak', icon: Baby, programs: ['kids'] },
+  { id: 'dewasa', icon: UserRound, programs: ['dasar', 'quran'] },
+  { id: 'lanjutan', icon: GraduationCap, programs: ['mahad', 's1'] },
+  { id: 'senja', icon: HeartHandshake, programs: ['senja'] },
+];
+
+// Prinsip + bukti konkret dari program yang sudah memiliki panduan (brief 7.4: hanya klaim faktual).
+const principles = [
+  { icon: Compass, title: 'Terarah', text: 'Setiap program menjelaskan untuk siapa ia dirancang dan apa yang dipelajari.', proof: 'TSL for Kids mengacu pada Tujuan Pembelajaran TSL Islamic Essential Knowledge.' },
+  { icon: Layers, title: 'Bertahap', text: 'Kelompok belajar mempertimbangkan usia, kesiapan, dan kemampuan.', proof: 'Madrasah anak dibagi KB, TK A, TK B, Fase A, B, dan C.' },
+  { icon: Sprout, title: 'Pembiasaan', text: 'Nilai Islam dibiasakan dalam keseharian, bukan hanya dihafal.', proof: 'Pembiasaan menjadi salah satu fokus Madrasah Anak Usia Dini.' },
+  { icon: Users, title: 'Pendampingan', text: 'Kelas kecil dan sesi private memberi ruang perhatian personal.', proof: 'Kelas madrasah maks. 6 anak; private Al-Qur’an 1 guru : 1 peserta.' },
+  { icon: ClipboardCheck, title: 'Evaluasi', text: 'Perkembangan dipantau dan ditindaklanjuti sesuai ketentuan program.', proof: 'TSL for Kids: laporan perkembangan & rekomendasi target tiap 3 bulan.' },
+];
+
+const steps = [
+  { n: '01', title: 'Jelajahi', text: 'Temukan program lewat kelompok usia, Program Finder, atau pencarian.', href: '/program#finder', cta: 'Buka Program Finder' },
+  { n: '02', title: 'Pahami', text: 'Baca halaman program: untuk siapa, apa yang dipelajari, dan cara belajarnya.', href: '/program', cta: 'Lihat katalog' },
+  { n: '03', title: 'Daftar atau ikuti', text: 'Daftar program melalui kanal resmi, atau langsung ikuti kajian rutin pekanan.', href: '/kajian', cta: 'Lihat jadwal kajian' },
+];
+
+const kids = getProgram('kids');
+const senja = getProgram('senja');
+---
+
+<Base>
+  <!-- 1. Hero -->
+  <section class="overflow-hidden bg-cream">
+    <div class="container-site grid items-center gap-10 py-12 md:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20">
+      <div>
+        <span class="eyebrow">Belajar Islam · sepanjang hayat</span>
+        <h1 class="mt-5 text-[2.6rem] font-extrabold leading-[1.08] sm:text-[3.3rem] lg:text-[4rem]">
+          Menuntut ilmu.<br /><span class="text-deep">Bertumbuh dalam kebaikan.</span>
+        </h1>
+        <p class="mt-6 max-w-[34rem] text-[1.12rem] text-muted">
+          Program pembelajaran Islam yang terarah, bertahap, dan mudah diakses — untuk anak, dewasa, hingga usia senja.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/program#finder" class="btn btn-primary !px-6 !py-3.5" data-track="cta_temukan" data-track-label="hero">
+            <Compass size={20} aria-hidden="true" /> Temukan Program
+          </a>
+          <a href="/kajian" class="btn btn-outline !px-6 !py-3.5" data-track="cta_jadwal" data-track-label="hero">
+            <CalendarDays size={20} aria-hidden="true" /> Lihat Jadwal Kajian
+          </a>
+        </div>
+        <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-[#DADFD5] pt-6 text-[0.92rem] font-bold text-forest">
+          <li class="inline-flex items-center gap-2"><Check size={18} class="text-deep" aria-hidden="true" /> Usia 3 hingga 45+</li>
+          <li class="inline-flex items-center gap-2"><Check size={18} class="text-deep" aria-hidden="true" /> {programs.length} jalur program</li>
+          <li class="inline-flex items-center gap-2"><Check size={18} class="text-deep" aria-hidden="true" /> {sessionCount} sesi kajian pekanan</li>
+        </ul>
+      </div>
+      <div class="relative">
+        <div class="aspect-[4/3.4] overflow-hidden rounded-[28px] bg-[#DDE8D9] sm:aspect-[560/490]">
+          <HeroArt />
+        </div>
+        <NextKajian class="relative -mt-16 mx-3 sm:absolute sm:-left-6 sm:bottom-6 sm:mx-0 sm:mt-0 sm:w-[330px]" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Temukan program berdasarkan kelompok -->
+  <section class="section" aria-labelledby="jelajahi-title">
+    <div class="container-site">
+      <SectionHead id="jelajahi-title" eyebrow="Mulai dari sini" title="Untuk siapa Anda mencari program?" lead="Pintu masuk sederhana tanpa perlu memahami struktur lembaga. Pilih kelompok, lalu lihat program yang relevan." />
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          segmentCards.map(({ id, icon: Icon, programs: ids }) => (
+            <a href={`/program?segmen=${id}#katalog`} class="card card-hover group flex flex-col p-6" data-track="segment_select" data-track-label={id}>
+              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-mist text-deep">
+                <Icon size={24} aria-hidden="true" />
+              </span>
+              <b class="mt-5 font-heading text-lg font-extrabold">{segments[id].label}</b>
+              <span class="mt-1 text-sm text-muted">{segments[id].description}</span>
+              <ul class="mt-4 flex flex-1 flex-col gap-1 border-t border-line pt-4 text-sm font-bold text-forest">
+                {ids.map((pid) => <li>· {getProgram(pid).title}</li>)}
+              </ul>
+              <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-forest">
+                Lihat program <ArrowRight size={16} class="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      <a href="/program#finder" class="mt-5 flex flex-col items-start justify-between gap-4 rounded-2xl border border-dashed border-[#BCCDBD] bg-cream/60 p-5 sm:flex-row sm:items-center" data-track="finder_open" data-track-label="home">
+        <span class="flex items-center gap-4">
+          <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest text-white"><Route size={20} aria-hidden="true" /></span>
+          <span><b class="block">Masih ragu?</b><span class="text-sm text-muted">Jawab dua pertanyaan singkat dan kami tunjukkan program yang paling relevan.</span></span>
+        </span>
+        <span class="btn btn-primary shrink-0">Coba Program Finder</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 3. Program unggulan -->
+  <section class="section bg-[#F8F9F5]" aria-labelledby="program-title">
+    <div class="container-site">
+      <SectionHead id="program-title" eyebrow="Program pembelajaran" title="Satu tujuan, beragam jalur belajar.">
+        <a href="/program" class="link-arrow shrink-0">Semua program <ArrowRight size={18} aria-hidden="true" /></a>
+      </SectionHead>
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {programs.map((p) => <ProgramCard program={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Pendekatan -->
+  <section class="section bg-forest text-white" aria-labelledby="pendekatan-title">
+    <div class="container-site">
+      <SectionHead
+        id="pendekatan-title"
+        inverse
+        eyebrow="Pendekatan belajar TSL"
+        title="Bukan hanya hadir di kelas.<br />Belajar dengan arah yang jelas."
+        lead="Setiap program punya rancangan sendiri. Prinsip di bawah disertai contoh nyata dari program yang panduannya sudah tersedia."
+      />
+      <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          principles.map(({ icon: Icon, title, text, proof }, i) => (
+            <li class="flex flex-col rounded-2xl border border-[#52735D] p-5">
+              <span class="flex items-center justify-between text-[#B7D0BC]">
+                <Icon size={22} aria-hidden="true" />
+                <span class="text-xs font-bold">0{i + 1}</span>
+              </span>
+              <h3 class="mt-6 text-xl font-extrabold !text-white">{title}</h3>
+              <p class="mt-2 flex-1 text-sm text-[#D0DED1]">{text}</p>
+              <p class="mt-4 border-t border-white/15 pt-3 text-xs text-[#B7D0BC]">{proof}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <a href="/cara-belajar" class="btn btn-light mt-8">Pelajari cara belajar di TSL <ArrowRight size={18} aria-hidden="true" /></a>
+    </div>
+  </section>
+
+  <!-- 5. Jadwal kajian -->
+  <section class="section" aria-labelledby="jadwal-title">
+    <div class="container-site">
+      <SectionHead id="jadwal-title" eyebrow="Kajian rutin daring" title="Jadwal kajian pekan ini." lead={`${activeKajian.length} kajian dengan ${sessionCount} sesi setiap pekan. Semua waktu dalam WIB (UTC+7).`}>
+        <a href="/kajian" class="link-arrow shrink-0">Jadwal lengkap <ArrowRight size={18} aria-hidden="true" /></a>
+      </SectionHead>
+      <WeekStrip />
+      <p class="mt-4 text-sm text-muted">Tautan Zoom/Google Meet dibagikan oleh pengelola setelah diverifikasi. Tambahkan jadwal ke kalender dari halaman detail kajian.</p>
+    </div>
+  </section>
+
+  <!-- 6. Sorotan Kids & Gemilang Senja -->
+  <section class="section bg-[#F8F9F5]" aria-label="Sorotan program">
+    <div class="container-site grid gap-6 lg:grid-cols-2">
+      {
+        [
+          { p: kids, eyebrow: 'Sorotan · usia 3–12', title: 'Belajar Islam sejak dini.', points: ['5 layanan: MAUD, MUD, Al-Qur’an, Tahfidz, Private', 'Kelas madrasah maksimal 6 anak', 'Laporan perkembangan setiap 3 bulan'], bg: 'bg-[#E8F0DF]' },
+          { p: senja, eyebrow: 'Sorotan · usia 45+', title: 'Terus belajar di setiap usia.', points: ['Reguler: 2× kajian diniyyah + 3× private Al-Qur’an per pekan', 'Intensif tatap muka 3 hari 2 malam', 'Seasonal: program daring Ramadan'], bg: 'bg-sand' },
+        ].map(({ p, eyebrow, title, points, bg }) => (
+          <article class:list={['flex flex-col overflow-hidden rounded-[24px]', bg]}>
+            <img src={p.image} alt={p.imageAlt} width="720" height="450" loading="lazy" class="aspect-[16/8] w-full object-cover" />
+            <div class="flex flex-1 flex-col p-7 md:p-9">
+              <span class="eyebrow">{eyebrow}</span>
+              <h2 class="mt-3 text-[1.9rem] font-extrabold leading-tight">
+                {p.title}.<br /><span class="text-deep">{title}</span>
+              </h2>
+              <ul class="mt-5 flex-1 space-y-2.5">
+                {points.map((t) => (
+                  <li class="flex gap-3 font-bold"><Check size={20} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" />{t}</li>
+                ))}
+              </ul>
+              <a href={programUrl(p)} class="btn btn-primary mt-7 self-start" data-track="program_highlight" data-track-label={p.id}>
+                Kenali {p.title} <ArrowUpRight size={18} aria-hidden="true" />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 7. Cara memulai -->
+  <section class="section" aria-labelledby="mulai-title">
+    <div class="container-site">
+      <SectionHead id="mulai-title" eyebrow="Cara memulai" title="Tiga langkah menuju majelis ilmu." />
+      <ol class="grid gap-4 md:grid-cols-3">
+        {
+          steps.map((s, i) => (
+            <li class="relative rounded-2xl bg-cream p-7">
+              <span class="font-heading text-[2.6rem] font-extrabold leading-none text-[#C9D8C8]">{s.n}</span>
+              <h3 class="mt-4 text-xl font-extrabold">{s.title}</h3>
+              <p class="mt-2 text-muted">{s.text}</p>
+              <a href={s.href} class="link-arrow mt-5">{s.cta} <ArrowRight size={16} aria-hidden="true" /></a>
+              {i < steps.length - 1 && (
+                <ArrowRight size={22} class="absolute -right-[19px] top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-0.5 text-sage md:block" aria-hidden="true" />
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 8. Tentang -->
+  <section class="pb-16 md:pb-24" aria-labelledby="tentang-title">
+    <div class="container-site">
+      <div class="grid gap-8 rounded-[28px] bg-mist p-8 md:grid-cols-[1.2fr_1fr] md:items-center md:p-12">
+        <div>
+          <span class="eyebrow">Tarbiyah Sunnah Learning</span>
+          <h2 id="tentang-title" class="mt-3 text-[1.9rem] font-extrabold leading-tight md:text-[2.3rem]">Ekosistem belajar Islam yang tumbuh bersama Anda.</h2>
+        </div>
+        <div>
+          <p class="text-muted">Dari madrasah anak hingga pembinaan usia senja, TSL menghadirkan pembelajaran yang terarah dan berkelanjutan — dengan informasi program yang jelas sebelum Anda memutuskan.</p>
+          <a href="/tentang" class="btn btn-primary mt-6">Tentang TSL <ArrowRight size={18} aria-hidden="true" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FAQ -->
+  <section class="section bg-[#F8F9F5]" aria-labelledby="faq-title">
+    <div class="container-site grid gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <span class="eyebrow">Bantuan</span>
+        <h2 id="faq-title" class="section-title">Pertanyaan yang sering muncul.</h2>
+        <p class="mt-4 text-muted">Tidak menemukan jawaban? Kunjungi pusat bantuan atau cari langsung.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/bantuan" class="btn btn-outline">Semua pertanyaan</a>
+          <button type="button" data-search-open class="btn btn-ghost">Cari jawaban</button>
+        </div>
+      </div>
+      <FaqList items={faqs.filter((f) => f.featured)} />
+    </div>
+  </section>
+</Base>

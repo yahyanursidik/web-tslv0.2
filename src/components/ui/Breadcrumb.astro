@@ -1,0 +1,41 @@
+---
+import { ChevronRight } from '@lucide/astro';
+
+interface Props {
+  items: { label: string; href?: string }[];
+}
+const { items } = Astro.props;
+const trail = [{ label: 'Beranda', href: '/' }, ...items];
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((t, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: t.label,
+    item: t.href ? new URL(t.href, Astro.site ?? Astro.url).href : undefined,
+  })),
+};
+---
+
+<nav aria-label="Breadcrumb" class="text-sm">
+  <ol class="flex flex-wrap items-center gap-1.5 text-muted">
+    {
+      trail.map((t, i) => (
+        <li class="flex items-center gap-1.5">
+          {i > 0 && <ChevronRight size={14} aria-hidden="true" />}
+          {t.href && i < trail.length - 1 ? (
+            <a href={t.href} class="hover:text-forest hover:underline">
+              {t.label}
+            </a>
+          ) : (
+            <span aria-current="page" class="font-bold text-ink">
+              {t.label}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />

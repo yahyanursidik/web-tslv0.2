@@ -1,11 +1,51 @@
 [build]
   command = "npm run build"
-  publish = "apps/web/dist"
+  publish = "dist"
 
 [build.environment]
+  # Astro 7 membutuhkan Node >= 22.22
   NODE_VERSION = "22"
 
+# Redirect permanen URL lama (website React & Astro awal) ke halaman baru.
+# Preschool Daring sengaja belum di-redirect sampai alamat migrasinya dikonfirmasi (brief 4.1).
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  from = "/madrasah-anak"
+  to = "/program/tsl-for-kids"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/bid"
+  to = "/program/belajar-islam-dasar"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/al-quran"
+  to = "/program/quran-bahasa-arab-dewasa"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/bahasa-arab"
+  to = "/program/quran-bahasa-arab-dewasa"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/kelas-bahasa-arab"
+  to = "/program/quran-bahasa-arab-dewasa"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/mahad-tsl"
+  to = "/program/mahad-tsl"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/s1-pjj"
+  to = "/program/s1-pjj"
+  status = 301
+  force = true

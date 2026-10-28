@@ -1,0 +1,54 @@
+---
+import { CalendarPlus } from '@lucide/astro';
+import { getTeacher, kajianUrl, type Kajian } from '../data/kajian';
+
+interface Props {
+  kajian: Kajian;
+  variant?: 'button' | 'icon';
+  class?: string;
+}
+const { kajian: k, variant = 'button', class: className = '' } = Astro.props;
+const payload = JSON.stringify({
+  id: k.id,
+  title: k.title,
+  teacher: getTeacher(k.teacherId).name,
+  platform: k.platform,
+  sessions: k.sessions,
+  url: new URL(kajianUrl(k), Astro.site ?? Astro.url).href,
+});
+---
+
+{
+  variant === 'icon' ? (
+    <button
+      type="button"
+      data-ics={payload}
+      class:list={['inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line text-forest hover:border-sage hover:bg-mist', className]}
+      aria-label={`Tambahkan ${k.title} ke kalender`}
+      title="Tambah ke kalender"
+    >
+      <CalendarPlus size={18} aria-hidden="true" />
+    </button>
+  ) : (
+    <button type="button" data-ics={payload} class:list={['btn btn-outline', className]}>
+      <CalendarPlus size={18} aria-hidden="true" /> Tambah ke kalender
+    </button>
+  )
+}
+
+<script>
+  import { buildICS, downloadFile } from '../lib/schedule';
+  import { toast, track } from '../lib/client';
+
+  if (!(window as any).__tslIcs) {
+    (window as any).__tslIcs = true;
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-ics]');
+      if (!btn) return;
+      const k = JSON.parse(btn.dataset.ics!);
+      downloadFile(`${k.id}-tsl.ics`, buildICS(k, k.url));
+      toast('File kalender diunduh — buka untuk menyimpan jadwal pekanan');
+      track('kajian_calendar', { kajian: k.id });
+    });
+  }
+</script>

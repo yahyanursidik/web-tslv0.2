@@ -1,0 +1,74 @@
+---
+import { AtSign, Clock, Mail, MapPin, MessageCircle, MonitorPlay, Video } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import { site } from '../data/site';
+import { programs } from '../data/programs';
+
+const channels = [
+  { key: 'whatsapp', label: 'WhatsApp admin', icon: MessageCircle, value: site.contact.whatsapp, cta: site.contact.whatsappLabel },
+  { key: 'lms', label: 'Learning Management System', icon: MonitorPlay, value: site.lmsUrl, cta: 'Masuk LMS' },
+  { key: 'email', label: 'Email', icon: Mail, value: site.contact.email ? `mailto:${site.contact.email}` : null, cta: site.contact.email },
+  { key: 'instagram', label: 'Instagram', icon: AtSign, value: site.contact.instagram, cta: 'Buka Instagram' },
+  { key: 'youtube', label: 'YouTube', icon: Video, value: site.contact.youtube, cta: 'Buka YouTube' },
+  { key: 'address', label: 'Alamat', icon: MapPin, value: null, cta: site.contact.address },
+];
+const programTitles = Object.fromEntries(programs.map((p) => [p.slug, p.title]));
+---
+
+<Base title="Kontak" description="Kanal informasi dan konsultasi resmi Tarbiyah Sunnah Learning.">
+  <PageHero
+    crumbs={[{ label: 'Kontak' }]}
+    eyebrow="Hubungi kami"
+    title="Kanal informasi resmi."
+    lead="Tanyakan program, jadwal, atau pendaftaran langsung kepada pengelola TSL."
+  />
+
+  <section class="section !pt-12">
+    <div class="container-site grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+      <div>
+        <div data-program-context hidden class="mb-6 rounded-2xl bg-mist p-5">
+          <p class="text-sm text-muted">Anda bertanya tentang</p>
+          <p class="font-heading text-lg font-extrabold" data-program-name></p>
+        </div>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {
+            channels.map(({ label, icon: Icon, value, cta, key }) => (
+              <li class="flex gap-4 rounded-2xl border border-line p-5">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-mist text-deep"><Icon size={20} aria-hidden="true" /></span>
+                <div class="min-w-0">
+                  <p class="font-bold">{label}</p>
+                  {value ? (
+                    <a href={value} class="link-arrow mt-1 text-sm" target={key === 'email' ? undefined : '_blank'} rel="noopener" data-track="contact_click" data-track-label={key}>{cta}</a>
+                  ) : cta ? (
+                    <p class="mt-1 text-sm text-muted">{cta}</p>
+                  ) : (
+                    <p class="mt-1 inline-flex items-center gap-1.5 text-sm text-muted"><Clock size={14} aria-hidden="true" /> Sedang dikonfirmasi</p>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <aside class="rounded-2xl bg-cream p-6">
+        <p class="font-heading text-lg font-extrabold">Agar pertanyaan cepat terjawab</p>
+        <ul class="mt-4 space-y-3 text-sm text-muted">
+          <li>• Sebutkan nama program atau kajian yang Anda tanyakan.</li>
+          <li>• Untuk program anak, sertakan usia anak dan layanan yang diminati.</li>
+          <li>• Untuk Gemilang Senja, sebutkan jalur yang diminati: Reguler, Intensif, atau Seasonal.</li>
+          <li>• Sebutkan zona waktu Anda bila berada di luar WIB.</li>
+        </ul>
+        <p class="mt-5 border-t border-line pt-4 text-xs text-muted">Jangan kirim data pribadi anak atau dokumen sensitif melalui kanal publik.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script define:vars={{ programTitles }}>
+  const slug = new URLSearchParams(location.search).get('program');
+  if (slug && programTitles[slug]) {
+    document.querySelector('[data-program-name]').textContent = programTitles[slug];
+    document.querySelector('[data-program-context]').hidden = false;
+  }
+</script>
