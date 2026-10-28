@@ -5,7 +5,7 @@
 export type FinderAge = 'anak' | 'dewasa' | 'senja';
 
 export interface FinderResult {
-  /** id program, atau 'kajian:<id>' / 'kajian' untuk kajian rutin. */
+  /** id program, 'kelas:<id>' untuk kelas dalam program, atau 'kajian:<id>' / 'kajian' untuk kajian rutin. */
   ref: string;
   reason: string;
 }
@@ -46,25 +46,41 @@ export const finderGoals: Record<FinderAge, { id: string; label: string; results
       results: [
         { ref: 'dasar', reason: 'Fondasi aqidah, ibadah, dan adab yang disusun bertahap.' },
         { ref: 'kajian:aqidah', reason: 'Kajian pekanan terbuka untuk memperdalam aqidah.' },
+        { ref: 'kelas:bacaan-salat', reason: 'Memahami arti dan makna setiap bacaan salat, 8 pertemuan.' },
       ],
     },
     {
       id: 'quran',
       label: 'Memperbaiki bacaan Al-Qur’an',
       results: [
-        { ref: 'quran', reason: 'Jalur Al-Qur’an untuk peserta dewasa.' },
+        { ref: 'kelas:al-fatihah', reason: 'Membenahi kesalahan bacaan Al-Fatihah lewat praktik, 7 pertemuan.' },
+        { ref: 'kelas:jazariyah', reason: 'Untuk yang sudah lancar: tajwid bait demi bait dengan talaqqi, 20 pertemuan.' },
         { ref: 'kajian:tahsin', reason: 'Kajian pekanan: tahsin dan hafalan bertahap.' },
-        { ref: 'kajian:tadabbur', reason: 'Memahami dan merenungi Al-Qur’an, dua sesi per pekan.' },
       ],
     },
     {
       id: 'arab',
-      label: 'Belajar Bahasa Arab',
+      label: 'Belajar bahasa Arab dari nol',
       results: [
-        { ref: 'quran', reason: 'Jalur Bahasa Arab untuk peserta dewasa.' },
-        { ref: 'mahad', reason: 'Bila sudah memiliki dasar dan ingin pendalaman.' },
-        { ref: 's1', reason: 'Bila menginginkan studi akademik Pendidikan Bahasa Arab.' },
+        { ref: 'kelas:dl1', reason: 'Fondasi tata bahasa dan 300–400 kosakata harian, 16–20 pertemuan.' },
+        { ref: 'kelas:nahwu-mukhtarat', reason: 'Dirancang untuk dewasa tanpa dasar; sepekan sekali selama ±6 bulan.' },
+        { ref: 'kelas:aby1', reason: 'Belajar lewat percakapan tema sehari-hari.' },
       ],
+    },
+    {
+      id: 'arab-lanjut',
+      label: 'Mendalami nahwu, sharaf, balaghah',
+      results: [
+        { ref: 'kelas:nahwu-lanjutan', reason: 'Kitab Mulakhkhas Qawa’id, 30 pertemuan, untuk yang sudah berdasar.' },
+        { ref: 'kelas:sharaf-1', reason: 'Perubahan bentuk kata; dilanjutkan Sharaf Dasar 2.' },
+        { ref: 'kelas:balaghah', reason: 'Sisi sastra bahasa Arab dan Al-Qur’an.' },
+        { ref: 'mahad', reason: 'Bila ingin jalur berjenjang lengkap dengan ilmu diniyah.' },
+      ],
+    },
+    {
+      id: 'waris',
+      label: 'Ilmu waris (faraidh)',
+      results: [{ ref: 'waris', reason: 'Praktis untuk orang awam: ahli waris, bagian, dan perhitungan, 8 pertemuan + ujian.' }],
     },
     {
       id: 'lanjutan',
@@ -96,6 +112,7 @@ export const finderGoals: Record<FinderAge, { id: string; label: string; results
       label: 'Lebih dekat dengan Al-Qur’an',
       results: [
         { ref: 'senja', reason: 'Jalur Reguler memuat 3× sesi private Al-Qur’an per pekan.' },
+        { ref: 'kelas:al-fatihah', reason: 'Kelas singkat memperbaiki bacaan Al-Fatihah, tanpa waswas.' },
         { ref: 'kajian:tahsin', reason: 'Kajian pekanan: perbaikan bacaan Al-Qur’an.' },
       ],
     },

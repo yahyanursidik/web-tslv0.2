@@ -3,7 +3,7 @@ import { Search, X } from '@lucide/astro';
 import { buildSearchIndex } from '../lib/search';
 
 const index = buildSearchIndex();
-const suggestions = ['TSL for Kids', 'Tahfidz', 'Bahasa Arab', 'Kajian Aqidah', 'Usia 45+', 'Pendaftaran'];
+const suggestions = ['TSL for Kids', 'Nahwu', 'Al-Fatihah', 'Waris', 'Kajian Aqidah', 'Usia 45+', 'Pendaftaran'];
 ---
 
 <dialog
@@ -58,11 +58,14 @@ const suggestions = ['TSL for Kids', 'Tahfidz', 'Bahasa Arab', 'Kajian Aqidah', 
   const none = dialog.querySelector<HTMLElement>('[data-search-none]')!;
   const index: SearchItem[] = JSON.parse(dialog.querySelector('[data-search-index]')!.textContent!);
 
+  // Abaikan diakritik, apostrof, dan huruf ganda agar variasi transliterasi
+  // (jazariyah/jazariyyah, murojaah/muraja’ah) tetap cocok.
   const norm = (s: string) =>
     s
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[̀-ͯ’'`]/g, '');
+      .replace(/[̀-ͯ’‘'`-]/g, '')
+      .replace(/([a-z])\1+/g, '$1');
   const haystacks = index.map((i) => ({ title: norm(i.title), all: norm(`${i.title} ${i.description} ${i.keywords} ${i.type}`) }));
   let active = 0;
   let results: SearchItem[] = [];

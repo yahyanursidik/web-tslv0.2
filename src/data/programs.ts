@@ -4,6 +4,7 @@
  * tersedia memakai `dataStatus: 'pending'` sehingga halaman menampilkan
  * pemberitahuan pembaruan, bukan kurikulum/harga karangan.
  */
+import { arabCourses, arabTracks, warisCourse, type Course, type CourseTrack } from './courses';
 
 export type Segment = 'anak' | 'dewasa' | 'lanjutan' | 'senja';
 export type ProgramStatus = 'active' | 'planned' | 'closed' | 'archived';
@@ -44,6 +45,9 @@ export interface Program {
   support?: string[];
   enrollmentSteps?: { title: string; text: string }[];
   pricing?: { items: { label: string; value: string; note: string }[]; note?: string };
+  /** Kelas beserta silabus; dikelompokkan per `courseTracks` bila lebih dari satu rumpun. */
+  courses?: Course[];
+  courseTracks?: CourseTrack[];
   facts: { label: string; value: string }[];
   faq?: { q: string; a: string }[];
   /** 'guide' = bersumber dari panduan resmi; 'pending' = menunggu dokumen/validasi. */
@@ -246,26 +250,75 @@ export const programs: Program[] = [
     title: 'Al-Qur’an & Bahasa Arab Dewasa',
     segment: 'dewasa',
     ageLabel: 'Dewasa',
-    menuDescription: 'Belajar dan meningkatkan keterampilan',
-    summary: 'Jalur pengembangan kemampuan membaca Al-Qur’an dan berbahasa Arab bagi peserta dewasa.',
+    menuDescription: 'Nahwu, sharaf, balaghah, dan perbaikan bacaan',
+    summary:
+      'Kelas bahasa Arab berjenjang — dari nol hingga balaghah — serta kelas perbaikan bacaan Al-Qur’an dan makna bacaan salat, dengan silabus dan kitab yang jelas.',
+    // Sumber: Kumpulan Dokumen Div. B. Arab dan Waris (TSL).
     intro: [
-      'Program ini ditujukan bagi peserta dewasa yang ingin belajar atau meningkatkan kemampuan Al-Qur’an dan Bahasa Arab secara terarah.',
+      'Divisi Bahasa Arab TSL menyelenggarakan kelas-kelas bahasa Arab berjenjang bagi peserta dewasa: bahasa Arab terpadu (Durusul Lughah dan Al-‘Arabiyyah Baina Yadaik), nahwu, sharaf, hingga balaghah. Setiap kelas memakai kitab rujukan, memiliki capaian pembelajaran, dan ditutup dengan ujian naik tingkat.',
+      'Selain itu tersedia kelas perbaikan bacaan Al-Qur’an melalui talaqqi — Memperbaiki Bacaan Al-Fatihah dan Syarah Matan al-Jazariyyah — serta kelas tematik Memahami Bacaan Salat.',
     ],
     audience: [
-      'Pembelajar dewasa yang ingin memperbaiki bacaan Al-Qur’an.',
-      'Peserta yang ingin mulai atau melanjutkan belajar Bahasa Arab.',
+      'Dewasa yang memulai bahasa Arab dari nol — mulai dari Durusul Lughah Jilid 1, Al-‘Arabiyyah Baina Yadaik, atau Nahwu Dasar (Mukhtarat).',
+      'Pelajar yang sudah memiliki dasar dan ingin mendalami nahwu, sharaf, atau balaghah.',
+      'Yang sudah bisa membaca Al-Qur’an dan ingin memperbaiki bacaannya.',
+      'Siapa saja yang ingin memahami makna bacaan salat agar lebih khusyuk.',
     ],
-    outcomes: [],
-    modalities: [],
-    curriculum: ['Al-Qur’an', 'Bahasa Arab'],
+    outcomes: [
+      'Memahami fungsi kata dalam kalimat (nahwu) dan perubahan bentuk kata (sharaf).',
+      'Membaca dan memberi harakat teks Arab tanpa harakat (gundul) secara bertahap.',
+      'Menggunakan bahasa Arab untuk membaca, menulis, mendengar, dan berbicara.',
+      'Mengenali keindahan bahasa Al-Qur’an melalui ilmu balaghah.',
+      'Membaca Al-Fatihah dan Al-Qur’an dengan makhraj dan tajwid yang benar.',
+    ],
+    modalities: [
+      { title: 'Kelas daring terjadwal', text: 'Pertemuan tatap muka daring melalui Google Meet sesuai jadwal tiap kelas.' },
+      { title: 'Kelompok kecil', text: 'Satu grup belajar berisi 3–10 peserta agar pengajar dapat memperhatikan setiap peserta.' },
+      { title: 'Rekaman & tugas pekanan', text: 'Setiap pertemuan direkam untuk murajaah, disertai tugas pekanan dari pengajar.' },
+      { title: 'Evaluasi berjenjang', text: 'Murajaah, ujian berkala, dan ujian naik tingkat di akhir setiap kelas.' },
+    ],
+    support: [
+      'Admin kelas mendampingi grup belajar: pengingat jadwal, tugas, dan rekaman.',
+      'Pertemuan pengganti (badal) bila pengajar berhalangan, sesuai kesepakatan peserta.',
+      'Kelas lanjutan dibuka atas rekomendasi pengajar setelah kelas sebelumnya selesai.',
+    ],
+    courses: arabCourses,
+    courseTracks: arabTracks,
     facts: [
-      { label: 'Untuk', value: 'Dewasa' },
-      { label: 'Fokus', value: 'Al-Qur’an & Bahasa Arab' },
+      { label: 'Pilihan kelas', value: `${arabCourses.length} kelas · ${arabTracks.length} rumpun` },
+      { label: 'Format', value: 'Daring · Google Meet' },
+      { label: 'Grup belajar', value: '3–10 peserta' },
+      { label: 'Durasi', value: '45–120 menit / pertemuan' },
     ],
-    dataStatus: 'pending',
-    pendingNotice:
-      'Rincian level, durasi, jadwal, dan biaya sedang disusun dalam dokumen program resmi. Halaman ini akan diperbarui setelah dokumen tersebut tersedia.',
-    internalNote: 'Menunggu dokumen resmi dari Ustadz Sigit — jangan mengarang level, harga, atau durasi.',
+    faq: [
+      {
+        q: 'Saya belum pernah belajar bahasa Arab. Mulai dari kelas apa?',
+        a: 'Pilih kelas tingkat Pemula: Durusul Lughah Jilid 1, Al-‘Arabiyyah Baina Yadaik Jilid 1, atau Nahwu Dasar (Mukhtarat) yang memang dirancang untuk peserta tanpa dasar. Admin dapat membantu memilih sesuai tujuan Anda.',
+      },
+      {
+        q: 'Apakah kelas direkam?',
+        a: 'Ya. Setiap pertemuan direkam dan dapat diakses kembali untuk murajaah.',
+      },
+      {
+        q: 'Berapa jumlah peserta dalam satu kelas?',
+        a: 'Satu grup belajar berisi 3–10 peserta. Jumlah dapat melebihi kuota dengan persetujuan pengajar.',
+      },
+      {
+        q: 'Bagaimana jika pengajar berhalangan?',
+        a: 'Kelas diliburkan dengan pemberitahuan di grup, lalu diganti dengan pertemuan pengganti (badal) sesuai jadwal pengajar dan kesepakatan peserta.',
+      },
+      {
+        q: 'Kapan jadwal dan berapa biayanya?',
+        a: 'Jadwal dan biaya diumumkan setiap pembukaan kelas. Tanyakan kepada admin untuk kelas yang sedang atau akan dibuka.',
+      },
+      {
+        q: 'Apakah kelas Al-Fatihah akan membuat saya ragu dengan salat yang telah lalu?',
+        a: 'Tidak. Kelas ini memperbaiki bacaan dengan tenang dan tidak menakut-nakuti. Fokusnya adalah belajar dan memperbaiki mulai sekarang.',
+      },
+    ],
+    dataStatus: 'guide',
+    internalNote:
+      'Sumber: Kumpulan Dokumen Div. B. Arab dan Waris. Tidak dipublikasikan: SOP, template admin, panduan ajar guru. Jadwal, biaya, dan nama pengajar belum ada di dokumen.',
     status: 'active',
     enrollmentStatus: 'unverified',
     registrationUrl: null,
@@ -274,8 +327,69 @@ export const programs: Program[] = [
     imageAlt: 'Ilustrasi papan tulis dengan huruf Arab ‘ain dan pensil',
     tone: 'sand',
     seo: {
-      title: 'Al-Qur’an & Bahasa Arab Dewasa — Tarbiyah Sunnah Learning',
-      description: 'Jalur belajar dan peningkatan kemampuan Al-Qur’an serta Bahasa Arab untuk peserta dewasa.',
+      title: 'Kelas Bahasa Arab & Al-Qur’an Dewasa — Nahwu, Sharaf, Balaghah, Tajwid',
+      description:
+        'Kelas bahasa Arab daring berjenjang dari nol: Durusul Lughah, Nahwu, Sharaf, Balaghah, plus Memperbaiki Bacaan Al-Fatihah dan Matan al-Jazariyyah. Lengkap dengan silabus.',
+    },
+  },
+  {
+    id: 'waris',
+    slug: 'ilmu-waris',
+    title: 'Belajar Ilmu Waris',
+    segment: 'dewasa',
+    ageLabel: 'Dewasa',
+    menuDescription: 'Faraidh praktis: ahli waris & perhitungan',
+    summary:
+      'Memahami hukum waris Islam secara praktis — menentukan ahli waris, menghitung bagian, dan membagi harta sesuai syariat — dalam 8 pertemuan dan ujian.',
+    // Sumber: Silabus Pembelajaran Waris, Div. B. Arab dan Waris (TSL).
+    intro: [
+      'Kelas ini memberikan pemahaman dasar hukum waris Islam dengan pendekatan praktis. Peserta langsung menerapkan prinsip syariat dalam menghitung dan membagi harta warisan melalui latihan interaktif dan contoh kasus.',
+      'Dirancang agar siapa saja, termasuk orang awam, dapat memahami dan menerapkan aturan waris — keterampilan yang bisa langsung dipakai untuk kasus di lingkungan sekitar.',
+    ],
+    audience: [
+      'Siapa saja yang ingin memahami pembagian waris sesuai syariat, termasuk orang awam.',
+      'Keluarga yang ingin menyiapkan atau menyelesaikan pembagian harta peninggalan dengan benar.',
+    ],
+    outcomes: warisCourse.outcomes,
+    modalities: [
+      { title: 'Pendekatan praktis', text: 'Setiap sesi berisi latihan interaktif dan contoh kasus yang dapat langsung diterapkan.' },
+      { title: 'Kelas daring', text: 'Pertemuan 90 menit melalui kelas daring dengan grup belajar 3–10 peserta.' },
+    ],
+    curriculum: ['Dalil & hikmah waris', 'Rukun, syarat, penghalang', 'Ashhabul furudh', '‘Ashabah', '‘Aul, tashih, radd'],
+    courses: [warisCourse],
+    facts: [
+      { label: 'Durasi', value: '8 pertemuan + ujian' },
+      { label: 'Per pertemuan', value: '90 menit' },
+      { label: 'Kitab', value: 'Mulai Belajar Waris' },
+      { label: 'Untuk', value: 'Umum, termasuk awam' },
+    ],
+    faq: [
+      {
+        q: 'Apakah perlu bisa bahasa Arab atau punya dasar fiqih?',
+        a: 'Tidak. Kelas ini dirancang agar orang awam pun dapat memahami dan menerapkan aturan waris.',
+      },
+      {
+        q: 'Apakah kelas ini bisa menggantikan konsultasi kasus waris keluarga?',
+        a: 'Kelas membekali Anda memahami dan menghitung pembagian waris melalui contoh kasus. Untuk kasus keluarga yang rumit, tetap dianjurkan berkonsultasi dengan ahli.',
+      },
+      {
+        q: 'Kapan jadwal dan berapa biayanya?',
+        a: 'Jadwal dan biaya diumumkan setiap pembukaan kelas. Tanyakan kepada admin.',
+      },
+    ],
+    dataStatus: 'guide',
+    internalNote: 'Header silabus menulis "Nama Program: Sharaf Dasar 2" (salah salin) dan "8 pertemuan" sementara rencana memuat 9 baris termasuk ujian.',
+    status: 'active',
+    enrollmentStatus: 'unverified',
+    registrationUrl: null,
+    contactUrl: null,
+    image: '/images/learning-waris.svg',
+    imageAlt: 'Ilustrasi lembar perhitungan dengan diagram pembagian bagian',
+    tone: 'mist',
+    seo: {
+      title: 'Belajar Ilmu Waris (Faraidh) Daring — Praktis untuk Umum',
+      description:
+        'Kelas waris Islam 8 pertemuan + ujian: ahli waris, bagian ashhabul furudh, ‘ashabah, ‘aul, tashih, dan radd melalui contoh kasus. Cocok untuk orang awam.',
     },
   },
   {
@@ -493,7 +607,7 @@ export const programUrl = (p: Program) => `/program/${p.slug}`;
 /** Kelompok mega menu sesuai brief bagian 6. */
 export const menuGroups: { title: string; programIds: string[] }[] = [
   { title: 'Anak', programIds: ['kids'] },
-  { title: 'Fondasi Islam', programIds: ['dasar'] },
+  { title: 'Fondasi Islam & Fiqih', programIds: ['dasar', 'waris'] },
   { title: 'Al-Qur’an & Bahasa Arab Dewasa', programIds: ['quran'] },
   { title: 'Pendidikan Lanjutan', programIds: ['mahad', 's1'] },
   { title: 'Gemilang Senja', programIds: ['senja'] },
