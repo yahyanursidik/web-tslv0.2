@@ -31,6 +31,15 @@ export function buildSearchIndex(): SearchItem[] {
       url: programUrl(p),
       keywords: [segments[p.segment].label, p.ageLabel, ...(p.curriculum ?? [])].join(' '),
     });
+    for (const c of p.courses ?? []) {
+      items.push({
+        type: 'Layanan',
+        title: c.title,
+        description: `${p.title} · ${c.level} · ${c.meetings} · ${c.summary}`,
+        url: `${programUrl(p)}#kelas-${c.id}`,
+        keywords: [c.kitab, ...c.plan.map(([, t]) => t)].join(' '),
+      });
+    }
     for (const o of p.offerings ?? []) {
       items.push({
         type: 'Layanan',

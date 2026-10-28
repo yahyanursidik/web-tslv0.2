@@ -10,7 +10,7 @@ interface Props {
 }
 const { program: p, headingLevel = 'h3', loading = 'lazy' } = Astro.props;
 const Heading = headingLevel;
-const search = [p.title, p.summary, p.ageLabel, segments[p.segment].label, ...(p.curriculum ?? []), ...(p.offerings ?? []).map((o) => o.label)]
+const search = [p.title, p.summary, p.ageLabel, segments[p.segment].label, ...(p.curriculum ?? []), ...(p.offerings ?? []).map((o) => o.label), ...(p.courses ?? []).map((c) => `${c.title} ${c.kitab}`)]
   .join(' ')
   .toLowerCase();
 ---

@@ -6,6 +6,7 @@ import StatusBadge from '../../components/ui/StatusBadge.astro';
 import RegistrationPanel from '../../components/RegistrationPanel.astro';
 import ProgramCard from '../../components/ProgramCard.astro';
 import FaqList from '../../components/FaqList.astro';
+import CourseList from '../../components/CourseList.astro';
 import { programs, segments, type Program } from '../../data/programs';
 
 export function getStaticPaths() {
@@ -19,6 +20,7 @@ const sections = [
   { id: 'ringkasan', label: 'Ringkasan', show: true },
   { id: 'untuk-siapa', label: 'Untuk siapa', show: p.audience.length > 0 },
   { id: 'tujuan', label: 'Tujuan belajar', show: p.outcomes.length > 0 },
+  { id: 'kelas', label: (p.courses?.length ?? 0) > 1 ? 'Pilihan kelas' : 'Silabus', show: !!p.courses?.length },
   { id: 'layanan', label: 'Ragam layanan', show: !!p.offerings?.length },
   { id: 'jalur', label: 'Jalur program', show: !!p.tracks?.length },
   { id: 'cara-belajar', label: 'Cara belajar', show: p.modalities.length > 0 || !!p.groups?.length },
@@ -59,6 +61,7 @@ const related = programs
             )}
             {p.enrollmentSteps && <a href="#alur-pendaftaran" class="btn btn-outline">Alur pendaftaran</a>}
             {p.offerings && <a href="#layanan" class="btn btn-outline">Lihat {p.offerings.length} layanan</a>}
+            {p.courses && <a href="#kelas" class="btn btn-outline">{p.courses.length > 1 ? `Lihat ${p.courses.length} kelas` : 'Lihat silabus'}</a>}
             {p.tracks && <a href="#jalur" class="btn btn-outline">Lihat {p.tracks.length} jalur</a>}
           </div>
         </div>
@@ -135,6 +138,22 @@ const related = programs
                 </li>
               ))}
             </ol>
+          </section>
+        )
+      }
+
+      {
+        p.courses && (
+          <section id="kelas" class="scroll-mt-28">
+            <h2 class="text-[1.6rem] font-extrabold">{p.courses.length > 1 ? 'Pilihan kelas' : 'Silabus kelas'}</h2>
+            <p class="mt-2 text-muted">
+              {p.courses.length > 1
+                ? 'Setiap kelas memiliki kitab rujukan, capaian, dan rencana pertemuan. Jadwal dan biaya diumumkan setiap pembukaan kelas.'
+                : 'Rencana pertemuan dan capaian pembelajaran. Jadwal dan biaya diumumkan setiap pembukaan kelas.'}
+            </p>
+            <div class="mt-5">
+              <CourseList program={p} />
+            </div>
           </section>
         )
       }
@@ -347,9 +366,9 @@ const related = programs
 </Base>
 
 <script>
-  // Tab layanan (pola ARIA tabs: panah kiri/kanan, Home/End)
+  // Tab layanan & rumpun kelas (pola ARIA tabs: panah kiri/kanan, Home/End)
   document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>(':scope > [role="tablist"] > [role="tab"]')];
     const select = (tab: HTMLButtonElement, focus = true) => {
       tabs.forEach((t) => {
         const on = t === tab;
@@ -370,6 +389,18 @@ const related = programs
       });
     });
   });
+
+  // Tautan langsung ke kelas (#kelas-…): buka tab rumpunnya dan silabusnya
+  function revealHash() {
+    const target = location.hash.startsWith('#kelas-') ? document.querySelector<HTMLElement>(location.hash) : null;
+    if (!target) return;
+    const panel = target.closest<HTMLElement>('[role="tabpanel"]');
+    if (panel?.hidden) document.querySelector<HTMLButtonElement>(`[aria-controls="${panel.id}"]`)?.click();
+    target.querySelector('details')?.setAttribute('open', '');
+    target.scrollIntoView({ block: 'start' });
+  }
+  revealHash();
+  addEventListener('hashchange', revealHash);
 
   // Tautan #daftar di desktop mengarah ke panel samping
   if (matchMedia('(min-width: 1024px)').matches) {

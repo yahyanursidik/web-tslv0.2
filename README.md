@@ -34,13 +34,14 @@ Semua konten ada di `src/data/` dan modelnya mengikuti brief bagian 9 — siap d
 
 - `site.ts` — kontak, tautan pendaftaran umum, pengumuman, `isPreview`. **Nilai `null` = belum terverifikasi**; UI otomatis menampilkan status "sedang dikonfirmasi" alih-alih tautan palsu. Setelah diisi, tombol Daftar/Konsultasi aktif sendiri.
 - `programs.ts` — program, layanan, jalur, FAQ program. `dataStatus: 'pending'` menampilkan pemberitahuan pembaruan; `internalNote` tidak pernah tampil di publik.
+- `courses.ts` — kelas & silabus Divisi Bahasa Arab dan Waris (kitab, jumlah pertemuan, durasi, capaian, rencana pertemuan, evaluasi). Kelas tampil per rumpun di halaman program dan bisa ditautkan langsung (`#kelas-<id>`).
 - `kajian.ts` — pengajar, kajian, sesi (WIB), `joinUrl`, dan `kajianExceptions` untuk libur/perubahan jadwal.
 - `faq.ts` — pertanyaan umum (kategori, `featured` untuk beranda).
 
 ## Masih menunggu data resmi (brief P0)
 
 - Alamat, media sosial, kebijakan tautan kajian, dan portal pendaftaran selain Ma'had (saat ini lewat WhatsApp admin). Sebaiknya minta juga file logo vektor (SVG/AI).
-- Dokumen Al-Qur'an & Bahasa Arab Dewasa; verifikasi Belajar Islam Dasar, Ma'had, S1 PJJ.
+- Verifikasi Belajar Islam Dasar dan S1 PJJ. Kelas Bahasa Arab & Waris: jadwal, biaya, dan nama pengajar per pembukaan kelas.
 - Frekuensi sesi MAUD/private TSL for Kids (sengaja tidak ditampilkan) dan redaksi "Class or Siroh".
 - Alamat migrasi Preschool → tambahkan ke `redirects` di `astro.config.mjs`.
 

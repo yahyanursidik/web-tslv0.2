@@ -12,6 +12,9 @@ const refs: Record<string, { title: string; meta: string; url: string; image?: s
 for (const p of programs) {
   const meta = segments[p.segment].short === p.ageLabel ? p.ageLabel : `${segments[p.segment].short} · ${p.ageLabel}`;
   refs[p.id] = { title: p.title, meta, url: programUrl(p), image: p.image };
+  for (const c of p.courses ?? []) {
+    refs[`kelas:${c.id}`] = { title: c.title, meta: `Kelas · ${c.level} · ${p.title}`, url: `${programUrl(p)}#kelas-${c.id}` };
+  }
 }
 for (const k of activeKajian)
   refs[`kajian:${k.id}`] = {
@@ -19,6 +22,9 @@ for (const k of activeKajian)
     meta: `Kajian · ${k.sessions.map((s) => `${DAYS[s.day]} ${formatTime(s.time)}`).join(' & ')} WIB · ${getTeacher(k.teacherId).name.split(',')[0]}`,
     url: kajianUrl(k),
   };
+// Gagal saat build bila aturan Finder merujuk program/kelas/kajian yang tidak ada.
+for (const goals of Object.values(finderGoals))
+  for (const g of goals) for (const r of g.results) if (!refs[r.ref]) throw new Error(`Program Finder: rujukan tidak dikenal "${r.ref}"`);
 const payload = { ages: finderAges, goals: finderGoals, refs };
 ---
 

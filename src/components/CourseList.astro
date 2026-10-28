@@ -1,0 +1,139 @@
+---
+/**
+ * Daftar kelas sebuah program. Bila ada lebih dari satu rumpun, kelas dikelompokkan dalam tab
+ * (pola ARIA tabs yang sama dengan tab layanan di halaman program).
+ */
+import { BookOpen, Check, ChevronDown, Clock, MessageCircle, Repeat } from '@lucide/astro';
+import { waLink } from '../data/site';
+import type { Program } from '../data/programs';
+import type { Course } from '../data/courses';
+
+interface Props {
+  program: Program;
+}
+const { program: p } = Astro.props;
+const courses = p.courses ?? [];
+const tracks = (p.courseTracks ?? []).filter((t) => courses.some((c) => c.track === t.id));
+const grouped = tracks.length > 1;
+const levelTone: Record<Course['level'], string> = {
+  Pemula: 'bg-[#E3F1E4] text-deep',
+  Dasar: 'bg-mist text-deep',
+  Lanjutan: 'bg-sand text-[#6B5420]',
+};
+const ask = (c: Course) => waLink(`Assalamu’alaikum, saya ingin bertanya tentang kelas ${c.title} (${p.title}). Kapan kelas berikutnya dibuka?`);
+const panels = grouped ? tracks.map((t) => ({ track: t, items: courses.filter((c) => c.track === t.id) })) : [{ track: null, items: courses }];
+---
+
+<div data-tabs={grouped ? '' : undefined}>
+  {
+    grouped && (
+      <div role="tablist" aria-label="Rumpun kelas" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
+        {tracks.map((t, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-rumpun-${t.id}`}
+            aria-controls={`panel-rumpun-${t.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            class="chip shrink-0"
+          >
+            {t.title}
+            <span class="opacity-60">{courses.filter((c) => c.track === t.id).length}</span>
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    panels.map(({ track, items }, i) => (
+      <div
+        role={grouped ? 'tabpanel' : undefined}
+        id={track ? `panel-rumpun-${track.id}` : undefined}
+        aria-labelledby={track ? `tab-rumpun-${track.id}` : undefined}
+        hidden={grouped && i !== 0}
+        class="mt-4 space-y-4"
+      >
+        {track && <p class="text-muted">{track.text}</p>}
+        {items.map((c) => (
+          <article id={`kelas-${c.id}`} class="scroll-mt-28 rounded-2xl border border-line bg-white p-5 sm:p-6">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class:list={['badge', levelTone[c.level]]}>{c.level}</span>
+              {c.audience && <span class="text-xs font-bold text-muted">{c.audience}</span>}
+            </div>
+            <h3 class="mt-3 text-[1.3rem] font-extrabold">{c.title}</h3>
+            <p class="mt-1 flex gap-2 text-sm text-muted">
+              <BookOpen size={16} class="mt-0.5 shrink-0 text-sage" aria-hidden="true" />
+              {c.kitab}
+            </p>
+            <div class="mt-3 flex flex-wrap gap-2 text-sm font-bold text-forest">
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1">
+                <Repeat size={14} aria-hidden="true" /> {c.meetings}
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1">
+                <Clock size={14} aria-hidden="true" /> {c.duration}
+              </span>
+            </div>
+            <p class="mt-4">{c.summary}</p>
+            {c.prerequisite && (
+              <p class="mt-2 text-sm text-muted">
+                <b class="text-ink">Prasyarat:</b> {c.prerequisite}
+              </p>
+            )}
+            {c.method && (
+              <p class="mt-2 text-sm text-muted">
+                <b class="text-ink">Cara belajar:</b> {c.method}
+              </p>
+            )}
+            <p class="mt-5 text-xs font-extrabold uppercase tracking-[0.12em] text-sage">Setelah kelas ini, peserta mampu</p>
+            <ul class="mt-2 space-y-1.5 text-sm">
+              {c.outcomes.map((o) => (
+                <li class="flex gap-2">
+                  <Check size={16} class="mt-0.5 shrink-0 text-deep" aria-hidden="true" />
+                  {o}
+                </li>
+              ))}
+            </ul>
+
+            <details class="group mt-5 rounded-xl bg-[#F8F9F5]">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-bold text-forest [&::-webkit-details-marker]:hidden">
+                Rencana pertemuan{c.evaluation ? ' & evaluasi' : ''}
+                <ChevronDown size={18} class="transition-transform group-open:rotate-180" aria-hidden="true" />
+              </summary>
+              <div class="px-4 pb-4">
+                <ol class="divide-y divide-line text-sm">
+                  {c.plan.map(([label, topic]) => (
+                    <li class="flex gap-3 py-2">
+                      {label ? (
+                        <span class="w-[4.6rem] shrink-0 text-xs font-bold leading-5 text-sage">{/^\d/.test(label) ? `Pert. ${label}` : label}</span>
+                      ) : (
+                        <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-sage" aria-hidden="true" />
+                      )}
+                      <span>{topic}</span>
+                    </li>
+                  ))}
+                </ol>
+                {c.evaluation && (
+                  <>
+                    <p class="mt-4 text-xs font-extrabold uppercase tracking-[0.12em] text-sage">Evaluasi</p>
+                    <ul class="mt-1.5 list-disc space-y-1 pl-5 text-sm text-muted">
+                      {c.evaluation.map((e) => <li>{e}</li>)}
+                    </ul>
+                  </>
+                )}
+                {c.note && <p class="mt-3 text-sm text-muted">Catatan: {c.note}</p>}
+              </div>
+            </details>
+
+            {ask(c) && (
+              <a href={ask(c)} target="_blank" rel="noopener" class="link-arrow mt-4 text-sm" data-track="course_ask" data-track-label={c.id}>
+                <MessageCircle size={16} aria-hidden="true" /> Tanya jadwal kelas ini
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    ))
+  }
+</div>
