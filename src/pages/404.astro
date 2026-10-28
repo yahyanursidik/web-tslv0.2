@@ -1,0 +1,19 @@
+---
+import { ArrowRight, Search } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Halaman tidak ditemukan" noindex>
+  <section class="bg-cream py-20 md:py-28">
+    <div class="container-site max-w-2xl text-center">
+      <p class="font-heading text-[4.5rem] font-extrabold leading-none text-[#C9D8C8]">404</p>
+      <h1 class="mt-4 text-[2rem] font-extrabold">Halaman ini tidak ditemukan.</h1>
+      <p class="mt-3 text-muted">Mungkin halaman sudah dipindahkan dalam pembaruan program. Coba cari, atau mulai dari salah satu tautan berikut.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <button type="button" data-search-open class="btn btn-primary"><Search size={18} aria-hidden="true" /> Cari di situs</button>
+        <a href="/program" class="btn btn-outline">Program Belajar <ArrowRight size={18} aria-hidden="true" /></a>
+        <a href="/kajian" class="btn btn-outline">Jadwal Kajian</a>
+      </div>
+    </div>
+  </section>
+</Base>

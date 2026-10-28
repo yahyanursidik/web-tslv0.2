@@ -1,0 +1,54 @@
+---
+/**
+ * Panel tindakan program. Tombol hanya aktif bila tautan resmi sudah diisi di data;
+ * bila belum, tampilkan status jujur alih-alih tautan kosong.
+ */
+import { ArrowUpRight, Info, MessageCircle, Share2 } from '@lucide/astro';
+import { site } from '../data/site';
+import type { Program } from '../data/programs';
+
+interface Props {
+  program: Program;
+  sticky?: boolean;
+}
+const { program: p, sticky = false } = Astro.props;
+const registration = p.registrationUrl ?? site.registrationUrl;
+const contact = p.contactUrl ?? site.contact.whatsapp;
+---
+
+<aside class:list={['rounded-2xl border border-line bg-white p-5 shadow-lift', sticky && 'lg:sticky lg:top-28']} aria-label="Pendaftaran dan konsultasi">
+  <p class="font-heading text-lg font-extrabold">Tertarik dengan {p.title}?</p>
+  <div class="mt-4 flex flex-col gap-2.5">
+    {
+      registration ? (
+        <a href={registration} class="btn btn-primary w-full" target="_blank" rel="noopener" data-track="cta_daftar" data-track-label={p.id}>
+          Daftar sekarang <ArrowUpRight size={18} aria-hidden="true" />
+        </a>
+      ) : (
+        <span class="btn btn-primary w-full" aria-disabled="true">Pendaftaran segera dibuka</span>
+      )
+    }
+    {
+      contact ? (
+        <a href={contact} class="btn btn-outline w-full" target="_blank" rel="noopener" data-track="cta_konsultasi" data-track-label={p.id}>
+          <MessageCircle size={18} aria-hidden="true" /> Konsultasi dengan admin
+        </a>
+      ) : (
+        <a href={`/kontak?program=${p.slug}`} class="btn btn-outline w-full" data-track="cta_konsultasi" data-track-label={p.id}>
+          <MessageCircle size={18} aria-hidden="true" /> Tanya admin
+        </a>
+      )
+    }
+    <button type="button" class="btn btn-ghost w-full" data-share={new URL(`/program/${p.slug}`, Astro.site ?? Astro.url).href} data-share-title={p.title}>
+      <Share2 size={18} aria-hidden="true" /> Bagikan ke keluarga
+    </button>
+  </div>
+  {
+    !registration && (
+      <p class="mt-4 flex gap-2 rounded-xl bg-cream p-3 text-xs text-muted">
+        <Info size={16} class="mt-0.5 shrink-0" aria-hidden="true" />
+        Formulir pendaftaran, biaya, dan jadwal angkatan ditampilkan setelah divalidasi pengelola.
+      </p>
+    )
+  }
+</aside>

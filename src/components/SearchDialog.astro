@@ -1,0 +1,168 @@
+---
+import { Search, X } from '@lucide/astro';
+import { buildSearchIndex } from '../lib/search';
+
+const index = buildSearchIndex();
+const suggestions = ['TSL for Kids', 'Tahfidz', 'Bahasa Arab', 'Kajian Aqidah', 'Usia 45+', 'Pendaftaran'];
+---
+
+<dialog
+  id="search-dialog"
+  aria-label="Pencarian"
+  class="m-0 h-full max-h-none w-full max-w-none bg-transparent p-0 backdrop:bg-night/60 sm:mx-auto sm:mt-[10vh] sm:h-auto sm:max-w-[640px]"
+>
+  <div class="flex h-full flex-col bg-white sm:h-auto sm:max-h-[75vh] sm:rounded-2xl sm:shadow-soft">
+    <div class="flex items-center gap-3 border-b border-line px-4">
+      <Search size={20} class="shrink-0 text-muted" aria-hidden="true" />
+      <input
+        type="search"
+        data-search-input
+        placeholder="Cari program, layanan, kajian, atau pertanyaan…"
+        class="h-16 w-full bg-transparent text-[1.05rem] outline-none placeholder:text-muted/80"
+        aria-label="Kata kunci pencarian"
+        aria-controls="search-results"
+        autocomplete="off"
+      />
+      <button type="button" data-search-close class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg hover:bg-mist" aria-label="Tutup pencarian">
+        <X size={20} aria-hidden="true" />
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-2">
+      <div data-search-empty class="p-4">
+        <p class="text-sm font-bold text-muted">Coba cari</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {suggestions.map((s) => <button type="button" class="chip" data-search-suggest={s}>{s}</button>)}
+        </div>
+      </div>
+      <ul id="search-results" role="listbox" aria-label="Hasil pencarian" data-search-results class="flex flex-col"></ul>
+      <p data-search-none hidden class="p-6 text-center text-muted">
+        Tidak ada hasil untuk “<span data-search-term></span>”. Coba kata lain atau lihat <a href="/bantuan" class="font-bold text-forest underline">Bantuan</a>.
+      </p>
+    </div>
+    <div class="hidden justify-between border-t border-line px-4 py-2.5 text-xs text-muted sm:flex">
+      <span><kbd class="font-bold">↑↓</kbd> pilih · <kbd class="font-bold">Enter</kbd> buka</span>
+      <span><kbd class="font-bold">Esc</kbd> tutup</span>
+    </div>
+  </div>
+  <script type="application/json" data-search-index set:html={JSON.stringify(index)} />
+</dialog>
+
+<script>
+  import { track } from '../lib/client';
+  import type { SearchItem } from '../lib/search';
+
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
+  const input = dialog.querySelector<HTMLInputElement>('[data-search-input]')!;
+  const list = dialog.querySelector<HTMLUListElement>('[data-search-results]')!;
+  const empty = dialog.querySelector<HTMLElement>('[data-search-empty]')!;
+  const none = dialog.querySelector<HTMLElement>('[data-search-none]')!;
+  const index: SearchItem[] = JSON.parse(dialog.querySelector('[data-search-index]')!.textContent!);
+
+  const norm = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ’'`]/g, '');
+  const haystacks = index.map((i) => ({ title: norm(i.title), all: norm(`${i.title} ${i.description} ${i.keywords} ${i.type}`) }));
+  let active = 0;
+  let results: SearchItem[] = [];
+
+  function search(q: string) {
+    const terms = norm(q).split(/\s+/).filter(Boolean);
+    if (!terms.length) return [];
+    return index
+      .map((item, i) => {
+        const h = haystacks[i];
+        if (!terms.every((t) => h.all.includes(t))) return null;
+        const score = terms.reduce((s, t) => s + (h.title.startsWith(t) ? 6 : h.title.includes(t) ? 3 : 1), 0) + (item.type === 'Program' ? 1 : 0);
+        return { item, score };
+      })
+      .filter((r): r is { item: SearchItem; score: number } => !!r)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12)
+      .map((r) => r.item);
+  }
+
+  function render() {
+    const q = input.value.trim();
+    results = search(q);
+    active = 0;
+    empty.hidden = !!q;
+    none.hidden = !q || results.length > 0;
+    dialog.querySelector('[data-search-term]')!.textContent = q;
+    list.innerHTML = '';
+    results.forEach((r, i) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.id = `sr-${i}`;
+      const a = document.createElement('a');
+      a.href = r.url;
+      a.className = 'flex items-start gap-3 rounded-xl px-3 py-3 hover:bg-mist';
+      a.innerHTML = `<span class="mt-0.5 shrink-0 rounded-md bg-mist px-2 py-0.5 text-[0.68rem] font-extrabold uppercase tracking-wide text-deep"></span><span class="min-w-0"><b class="block text-ink"></b><small class="line-clamp-2 block text-muted"></small></span>`;
+      a.querySelector('span')!.textContent = r.type;
+      a.querySelector('b')!.textContent = r.title;
+      a.querySelector('small')!.textContent = r.description;
+      a.addEventListener('click', () => {
+        track('search_select', { query: q, url: r.url });
+        dialog.close();
+      });
+      li.append(a);
+      list.append(li);
+    });
+    if (q && !results.length) track('search_no_result', { query: q });
+    highlight();
+  }
+
+  function highlight() {
+    [...list.children].forEach((li, i) => {
+      li.setAttribute('aria-selected', String(i === active));
+      li.firstElementChild?.classList.toggle('bg-mist', i === active);
+    });
+    input.setAttribute('aria-activedescendant', results.length ? `sr-${active}` : '');
+    list.children[active]?.scrollIntoView({ block: 'nearest' });
+  }
+
+  function open() {
+    if (dialog.open) return;
+    dialog.showModal();
+    input.select();
+    track('search_open');
+  }
+
+  let timer: number;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = window.setTimeout(render, 80);
+  });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!results.length) return;
+      active = (active + (e.key === 'ArrowDown' ? 1 : -1) + results.length) % results.length;
+      highlight();
+    } else if (e.key === 'Enter' && results[active]) {
+      e.preventDefault();
+      (list.children[active].firstElementChild as HTMLAnchorElement).click();
+    }
+  });
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+    const s = (e.target as HTMLElement).closest<HTMLElement>('[data-search-suggest]');
+    if (s) {
+      input.value = s.dataset.searchSuggest!;
+      render();
+      input.focus();
+    }
+  });
+  dialog.querySelector('[data-search-close]')!.addEventListener('click', () => dialog.close());
+  document.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('[data-search-open]')) open();
+  });
+  document.addEventListener('keydown', (e) => {
+    const typing = e.target instanceof Element && e.target.closest('input, textarea, select, [contenteditable]');
+    if ((e.key === 'k' && (e.ctrlKey || e.metaKey)) || (e.key === '/' && !typing)) {
+      e.preventDefault();
+      open();
+    }
+  });
+</script>

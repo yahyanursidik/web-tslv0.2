@@ -1,0 +1,114 @@
+---
+import { ArrowRight, CalendarDays, Search } from '@lucide/astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import ProgramCard from '../../components/ProgramCard.astro';
+import ProgramFinder from '../../components/ProgramFinder.astro';
+import { programs, segments, type Segment } from '../../data/programs';
+import { activeKajian, sessionCount } from '../../data/kajian';
+
+const filters: { id: 'semua' | Segment; label: string }[] = [
+  { id: 'semua', label: 'Semua' },
+  ...(Object.keys(segments) as Segment[]).map((id) => ({ id, label: segments[id].short })),
+];
+---
+
+<Base title="Program Belajar" description="Katalog program Tarbiyah Sunnah Learning untuk anak, dewasa, pendidikan lanjutan, dan usia 45+, lengkap dengan Program Finder.">
+  <PageHero
+    crumbs={[{ label: 'Program Belajar' }]}
+    eyebrow="Program pembelajaran"
+    title="Satu tujuan, beragam jalur belajar."
+    lead="Kenali fokus dan cara belajar setiap program, lalu pilih yang sesuai usia dan kebutuhan Anda."
+  />
+
+  <div class="container-site -mt-2 pt-10 md:pt-14">
+    <ProgramFinder />
+  </div>
+
+  <section id="katalog" class="section scroll-mt-24 !pt-14" aria-labelledby="katalog-title">
+    <div class="container-site">
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <span class="eyebrow">Katalog</span>
+          <h2 id="katalog-title" class="section-title">Semua program</h2>
+        </div>
+        <label class="relative block w-full lg:w-80">
+          <span class="sr-only">Saring program</span>
+          <Search size={18} class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true" />
+          <input type="search" data-catalog-search placeholder="Saring: tahfidz, bahasa arab…" class="h-12 w-full rounded-xl border border-line bg-white pl-11 pr-4 outline-none focus:border-sage" />
+        </label>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Saring menurut kelompok">
+        {filters.map((f) => <button type="button" class="chip" data-filter={f.id} aria-pressed={f.id === 'semua' ? 'true' : 'false'}>{f.label}</button>)}
+      </div>
+      <p class="mt-4 text-sm text-muted" aria-live="polite" data-catalog-count>Menampilkan {programs.length} program</p>
+
+      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-catalog>
+        {programs.map((p, i) => <ProgramCard program={p} headingLevel="h3" loading={i < 3 ? 'eager' : 'lazy'} />)}
+      </div>
+
+      <div data-catalog-empty hidden class="mt-6 rounded-2xl border border-dashed border-line p-10 text-center">
+        <p class="font-heading text-lg font-extrabold">Tidak ada program yang cocok.</p>
+        <p class="mt-2 text-muted">Coba kata kunci lain, atau gunakan Program Finder di atas.</p>
+        <button type="button" class="btn btn-outline mt-5" data-catalog-reset>Tampilkan semua program</button>
+      </div>
+
+      <a href="/kajian" class="mt-10 grid gap-5 rounded-[24px] bg-mist p-7 transition hover:bg-[#E1ECE0] md:grid-cols-[auto_1fr_auto] md:items-center md:p-8">
+        <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-deep"><CalendarDays size={26} aria-hidden="true" /></span>
+        <span>
+          <b class="block font-heading text-xl font-extrabold">Ingin belajar tanpa mendaftar kelas?</b>
+          <span class="mt-1 block text-muted">Ikuti Kajian Rutin Daring — {activeKajian.length} kajian, {sessionCount} sesi setiap pekan, terbuka melalui Zoom & Google Meet.</span>
+        </span>
+        <span class="btn btn-primary">Lihat jadwal <ArrowRight size={18} aria-hidden="true" /></span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { track } from '../../lib/client';
+
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-program-card]')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const input = document.querySelector<HTMLInputElement>('[data-catalog-search]')!;
+  const count = document.querySelector<HTMLElement>('[data-catalog-count]')!;
+  const empty = document.querySelector<HTMLElement>('[data-catalog-empty]')!;
+  const valid = chips.map((c) => c.dataset.filter);
+  let segment = new URLSearchParams(location.search).get('segmen') ?? 'semua';
+  if (!valid.includes(segment)) segment = 'semua';
+
+  function apply(updateUrl = false) {
+    const terms = input.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    for (const c of cards) {
+      const ok = (segment === 'semua' || c.dataset.segment === segment) && terms.every((t) => c.dataset.search!.includes(t));
+      c.hidden = !ok;
+      if (ok) shown++;
+    }
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === segment)));
+    count.textContent = `Menampilkan ${shown} program`;
+    empty.hidden = shown > 0;
+    if (updateUrl) {
+      const url = new URL(location.href);
+      if (segment === 'semua') url.searchParams.delete('segmen');
+      else url.searchParams.set('segmen', segment);
+      history.replaceState(null, '', url);
+    }
+  }
+
+  chips.forEach((c) =>
+    c.addEventListener('click', () => {
+      segment = c.dataset.filter!;
+      apply(true);
+      track('catalog_filter', { segment });
+    }),
+  );
+  input.addEventListener('input', () => apply());
+  document.querySelector('[data-catalog-reset]')!.addEventListener('click', () => {
+    segment = 'semua';
+    input.value = '';
+    apply(true);
+  });
+  apply();
+</script>

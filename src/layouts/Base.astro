@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileTabBar from '../components/MobileTabBar.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import { site } from '../data/site';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description = site.description, image, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+// Isi dengan foto/gambar PNG resmi 1200×630 per halaman bila tersedia.
+const ogImage = image ? new URL(image, Astro.site ?? Astro.url).href : null;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="theme-color" content="#173D2B" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Terapkan preferensi ukuran teks sebelum render agar tidak berkedip.
+      try {
+        if (localStorage.getItem('tsl-text') === 'lg') document.documentElement.dataset.text = 'lg';
+      } catch (e) {}
+    </script>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'EducationalOrganization',
+        name: site.name,
+        description: site.description,
+        url: Astro.site?.href,
+      })}
+    />
+  </head>
+  <body class="pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
+    <a
+      href="#konten"
+      class="sr-only z-[100] rounded-lg bg-forest px-4 py-3 font-bold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >Lewati ke konten utama</a
+    >
+    <Header />
+    <main id="konten" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer />
+    <MobileTabBar />
+    <SearchDialog />
+    <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed inset-x-0 bottom-24 z-[90] flex justify-center px-4 lg:bottom-8"></div>
+    <script>
+      import { initGlobal } from '../lib/client';
+      initGlobal();
+    </script>
+  </body>
+</html>

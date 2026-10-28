@@ -1,0 +1,185 @@
+---
+import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, MessageCircle, UserRound, Video } from '@lucide/astro';
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import AddToCalendar from '../../components/AddToCalendar.astro';
+import { activeKajian, getTeacher, kajianUrl, kajianExceptions, type Kajian } from '../../data/kajian';
+import { getProgram, programUrl } from '../../data/programs';
+import { site } from '../../data/site';
+import { DAYS, formatTime } from '../../lib/schedule';
+
+export function getStaticPaths() {
+  return activeKajian.map((kajian) => ({ params: { slug: kajian.slug }, props: { kajian } }));
+}
+
+const { kajian: k } = Astro.props as { kajian: Kajian };
+const teacher = getTeacher(k.teacherId);
+const sameTeacher = activeKajian.filter((x) => x.teacherId === k.teacherId && x.id !== k.id);
+const exceptions = kajianExceptions.filter((x) => x.kajianId === k.id);
+const scheduleText = k.sessions.map((s) => `${DAYS[s.day]} ${formatTime(s.time)}`).join(' & ');
+
+// Program terstruktur yang relevan untuk melanjutkan belajar
+const relatedProgram: Record<string, string> = {
+  aqidah: 'dasar',
+  tahsin: 'quran',
+  tadabbur: 'quran',
+  'shalat-wanita': 'dasar',
+  'kaidah-amal': 'dasar',
+};
+const next = relatedProgram[k.id] ? getProgram(relatedProgram[k.id]) : null;
+---
+
+<Base title={`${k.title} — ${scheduleText} WIB`} description={`${k.summary} Bersama ${teacher.name}, setiap ${scheduleText} WIB via ${k.platform}.`}>
+  <section class="bg-mist pb-12 pt-8 md:pb-16">
+    <div class="container-site">
+      <Breadcrumb items={[{ label: 'Jadwal Kajian', href: '/kajian' }, { label: k.title }]} />
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div>
+          <span class="eyebrow">Kajian rutin daring · {k.topics.join(' · ')}</span>
+          <h1 class="mt-3 text-[2.2rem] font-extrabold leading-[1.1] md:text-[3rem]">{k.title}</h1>
+          <p class="mt-4 max-w-xl text-[1.08rem] text-muted">{k.summary}</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="badge bg-white text-deep"><Video size={14} aria-hidden="true" /> {k.platform}</span>
+            {k.audience && <span class="badge bg-sand text-[#6B5420]">{k.audience}</span>}
+            <span class="badge bg-white text-deep">{k.sessions.length} sesi / pekan</span>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3 lg:justify-end">
+          <AddToCalendar kajian={k} />
+          <button type="button" class="btn btn-ghost" data-share={new URL(kajianUrl(k), Astro.site ?? Astro.url).href} data-share-title={k.title}>Bagikan</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-site grid gap-10 py-12 md:py-16 lg:grid-cols-[1.5fr_1fr]">
+    <div class="space-y-12">
+      <section aria-labelledby="sesi-title">
+        <h2 id="sesi-title" class="text-[1.6rem] font-extrabold">Waktu pelaksanaan</h2>
+        <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+          {
+            k.sessions.map((s) => (
+              <li class="rounded-2xl border border-line p-5" data-session-card data-day={s.day} data-time={s.time}>
+                <p class="text-sm font-bold text-muted">Setiap {DAYS[s.day]}</p>
+                <p class="mt-1 font-heading text-[2rem] font-extrabold leading-none text-forest">
+                  {formatTime(s.time)} <span class="text-base text-muted">WIB</span>
+                </p>
+                <p class="mt-3 hidden text-sm font-bold text-deep" data-next-date />
+                <p class="mt-1 hidden text-xs text-muted" data-local />
+              </li>
+            ))
+          }
+        </ul>
+        {
+          exceptions.length > 0 && (
+            <ul class="mt-4 space-y-2 rounded-2xl border border-gold/40 bg-[#FBF6EA] p-4 text-sm" role="note">
+              {exceptions.map((x) => (
+                <li>
+                  <b>{x.date}</b> — {x.notice}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <section aria-labelledby="bahasan-title">
+        <h2 id="bahasan-title" class="text-[1.6rem] font-extrabold">Pembahasan</h2>
+        <dl class="mt-5 divide-y divide-line rounded-2xl border border-line">
+          <div class="flex gap-4 p-5">
+            <UserRound size={20} class="mt-0.5 shrink-0 text-sage" aria-hidden="true" />
+            <div><dt class="text-sm text-muted">Pemateri</dt><dd class="font-bold">{teacher.name}</dd></div>
+          </div>
+          {
+            k.kitab && (
+              <div class="flex gap-4 p-5">
+                <BookOpen size={20} class="mt-0.5 shrink-0 text-sage" aria-hidden="true" />
+                <div><dt class="text-sm text-muted">Kitab</dt><dd class="font-bold">{k.kitab}</dd></div>
+              </div>
+            )
+          }
+          <div class="flex gap-4 p-5">
+            <CalendarDays size={20} class="mt-0.5 shrink-0 text-sage" aria-hidden="true" />
+            <div><dt class="text-sm text-muted">Topik</dt><dd class="font-bold">{k.topics.join(', ')}</dd></div>
+          </div>
+        </dl>
+      </section>
+
+      {
+        sameTeacher.length > 0 && (
+          <section aria-labelledby="lain-title">
+            <h2 id="lain-title" class="text-[1.6rem] font-extrabold">Kajian lain bersama {teacher.name.replace(/,.*$/, '')}</h2>
+            <ul class="mt-5 space-y-3">
+              {sameTeacher.map((x) => (
+                <li>
+                  <a href={kajianUrl(x)} class="card card-hover flex items-center justify-between gap-4 p-5">
+                    <span>
+                      <b class="block">{x.title}</b>
+                      <span class="text-sm text-muted">{x.sessions.map((s) => `${DAYS[s.day]} ${formatTime(s.time)}`).join(' & ')} WIB</span>
+                    </span>
+                    <ArrowRight size={18} class="shrink-0 text-forest" aria-hidden="true" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+    </div>
+
+    <aside class="space-y-4 lg:sticky lg:top-28 lg:self-start">
+      <div class="rounded-2xl border border-line bg-white p-5 shadow-lift">
+        <p class="font-heading text-lg font-extrabold">Cara bergabung</p>
+        {
+          k.joinUrl ? (
+            <a href={k.joinUrl} class="btn btn-primary mt-4 w-full" target="_blank" rel="noopener" data-track="kajian_join" data-track-label={k.id}>
+              <Video size={18} aria-hidden="true" /> Gabung via {k.platform}
+            </a>
+          ) : (
+            <>
+              <ol class="mt-3 space-y-2 text-sm text-muted">
+                <li>1. Simpan jadwal ke kalender Anda.</li>
+                <li>2. Tautan {k.platform} dibagikan oleh pengelola melalui kanal resmi.</li>
+                <li>3. Bergabung beberapa menit sebelum kajian dimulai.</li>
+              </ol>
+              <a href={site.contact.whatsapp ?? '/kontak'} class="btn btn-primary mt-4 w-full" data-track="kajian_howto" data-track-label={k.id}>
+                <MessageCircle size={18} aria-hidden="true" /> Minta tautan ke admin
+              </a>
+            </>
+          )
+        }
+        <AddToCalendar kajian={k} class="mt-2.5 w-full" />
+      </div>
+      {
+        next && (
+          <a href={programUrl(next)} class="block rounded-2xl bg-cream p-5 transition hover:bg-mist">
+            <span class="eyebrow">Ingin belajar lebih terstruktur?</span>
+            <b class="mt-2 block font-heading text-lg">{next.title}</b>
+            <span class="mt-1 block text-sm text-muted">{next.menuDescription}</span>
+            <span class="link-arrow mt-3 text-sm">Lihat program <ArrowRight size={16} aria-hidden="true" /></span>
+          </a>
+        )
+      }
+      <a href="/kajian" class="btn btn-ghost w-full"><ArrowLeft size={18} aria-hidden="true" /> Semua jadwal kajian</a>
+    </aside>
+  </div>
+</Base>
+
+<script>
+  import { dayLabel, localTimeLabel, nextOccurrence } from '../../lib/schedule';
+
+  document.querySelectorAll<HTMLElement>('[data-session-card]').forEach((card) => {
+    const at = nextOccurrence({ day: Number(card.dataset.day), time: card.dataset.time! });
+    const dateEl = card.querySelector<HTMLElement>('[data-next-date]')!;
+    const date = at.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', timeZone: 'Asia/Jakarta' });
+    const label = dayLabel(at);
+    dateEl.textContent = `Berikutnya: ${label === 'Hari ini' || label === 'Besok' ? `${label}, ` : ''}${date}`;
+    dateEl.classList.remove('hidden');
+    const local = localTimeLabel(at);
+    if (local) {
+      const el = card.querySelector<HTMLElement>('[data-local]')!;
+      el.textContent = `≈ ${local}`;
+      el.classList.remove('hidden');
+    }
+  });
+</script>

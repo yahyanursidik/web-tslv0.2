@@ -1,0 +1,22 @@
+---
+import type { Program } from '../../data/programs';
+
+interface Props {
+  program: Program;
+}
+const { program: p } = Astro.props;
+
+const status =
+  p.enrollmentStatus === 'open'
+    ? { label: 'Pendaftaran dibuka', cls: 'bg-[#E3F1E4] text-deep', dot: 'bg-deep' }
+    : p.enrollmentStatus === 'closed'
+      ? { label: 'Pendaftaran ditutup', cls: 'bg-[#F4ECEA] text-[#7A3B2E]', dot: 'bg-[#B5523F]' }
+      : p.dataStatus === 'pending'
+        ? { label: 'Info sedang diperbarui', cls: 'bg-sand text-[#6B5420]', dot: 'bg-gold' }
+        : { label: 'Info pendaftaran segera', cls: 'bg-mist text-deep', dot: 'bg-sage' };
+---
+
+<span class:list={['badge', status.cls]}>
+  <span class:list={['h-1.5 w-1.5 rounded-full', status.dot]} aria-hidden="true"></span>
+  {status.label}
+</span>

@@ -1,0 +1,19 @@
+---
+import { ArrowRight, NotebookPen } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+---
+
+<Base title="Artikel & Materi" description="Artikel dan materi belajar Tarbiyah Sunnah Learning." noindex>
+  <PageHero crumbs={[{ label: 'Artikel & Materi' }]} eyebrow="Artikel & materi" title="Bacaan untuk menemani belajar." />
+  <section class="section !pt-12">
+    <div class="container-site">
+      <div class="mx-auto max-w-xl rounded-[24px] border border-dashed border-line p-10 text-center">
+        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-mist text-deep"><NotebookPen size={26} aria-hidden="true" /></span>
+        <h2 class="mt-5 text-xl font-extrabold">Belum ada artikel yang diterbitkan.</h2>
+        <p class="mt-2 text-muted">Artikel dan ringkasan materi akan tampil di sini. Sementara itu, Anda dapat mengikuti kajian rutin pekanan.</p>
+        <a href="/kajian" class="btn btn-primary mt-6">Lihat jadwal kajian <ArrowRight size={18} aria-hidden="true" /></a>
+      </div>
+    </div>
+  </section>
+</Base>

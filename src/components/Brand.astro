@@ -1,0 +1,21 @@
+---
+interface Props {
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+const { variant = 'dark', class: className = '' } = Astro.props;
+// tsl-mark.svg adalah konsep sementara — ganti dengan logo resmi TSL saat tersedia.
+const src = variant === 'light' ? '/images/tsl-mark-light.svg' : '/images/tsl-mark.svg';
+---
+
+<a href="/" class:list={['flex shrink-0 items-center gap-3 rounded-lg', className]} aria-label="Tarbiyah Sunnah Learning — Beranda">
+  <img src={src} alt="" width="44" height="44" class="h-11 w-11" />
+  <span class="leading-tight">
+    <strong class:list={['block font-heading text-[0.98rem] font-extrabold tracking-tight', variant === 'light' ? 'text-white' : 'text-forest']}
+      >Tarbiyah Sunnah</strong
+    >
+    <small class:list={['block text-[0.6rem] font-extrabold tracking-[0.24em]', variant === 'light' ? 'text-[#C1D6C4]' : 'text-sage']}
+      >LEARNING</small
+    >
+  </span>
+</a>

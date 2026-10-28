@@ -1,0 +1,77 @@
+---
+/**
+ * Kartu "kajian berikutnya". Saat build menampilkan sesi pertama pekan ini;
+ * di browser dihitung ulang menurut jam WIB saat ini. Tidak pernah mengklaim
+ * "sedang berlangsung" karena durasi kajian belum ditetapkan.
+ */
+import { Clock, Video } from '@lucide/astro';
+import { activeKajian, teachers } from '../data/kajian';
+import { DAYS, flattenSessions, formatTime } from '../lib/schedule';
+
+interface Props {
+  variant?: 'card' | 'compact' | 'inverse';
+  class?: string;
+}
+const { variant = 'card', class: className = '' } = Astro.props;
+const first = flattenSessions(activeKajian, teachers)[0];
+const inverse = variant === 'inverse';
+---
+
+<div
+  data-next-kajian
+  class:list={[
+    'block',
+    variant === 'card' && 'rounded-2xl border border-line bg-white p-4 shadow-soft sm:p-5',
+    variant === 'compact' && 'rounded-2xl bg-white p-4',
+    inverse && 'rounded-2xl border border-white/15 bg-white/[0.06] p-5 text-white',
+    className,
+  ]}
+>
+  <div class="flex items-center justify-between gap-3">
+    <span class:list={['eyebrow', inverse && '!text-[#B7D0BC]']} data-nk="label">Jadwal pekanan</span>
+    <span class:list={['badge', inverse ? 'bg-white/10 text-white' : 'bg-mist text-deep']} data-nk="countdown" hidden></span>
+  </div>
+  <a href={`/kajian/${first.slug}`} data-nk="link" class="group mt-2 block">
+    <b class:list={['block font-heading text-[1.05rem] leading-snug group-hover:underline', inverse ? 'text-white' : 'text-ink']} data-nk="title"
+      >{first.title}</b
+    >
+    <span class:list={['mt-1 block text-sm', inverse ? 'text-[#C5D9CB]' : 'text-muted']} data-nk="teacher">{first.teacher}</span>
+  </a>
+  <div class:list={['mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold', inverse ? 'text-white' : 'text-forest']}>
+    <span class="inline-flex items-center gap-1.5"
+      ><Clock size={16} aria-hidden="true" /><span data-nk="when">{DAYS[first.day]} · {formatTime(first.time)} WIB</span></span
+    >
+    <span class="inline-flex items-center gap-1.5"><Video size={16} aria-hidden="true" /><span data-nk="platform">{first.platform}</span></span>
+  </div>
+  <span class:list={['mt-1 block text-xs', inverse ? 'text-[#C5D9CB]' : 'text-muted']} data-nk="local" hidden></span>
+</div>
+
+<script>
+  import { activeKajian, teachers } from '../data/kajian';
+  import { countdown, dayLabel, flattenSessions, formatTime, localTimeLabel, upcoming } from '../lib/schedule';
+
+  function render() {
+    const next = upcoming(flattenSessions(activeKajian, teachers))[0];
+    if (!next) return;
+    const time = formatTime(next.time);
+    document.querySelectorAll<HTMLElement>('[data-next-kajian]').forEach((root) => {
+      const set = (key: string, value: string) => {
+        const el = root.querySelector<HTMLElement>(`[data-nk="${key}"]`);
+        if (el) {
+          el.textContent = value;
+          el.hidden = !value;
+        }
+      };
+      set('label', 'Kajian berikutnya');
+      set('title', next.title);
+      set('teacher', next.teacher);
+      set('platform', next.platform);
+      set('when', `${dayLabel(next.at)} · ${time} WIB`);
+      set('countdown', countdown(next.at));
+      set('local', localTimeLabel(next.at) ? `≈ ${localTimeLabel(next.at)}` : '');
+      root.querySelector<HTMLAnchorElement>('[data-nk="link"]')!.href = `/kajian/${next.slug}`;
+    });
+  }
+  render();
+  setInterval(render, 60_000);
+</script>

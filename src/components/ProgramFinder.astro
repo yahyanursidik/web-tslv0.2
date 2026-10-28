@@ -1,0 +1,141 @@
+---
+import { Compass, RotateCcw } from '@lucide/astro';
+import { finderAges, finderGoals } from '../lib/finder';
+import { programs, programUrl, segments } from '../data/programs';
+import { activeKajian, getTeacher, kajianUrl, sessionCount } from '../data/kajian';
+import { DAYS, formatTime } from '../lib/schedule';
+
+// Data ringkas untuk kartu hasil di browser.
+const refs: Record<string, { title: string; meta: string; url: string; image?: string }> = {
+  kajian: { title: 'Kajian Rutin Daring', meta: `${activeKajian.length} kajian · ${sessionCount} sesi pekanan`, url: '/kajian' },
+};
+for (const p of programs) {
+  const meta = segments[p.segment].short === p.ageLabel ? p.ageLabel : `${segments[p.segment].short} · ${p.ageLabel}`;
+  refs[p.id] = { title: p.title, meta, url: programUrl(p), image: p.image };
+}
+for (const k of activeKajian)
+  refs[`kajian:${k.id}`] = {
+    title: k.title,
+    meta: `Kajian · ${k.sessions.map((s) => `${DAYS[s.day]} ${formatTime(s.time)}`).join(' & ')} WIB · ${getTeacher(k.teacherId).name.split(',')[0]}`,
+    url: kajianUrl(k),
+  };
+const payload = { ages: finderAges, goals: finderGoals, refs };
+---
+
+<section id="finder" class="scroll-mt-28 rounded-[28px] bg-forest p-6 text-white md:p-10" aria-labelledby="finder-title" data-finder>
+  <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+    <div class="max-w-md">
+      <span class="eyebrow !text-[#B7D0BC]"><Compass size={14} class="mr-1 inline" aria-hidden="true" />Program Finder</span>
+      <h2 id="finder-title" class="mt-3 text-[1.8rem] font-extrabold leading-tight !text-white md:text-[2.2rem]">Temukan jalur belajar dalam dua langkah.</h2>
+      <p class="mt-3 text-[#C5D9CB]">Rekomendasi ini panduan awal berdasarkan pilihan Anda — bukan asesmen kemampuan. Penempatan kelas tetap mengikuti ketentuan program.</p>
+    </div>
+    <ol class="flex items-center gap-2 text-sm font-bold" aria-label="Langkah">
+      {['Untuk siapa', 'Tujuan', 'Hasil'].map((s, i) => (
+        <li class="flex items-center gap-2" data-step-indicator={i}>
+          <span class="flex h-7 w-7 items-center justify-center rounded-full border border-white/30 text-xs transition" data-step-dot>{i + 1}</span>
+          <span class="hidden text-[#C5D9CB] sm:inline">{s}</span>
+          {i < 2 && <span class="h-px w-5 bg-white/30" aria-hidden="true" />}
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="mt-8" aria-live="polite">
+    <fieldset data-step="0">
+      <legend class="text-lg font-bold">1. Untuk siapa Anda mencari program?</legend>
+      <div class="mt-4 grid gap-3 md:grid-cols-3">
+        {
+          finderAges.map((a) => (
+            <button type="button" class="finder-option" data-age={a.id}>
+              <b class="block text-[1.02rem]">{a.label}</b>
+              <span class="mt-1 block text-sm text-[#C5D9CB]">{a.hint}</span>
+            </button>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <fieldset data-step="1" hidden>
+      <legend class="text-lg font-bold">2. Apa tujuan belajarnya?</legend>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-goal-list></div>
+      <button type="button" class="mt-5 text-sm font-bold text-[#C5D9CB] underline underline-offset-4 hover:text-white" data-finder-back>← Ubah pilihan usia</button>
+    </fieldset>
+
+    <div data-step="2" hidden>
+      <p class="text-lg font-bold" data-result-title tabindex="-1">Rekomendasi untuk Anda</p>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3" data-result-list></div>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <button type="button" class="btn btn-light" data-finder-reset><RotateCcw size={18} aria-hidden="true" /> Ulangi</button>
+        <a href="/kontak" class="btn border-white/30 text-white hover:bg-white/10">Konsultasi dengan admin</a>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" data-finder-data set:html={JSON.stringify(payload)} />
+</section>
+
+<style is:global>
+  /* Global karena tombol tujuan dibuat dinamis di browser. */
+  .finder-option {
+    @apply min-h-[76px] rounded-2xl border border-white/20 bg-white/[0.06] p-4 text-left transition hover:border-white/60 hover:bg-white/10;
+  }
+</style>
+
+<script>
+  import { track } from '../lib/client';
+
+  const root = document.querySelector<HTMLElement>('[data-finder]');
+  if (root) {
+    const data = JSON.parse(root.querySelector('[data-finder-data]')!.textContent!);
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const goalList = root.querySelector<HTMLElement>('[data-goal-list]')!;
+    const resultList = root.querySelector<HTMLElement>('[data-result-list]')!;
+    let age = '';
+
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+    function show(i: number, focus = true) {
+      steps.forEach((s, j) => (s.hidden = j !== i));
+      root!.querySelectorAll<HTMLElement>('[data-step-dot]').forEach((d, j) => {
+        d.classList.toggle('bg-gold', j <= i);
+        d.classList.toggle('border-gold', j <= i);
+        d.classList.toggle('text-night', j <= i);
+      });
+      if (focus) (steps[i].querySelector<HTMLElement>('button, [tabindex="-1"]'))?.focus();
+    }
+
+    root.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const ageBtn = t.closest<HTMLElement>('[data-age]');
+      if (ageBtn) {
+        age = ageBtn.dataset.age!;
+        goalList.innerHTML = data.goals[age]
+          .map((g: { id: string; label: string }) => `<button type="button" class="finder-option" data-goal="${g.id}"><b class="block">${esc(g.label)}</b></button>`)
+          .join('');
+        show(1);
+        track('finder_step', { step: 'age', value: age });
+      }
+      const goalBtn = t.closest<HTMLElement>('[data-goal]');
+      if (goalBtn) {
+        const goal = data.goals[age].find((g: { id: string }) => g.id === goalBtn.dataset.goal);
+        resultList.innerHTML = goal.results
+          .map((r: { ref: string; reason: string }, i: number) => {
+            const ref = data.refs[r.ref];
+            return `<a href="${ref.url}" class="group flex flex-col rounded-2xl bg-white p-5 text-ink transition hover:-translate-y-0.5" data-track="finder_result">
+              ${i === 0 ? '<span class="badge mb-3 self-start bg-gold/20 text-[#7A5A16]">Paling relevan</span>' : ''}
+              <span class="text-xs font-bold uppercase tracking-wide text-deep">${esc(ref.meta)}</span>
+              <b class="mt-1 font-heading text-lg">${esc(ref.title)}</b>
+              <span class="mt-2 flex-1 text-sm text-muted">${esc(r.reason)}</span>
+              <span class="mt-4 text-sm font-bold text-forest">Lihat detail →</span>
+            </a>`;
+          })
+          .join('');
+        root.querySelector('[data-result-title]')!.textContent = `Rekomendasi: ${goal.label.toLowerCase()}`;
+        show(2);
+        track('finder_complete', { age, goal: goal.id });
+      }
+      if (t.closest('[data-finder-back]')) show(0);
+      if (t.closest('[data-finder-reset]')) show(0);
+    });
+    show(0, false);
+  }
+</script>

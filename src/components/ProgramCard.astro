@@ -1,0 +1,49 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import StatusBadge from './ui/StatusBadge.astro';
+import { segments, programUrl, type Program } from '../data/programs';
+
+interface Props {
+  program: Program;
+  headingLevel?: 'h2' | 'h3';
+  loading?: 'lazy' | 'eager';
+}
+const { program: p, headingLevel = 'h3', loading = 'lazy' } = Astro.props;
+const Heading = headingLevel;
+const search = [p.title, p.summary, p.ageLabel, segments[p.segment].label, ...(p.curriculum ?? []), ...(p.offerings ?? []).map((o) => o.label)]
+  .join(' ')
+  .toLowerCase();
+---
+
+<article
+  class="card card-hover group relative flex flex-col overflow-hidden"
+  data-program-card
+  data-segment={p.segment}
+  data-search={search}
+>
+  <div class="relative">
+    <img src={p.image} alt="" width="720" height="450" loading={loading} class="aspect-[16/10] w-full object-cover" />
+    <span class="badge absolute left-4 top-4 bg-white/95 text-deep shadow-sm">{segments[p.segment].short}</span>
+  </div>
+  <div class="flex flex-1 flex-col p-6">
+    <span class="eyebrow">{p.ageLabel}</span>
+    <Heading class="mt-2 text-[1.3rem] font-extrabold">
+      <a href={programUrl(p)} class="after:absolute after:inset-0 focus:outline-none" data-track="program_card" data-track-label={p.id}>{p.title}</a>
+    </Heading>
+    <p class="mt-2 flex-1 text-[0.95rem] text-muted">{p.summary}</p>
+    <div class="mt-5 flex items-center justify-between border-t border-line pt-4">
+      <StatusBadge program={p} />
+      <span class="inline-flex items-center gap-1 text-sm font-bold text-forest">
+        Detail <ArrowUpRight size={18} class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  /* Ring fokus pada seluruh kartu saat tautan judul (stretched link) difokuskan. */
+  article:has(a:focus-visible) {
+    outline: 3px solid theme('colors.gold');
+    outline-offset: 3px;
+  }
+</style>
