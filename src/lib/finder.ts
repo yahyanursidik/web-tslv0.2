@@ -2,6 +2,8 @@
  * Aturan Program Finder: usia → tujuan → rekomendasi.
  * Ini pemetaan konten, bukan asesmen kemampuan peserta (brief bagian 6).
  */
+import { activeKajian, sessionCount } from '../data/kajian';
+
 export type FinderAge = 'anak' | 'dewasa' | 'senja';
 
 export interface FinderResult {
@@ -93,12 +95,12 @@ export const finderGoals: Record<FinderAge, { id: string; label: string; results
     {
       id: 'akademik',
       label: 'Studi bergelar (S1)',
-      results: [{ ref: 's1', reason: 'Program sarjana Pendidikan Bahasa Arab melalui pembelajaran jarak jauh.' }],
+      results: [{ ref: 's1', reason: 'Kuliah sarjana Prodi Pendidikan Bahasa Arab secara online.' }],
     },
     {
       id: 'kajian',
       label: 'Ikut kajian tanpa mendaftar kelas',
-      results: [{ ref: 'kajian', reason: '6 kajian dengan 7 sesi pekanan via Zoom & Google Meet.' }],
+      results: [{ ref: 'kajian', reason: `${activeKajian.length} kajian dengan ${sessionCount} sesi pekanan via Zoom & Google Meet.` }],
     },
   ],
   senja: [

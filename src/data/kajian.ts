@@ -1,6 +1,6 @@
 /**
  * Kajian rutin daring (padanan model `Teacher`, `Kajian`, `KajianException`).
- * Sumber: data pembaruan 28 Oktober 2026 — menggantikan seluruh jadwal lama.
+ * Sumber: data pembaruan 28 Oktober 2026 (menggantikan seluruh jadwal lama) dan 3 November 2026.
  * Semua waktu dalam WIB (UTC+7). Hari: 0 = Ahad … 6 = Sabtu.
  */
 
@@ -112,7 +112,8 @@ export const kajian: Kajian[] = [
     summary: 'Kajian pekanan tentang kaidah-kaidah dalam beramal shaleh.',
     topics: ['Amal shaleh'],
     joinUrl: null,
-    active: true,
+    // Kajian sudah selesai (pembaruan 3 November 2026). URL lama dialihkan ke /kajian.
+    active: false,
   },
   {
     id: 'siroh',
@@ -125,6 +126,31 @@ export const kajian: Kajian[] = [
     summary: 'Kajian pekanan bersama Ustadz Mohamad Toriqul Huda.',
     topics: ['Siroh'],
     titleNeedsReview: true,
+    joinUrl: null,
+    active: true,
+  },
+  // Kajian baru — pembaruan 3 November 2026.
+  {
+    id: 'manhaj',
+    slug: 'kajian-manhaj',
+    title: 'Kajian Manhaj',
+    teacherId: 'toriqul',
+    platform: 'Google Meet',
+    sessions: [{ day: 0, time: '15:45' }],
+    summary: 'Kajian manhaj pekanan bersama Ustadz Mohamad Toriqul Huda.',
+    topics: ['Manhaj'],
+    joinUrl: null,
+    active: true,
+  },
+  {
+    id: 'istidlal',
+    slug: 'kaidah-dan-adab-beristidlal',
+    title: 'Kajian Kaidah dan Adab Beristidlal',
+    teacherId: 'toriqul',
+    platform: 'Google Meet',
+    sessions: [{ day: 0, time: '19:45' }],
+    summary: 'Kajian pekanan tentang kaidah dan adab dalam beristidlal (berdalil) bersama Ustadz Mohamad Toriqul Huda.',
+    topics: ['Kaidah istidlal', 'Adab'],
     joinUrl: null,
     active: true,
   },

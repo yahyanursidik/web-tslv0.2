@@ -59,12 +59,12 @@ export const faqs: Faq[] = [
     category: 'Pendaftaran',
     featured: true,
     q: 'Bagaimana cara mendaftar program?',
-    a: 'Setiap halaman program memiliki panel pendaftaran. Ma’had TSL Daring didaftarkan melalui portal PMB TSL; program lainnya melalui WhatsApp admin dengan pesan yang sudah disiapkan.',
+    a: 'Setiap halaman program memiliki panel pendaftaran. Ma’had Online TSL didaftarkan melalui portal PMB TSL; program lainnya melalui WhatsApp admin dengan pesan yang sudah disiapkan.',
   },
   {
     category: 'Pendaftaran',
     q: 'Berapa biaya program?',
-    a: 'Biaya dicantumkan di halaman program yang sudah divalidasi — misalnya SPP Ma’had TSL Daring Rp1.800.000 per semester. Untuk program lain, tanyakan kepada admin; kami tidak menampilkan angka sebelum dikonfirmasi.',
+    a: 'Biaya dicantumkan di halaman program yang sudah divalidasi — misalnya SPP Ma’had Online TSL Rp1.800.000 per semester. Untuk program lain, tanyakan kepada admin; kami tidak menampilkan angka sebelum dikonfirmasi.',
   },
 ];
 

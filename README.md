@@ -41,7 +41,7 @@ Semua konten ada di `src/data/` dan modelnya mengikuti brief bagian 9 — siap d
 ## Masih menunggu data resmi (brief P0)
 
 - Alamat, media sosial, kebijakan tautan kajian, dan portal pendaftaran selain Ma'had (saat ini lewat WhatsApp admin). Sebaiknya minta juga file logo vektor (SVG/AI).
-- Verifikasi Belajar Islam Dasar dan S1 PJJ. Kelas Bahasa Arab & Waris: jadwal, biaya, dan nama pengajar per pembukaan kelas.
+- Verifikasi Belajar Islam Dasar dan Kuliah Online S1. Kelas Bahasa Arab & Waris: jadwal, biaya, dan nama pengajar per pembukaan kelas.
 - Frekuensi sesi MAUD/private TSL for Kids (sengaja tidak ditampilkan) dan redaksi "Class or Siroh".
 - Alamat migrasi Preschool → tambahkan ke `redirects` di `astro.config.mjs`.
 

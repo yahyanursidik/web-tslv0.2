@@ -18,5 +18,7 @@ export default defineConfig({
     '/bahasa-arab': '/program/quran-bahasa-arab-dewasa',
     '/mahad-tsl': '/program/mahad-tsl',
     '/s1-pjj': '/program/s1-pjj',
+    // Kajian yang sudah selesai
+    '/kajian/kaidah-beramal-shaleh': '/kajian',
   },
 });
