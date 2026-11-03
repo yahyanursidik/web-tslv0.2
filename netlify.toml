@@ -49,3 +49,10 @@
   to = "/program/s1-pjj"
   status = 301
   force = true
+
+# Kajian yang sudah selesai → jadwal kajian
+[[redirects]]
+  from = "/kajian/kaidah-beramal-shaleh"
+  to = "/kajian"
+  status = 301
+  force = true

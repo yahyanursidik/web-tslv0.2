@@ -395,7 +395,7 @@ export const programs: Program[] = [
   {
     id: 'mahad',
     slug: 'mahad-tsl',
-    title: 'Ma’had TSL Daring',
+    title: 'Ma’had Online TSL',
     segment: 'lanjutan',
     ageLabel: 'Pendidikan lanjutan',
     menuDescription: 'Bahasa Arab & ilmu diniyah berjenjang',
@@ -403,7 +403,7 @@ export const programs: Program[] = [
       'Pembelajaran Bahasa Arab dan ilmu diniyah yang sistematis, bertahap, dan berbasis level belajar — sepenuhnya daring, Senin–Sabtu pukul 19.45 WIB.',
     // Sumber: halaman Ma’had TSL di website sebelumnya (PR #4–#6, Juli 2026).
     intro: [
-      'Ma’had TSL Daring adalah program pembelajaran Bahasa Arab dan ilmu diniyah yang sistematis, bertahap, dan berbasis level belajar untuk membangun fondasi keilmuan Islam berdasarkan Al-Qur’an dan As-Sunnah.',
+      'Ma’had Online TSL adalah program pembelajaran Bahasa Arab dan ilmu diniyah yang sistematis, bertahap, dan berbasis level belajar untuk membangun fondasi keilmuan Islam berdasarkan Al-Qur’an dan As-Sunnah.',
       'Bahasa menjadi alat untuk memahami sumber ilmu, sementara materi diniyah menata pemahaman dan amal secara seimbang. Materi disusun dengan rujukan kitab para ulama yang mu’tabar dan sesuai manhaj Ahlus Sunnah.',
     ],
     audience: [
@@ -479,12 +479,12 @@ export const programs: Program[] = [
     enrollmentStatus: 'unverified',
     registrationUrl: 'https://pmb.sim-tsl.com',
     // Kontak khusus Ma’had & STPII Support (0881 0257 66336)
-    contactUrl: `https://wa.me/62881025766336?text=${encodeURIComponent('Assalamu’alaikum, saya ingin mendapatkan informasi pendaftaran program Ma’had TSL Daring.')}`,
+    contactUrl: `https://wa.me/62881025766336?text=${encodeURIComponent('Assalamu’alaikum, saya ingin mendapatkan informasi pendaftaran program Ma’had Online TSL.')}`,
     image: '/images/learning-mahad.svg',
     imageAlt: 'Ilustrasi layar laptop untuk pembelajaran daring',
     tone: 'mist',
     seo: {
-      title: 'Ma’had TSL Daring — Bahasa Arab & Ilmu Diniyah Berjenjang',
+      title: 'Ma’had Online TSL — Bahasa Arab & Ilmu Diniyah Berjenjang',
       description:
         'Bahasa Arab, aqidah, fiqh, adab, hadits, dan tafsir secara daring Senin–Sabtu 19.45 WIB, dengan rekaman kelas dan tes penempatan. SPP Rp1.800.000/semester.',
     },
@@ -492,24 +492,26 @@ export const programs: Program[] = [
   {
     id: 's1',
     slug: 's1-pjj',
-    title: 'S1 Pendidikan Jarak Jauh',
+    // Slug tetap 's1-pjj' agar tautan lama tidak rusak.
+    title: 'Kuliah Online S1 - Prodi Pendidikan Bahasa Arab',
     segment: 'lanjutan',
     ageLabel: 'Pendidikan tinggi',
-    menuDescription: 'Program sarjana Pendidikan Bahasa Arab',
-    summary: 'Program pendidikan sarjana Pendidikan Bahasa Arab melalui pembelajaran jarak jauh.',
+    menuDescription: 'Kuliah sarjana bergelar secara online',
+    summary: 'Kuliah sarjana (S1) Program Studi Pendidikan Bahasa Arab yang diikuti secara online.',
     intro: [
-      'S1 Pendidikan Jarak Jauh (PJJ) memberi kesempatan menempuh studi sarjana Pendidikan Bahasa Arab tanpa harus meninggalkan kota dan pekerjaan.',
+      'Kuliah Online S1 - Prodi Pendidikan Bahasa Arab memberi kesempatan menempuh studi sarjana Pendidikan Bahasa Arab tanpa harus meninggalkan kota dan pekerjaan.',
     ],
     audience: [
       'Pembelajar yang menginginkan studi akademik bergelar.',
-      'Peserta yang membutuhkan fleksibilitas belajar jarak jauh.',
+      'Peserta yang membutuhkan fleksibilitas kuliah secara online.',
     ],
     outcomes: [],
     modalities: [],
     curriculum: ['Pendidikan Bahasa Arab'],
     facts: [
       { label: 'Jenjang', value: 'Sarjana (S1)' },
-      { label: 'Format', value: 'Pendidikan jarak jauh' },
+      { label: 'Program studi', value: 'Pendidikan Bahasa Arab' },
+      { label: 'Format', value: 'Kuliah online' },
     ],
     dataStatus: 'pending',
     pendingNotice:
@@ -523,8 +525,8 @@ export const programs: Program[] = [
     imageAlt: 'Ilustrasi topi wisuda',
     tone: 'sand',
     seo: {
-      title: 'S1 Pendidikan Jarak Jauh — Pendidikan Bahasa Arab',
-      description: 'Program sarjana Pendidikan Bahasa Arab melalui pembelajaran jarak jauh.',
+      title: 'Kuliah Online S1 - Prodi Pendidikan Bahasa Arab',
+      description: 'Kuliah sarjana (S1) Program Studi Pendidikan Bahasa Arab secara online bersama Tarbiyah Sunnah Learning.',
     },
   },
   {
